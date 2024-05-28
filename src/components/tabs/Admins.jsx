@@ -460,6 +460,14 @@ export default function Admins() {
             </tr>
           </tbody>
         </table>
+       <ul className="pagination mt-2">
+        <li className="page-item"><a className="page-link" href="javascript:void(0);">Previous</a></li>
+        <li className="page-item active"><a className="page-link" href="javascript:void(0);">1</a></li>
+        <li className="page-item"><a className="page-link" href="javascript:void(0);">2</a></li>
+        <li className="page-item"><a className="page-link" href="javascript:void(0);">3</a></li>
+        <li className="page-item"><a className="page-link" href="javascript:void(0);">Next</a></li>
+      </ul>
+
       </div>
     </div>
   );

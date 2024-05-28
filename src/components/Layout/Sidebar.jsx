@@ -5,43 +5,57 @@ import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const [path, setPath] = useState(window.location.pathname)
-    const sidebarMenu = [
-        {
-            title: 'Dashboard',
-            icon: <i className="icon-speedometer" />,
-            dropdown: false,
-            href: '/'
-        },
-        {
-            title: 'Departments',
-            icon: <i className="icon-drawer" />,
-            dropdown: false,
-            href: '/departments'
-        },
-        {
-            title: 'Documents',
-            icon: <i className="icon-folder" />,
-            dropdown: false,
-            href: '/documents'
-        },
-        {
-            title: 'Users',
-            icon: <i className="icon-user" />,
-            dropdown: false,
-            id: 'users',
-            href: '/users',
-        },
-        {
-            title: 'Settings',
-            icon: <i className="icon-settings" />,
-            dropdown: false,
-            href: '/settings'
-        },
-    ]
+  const sidebarMenu = [
+      {
+          title: 'Dashboard',
+          icon: <i className="icon-speedometer" />,
+          dropdown: false,
+          href: '/'
+      },
+      {
+          title: 'Departments',
+          icon: <i className="icon-drawer" />,
+          dropdown: false,
+          href: '/departments'
+      },
+      {
+          title: 'Documents',
+          icon: <i className="icon-folder" />,
+          dropdown: false,
+          href: '/documents'
+      },
+      {
+          title: 'Users',
+          icon: <i className="icon-user" />,
+          dropdown: false,
+          id: 'users',
+          href: '/users',
+      },
+      {
+          title: 'Settings',
+          icon: <i className="icon-settings" />,
+          dropdown: false,
+          href: '/settings'
+      },
+  ]
+  const transactionMenu = [
+      {
+          title: 'Business Certificate',
+          icon: <i className="icon-book-open" />,
+          dropdown: false,
+          href: '/reports/business-certificate'
+      },
+      {
+          title: 'Sales',
+          icon: <i className="icon-calculator" />,
+          dropdown: false,
+          href: '/reports/sales'
+      },
+  ]
 
-    const handleLink = () => {
-        setPath(window.location.pathname)
-    }
+  const handleLink = () => {
+      setPath(window.location.pathname)
+  }
   return (
     <div id="left-sidebar" className="sidebar">
       <div className="navbar-brand">
@@ -112,6 +126,42 @@ export default function Sidebar() {
             <li className="header">Main</li>
             {
                 sidebarMenu.map((item, key) => (
+                    <li key={key} className={`${item.href === path ? 'active' : ''}`} onClick={ev => handleLink()}>
+                        {
+                            
+                                item.dropdown ?
+                                <>
+                                    <a href={`#${item.title}`} className="has-arrow">
+                                        {item.icon}
+                                        <span>{item.title}</span>
+                                    </a>
+                                    {
+                                        item.dropdown ? 
+                                        <ul className="collapse" aria-expanded="false">
+                                            {
+                                                item.subMenu.map((menu, key) => (
+                                                    <li key={key} className={`${menu.href === path ? 'active' : ''}`} onClick={ev => handleLink()}>
+                                                        <Link to={menu.href}>{menu.title}</Link>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ul> : null
+                                    }
+                                </>  : 
+                                <Link to={item.href}>
+                                    {item.icon}
+                                    <span>{item.title}</span>
+                                </Link>
+                            
+                        }
+                        
+                    </li>
+                ))
+            }
+
+          <li className="header">Transactions</li>
+          {
+                transactionMenu.map((item, key) => (
                     <li key={key} className={`${item.href === path ? 'active' : ''}`} onClick={ev => handleLink()}>
                         {
                             
