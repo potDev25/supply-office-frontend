@@ -8,6 +8,9 @@ import Staffs from "./pages/Admin/Users";
 import Admins from "./components/tabs/Admins";
 import AddUser from "./pages/Admin/AddUser";
 import Users from "./pages/Admin/Users";
+import Applicants from "./pages/Admin/Departments";
+import Businesses from "./pages/Admin/Businesses";
+import Announcements from "./pages/Admin/Announcements";
 
 const router = createBrowserRouter([
     {
@@ -23,8 +26,8 @@ const router = createBrowserRouter([
                 element: <Documents/>
             },
             {
-                path: '/departments',
-                element: <Departments/>
+                path: '/applicants',
+                element: <Applicants/>
             },
             {
                 path: '/settings',
@@ -33,6 +36,14 @@ const router = createBrowserRouter([
             {
                 path: '/users',
                 element: <Users/>
+            },
+            {
+                path: '/registered-businesses',
+                element: <Businesses/>
+            },
+            {
+                path: '/announcements',
+                element: <Announcements/>
             },
         ]
     }

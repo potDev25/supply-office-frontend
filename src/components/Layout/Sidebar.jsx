@@ -13,16 +13,16 @@ export default function Sidebar() {
           href: '/'
       },
       {
-          title: 'Departments',
+          title: 'Applicants',
           icon: <i className="icon-drawer" />,
           dropdown: false,
-          href: '/departments'
+          href: '/applicants'
       },
       {
-          title: 'Documents',
-          icon: <i className="icon-folder" />,
+          title: 'Registered Business',
+          icon: <i className="icon-briefcase" />,
           dropdown: false,
-          href: '/documents'
+          href: '/registered-businesses'
       },
       {
           title: 'Users',
@@ -30,6 +30,13 @@ export default function Sidebar() {
           dropdown: false,
           id: 'users',
           href: '/users',
+      },
+      {
+          title: 'Announcements',
+          icon: <i className="icon-volume-1" />,
+          dropdown: false,
+          id: 'users',
+          href: '/announcements',
       },
       {
           title: 'Settings',
@@ -40,14 +47,14 @@ export default function Sidebar() {
   ]
   const transactionMenu = [
       {
-          title: 'Business Certificate',
-          icon: <i className="icon-book-open" />,
+          title: 'Transactions',
+          icon: <i className="icon-calculator" />,
           dropdown: false,
-          href: '/reports/business-certificate'
+          href: '/reports/sales'
       },
       {
-          title: 'Sales',
-          icon: <i className="icon-calculator" />,
+          title: 'Reports',
+          icon: <i className="icon-graph" />,
           dropdown: false,
           href: '/reports/sales'
       },

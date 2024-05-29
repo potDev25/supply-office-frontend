@@ -1,13 +1,13 @@
 import React from "react";
 import PageTitle from "../../components/Layout/PageTitle";
 import Clearfix from "../../components/container/Clearfix";
-import AddDepartment from "../../components/tabs/AddDepartment";
-import DepartmentsTab from "../../components/tabs/DepartmentsTab";
+import ApplicantsData from "../../components/tabs/ApplicantsData";
+import AddApplicant from "../../components/tabs/AddDepartment";
 
-export default function Departments() {
+export default function Applicants() {
   return (
     <>
-      <PageTitle title={"Departments"} />
+      <PageTitle title={"Applicants"} />
 
       <Clearfix classname={"row"}>
         <div className="col-lg-12">
@@ -17,20 +17,20 @@ export default function Departments() {
                 <a
                   className="nav-link active show"
                   data-toggle="tab"
-                  href="#e_departments"
+                  href="#e_applicants"
                 >
-                  Departments
+                  Applicants
                 </a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" data-toggle="tab" href="#e_add">
-                  Add
+                  Add Applicant
                 </a>
               </li>
             </ul>
             <div className="tab-content">
-              <AddDepartment/>
-              <DepartmentsTab/>
+              <AddApplicant/>
+              <ApplicantsData/>
             </div>
           </div>
         </div>

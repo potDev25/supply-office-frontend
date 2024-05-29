@@ -1,39 +1,93 @@
-import React from "react";
+import React, { useState } from "react";
+import Input from "../Forms/Input";
+import Select from "../Forms/Select";
+import DateInput from "../Forms/DateInput";
+import UploadRequirementsModal from "../modals/UploadRequirementsModal";
 
-export default function AddDepartment() {
+export default function AddApplicant() {
+  const [uploadModal, setUploadModal] = useState(false)
+
+  const handleCloseModal = () => {
+    setUploadModal(false)
+  } 
   return (
     <div className="tab-pane" id="e_add">
       <div className="body">
         <div className="row clearfix">
-          <div className="col-md-12">
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Departments Name"
-              />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Departments Head"
-              />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="form-group">
-              <input
-                type="number"
-                className="form-control"
-                placeholder="No of Employee"
-              />
-            </div>
-          </div>
+          <Input
+            placeholder={"Lastname"}
+            label={"Lastname"}
+            col={"4"}
+            name={"lastname"}
+          />
+
+          <Input
+            placeholder={"Firstname"}
+            label={"Firstname"}
+            col={"4"}
+            name={"firstname"}
+          />
+
+          <Input
+            placeholder={"Middle Name"}
+            label={"Middle Name"}
+            col={"4"}
+            name={"middle_name"}
+          />
+
+          <Select col={"4"} label={"Province"} name={"province"} />
+
+          <Select col={"4"} label={"City/Municipality"} name={"city"} />
+
+          <Select col={"4"} label={"Barangay"} name={"barangay"} />
+
+          <DateInput
+            placeholder={"Birthdate"}
+            label={"Birthdate"}
+            col={"4"}
+            name={"firstname"}
+          />
+
+          <Input
+            placeholder={"Email"}
+            label={"Email"}
+            col={"4"}
+            name={"email"}
+          />
+
+          <Select col={"4"} label={"Gender"} name={"gender"} />
+
+          <Input
+            placeholder={"Username"}
+            label={"Username"}
+            col={"4"}
+            name={"username"}
+          />
+
+          <Input
+            placeholder={"Password"}
+            label={"Password"}
+            col={"4"}
+            name={"password"}
+            type="password"
+          />
+
+          <Input
+            placeholder={"Confirm Password"}
+            label={"Confirm Password"}
+            col={"4"}
+            name={"password_confirmation"}
+            type="password"
+          />
+
           <div className="col-12" style={{ display: "flex", gap: "5px" }}>
-            <button type="button" className="btn btn-primary btn-round">
+            <button
+              type="button"
+              className="btn btn-primary btn-round"
+              data-toggle="modal"
+              data-target="#exampleModalCenter"
+              onClick={ev => setUploadModal(true)}
+            >
               ADD
             </button>
             <button
@@ -46,6 +100,9 @@ export default function AddDepartment() {
           </div>
         </div>
       </div>
+
+      <UploadRequirementsModal show={uploadModal} handleClose={handleCloseModal}/>
+
     </div>
   );
 }
