@@ -1,7 +1,7 @@
 import React from 'react'
 import Modal from 'react-bootstrap/Modal';
 
-export default function ModalContainer({show, handleClose, children, title, handleSubmit, btnText, modalTitle, withCancel = true, closeButton = true}) {
+export default function ModalContainer({show, handleClose, children, cancelText, handleSubmit, btnText, modalTitle, withCancel = true, withOkButton = true, closeButton = true, size}) {
   return (
     <Modal
         show={show}
@@ -9,6 +9,7 @@ export default function ModalContainer({show, handleClose, children, title, hand
         backdrop="static"
         keyboard={false}
         centered
+        size={size}
       >
         <Modal.Header closeButton={closeButton}>
           <Modal.Title>{modalTitle}</Modal.Title>
@@ -17,13 +18,17 @@ export default function ModalContainer({show, handleClose, children, title, hand
           {children}
         </Modal.Body>
         <Modal.Footer>
-          <button
-            type="button"
-            className="btn btn-primary btn-round"
-            onClick={handleClose}
-          >
-            {btnText}
-          </button>
+          {
+            withOkButton ? <>
+              <button
+                type="button"
+                className="btn btn-primary btn-round"
+                onClick={handleClose}
+              >
+                {btnText}
+              </button>
+            </> : null
+          }
           {
             withCancel ?
             <button
@@ -31,7 +36,7 @@ export default function ModalContainer({show, handleClose, children, title, hand
                 className="btn btn-secondary btn-round"
                 onClick={handleClose}
             >
-                Cancel
+                {cancelText}
             </button>
             : null
           }

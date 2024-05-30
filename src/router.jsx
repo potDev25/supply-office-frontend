@@ -11,6 +11,7 @@ import Users from "./pages/Admin/Users";
 import Applicants from "./pages/Admin/Departments";
 import Businesses from "./pages/Admin/Businesses";
 import Announcements from "./pages/Admin/Announcements";
+import Applicant from "./pages/Admin/Applicant";
 
 const router = createBrowserRouter([
     {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
             {
                 path: '/announcements',
                 element: <Announcements/>
+            },
+            {
+                path: '/applicant/view/:id',
+                element: <Applicant/>
             },
         ]
     }

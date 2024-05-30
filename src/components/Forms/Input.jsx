@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Input({className, col, handleChange, label, placeholder, value, name, error, type = 'text'}) {
+export default function Input({className, col, handleChange, label, placeholder, value, name, error, type = 'text',  readOnly=false}) {
   return (
     <div className={`col-md-${col} ${className}`}>
       <div className="form-group">
@@ -14,6 +14,7 @@ export default function Input({className, col, handleChange, label, placeholder,
           onChange={handleChange}
           required
           placeholder={placeholder}
+          readOnly={readOnly}
         />
         {
             error ? 
