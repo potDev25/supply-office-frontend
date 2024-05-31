@@ -15,7 +15,7 @@ import Applicant from "./pages/Admin/Applicant";
 import GuestLayout from "./components/Layout/GuestLayout";
 import Landingpage from "./pages/Guest/Landingpage";
 
-const router = createBrowserRouter([
+const guest_router = createBrowserRouter([
     {
         path: '/',
         element: <GuestLayout/>,
@@ -26,44 +26,6 @@ const router = createBrowserRouter([
             }
         ]
     },
-    {
-        path: '/',
-        element: <DashboardLayout/>,
-        children: [
-            {
-                path: '/dashboard',
-                element: <Dasboard/>
-            },
-            {
-                path: '/documents',
-                element: <Documents/>
-            },
-            {
-                path: '/applicants',
-                element: <Applicants/>
-            },
-            {
-                path: '/settings',
-                element: <Settings/>
-            },
-            {
-                path: '/users',
-                element: <Users/>
-            },
-            {
-                path: '/registered-businesses',
-                element: <Businesses/>
-            },
-            {
-                path: '/announcements',
-                element: <Announcements/>
-            },
-            {
-                path: '/applicant/view/:id',
-                element: <Applicant/>
-            },
-        ]
-    },
 ])
 
-export default router;
+export default guest_router;

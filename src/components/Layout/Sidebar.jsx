@@ -10,7 +10,7 @@ export default function Sidebar() {
           title: 'Dashboard',
           icon: <i className="icon-speedometer" />,
           dropdown: false,
-          href: '/'
+          href: '/dashboard'
       },
       {
           title: 'Applicants',
@@ -45,6 +45,20 @@ export default function Sidebar() {
           href: '/settings'
       },
   ]
+  const landingPage = [
+    {
+        title: 'Page Settings',
+        icon: <i className="icon-settings" />,
+        dropdown: false,
+        href: '/settings'
+    },
+    {
+        title: 'Key Officials',
+        icon: <i className="icon-user-follow" />,
+        dropdown: false,
+        href: '/settings'
+    },
+]
   const transactionMenu = [
       {
           title: 'Transactions',
@@ -202,6 +216,41 @@ export default function Sidebar() {
                     </li>
                 ))
             }
+            <li className="header">Page Settings</li>
+            {
+                  landingPage.map((item, key) => (
+                      <li key={key} className={`${item.href === path ? 'active' : ''}`} onClick={ev => handleLink()}>
+                          {
+                              
+                                  item.dropdown ?
+                                  <>
+                                      <a href={`#${item.title}`} className="has-arrow">
+                                          {item.icon}
+                                          <span>{item.title}</span>
+                                      </a>
+                                      {
+                                          item.dropdown ? 
+                                          <ul className="collapse" aria-expanded="false">
+                                              {
+                                                  item.subMenu.map((menu, key) => (
+                                                      <li key={key} className={`${menu.href === path ? 'active' : ''}`} onClick={ev => handleLink()}>
+                                                          <Link to={menu.href}>{menu.title}</Link>
+                                                      </li>
+                                                  ))
+                                              }
+                                          </ul> : null
+                                      }
+                                  </>  : 
+                                  <Link to={item.href} style={{ color: '#bbbec2' }}>
+                                      {item.icon}
+                                      <span>{item.title}</span>
+                                  </Link>
+                              
+                          }
+                          
+                      </li>
+                  ))
+              }
           </ul>
         </nav>
       </div>
