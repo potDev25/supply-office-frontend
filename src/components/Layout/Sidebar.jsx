@@ -64,7 +64,7 @@ export default function Sidebar() {
       setPath(window.location.pathname)
   }
   return (
-    <div id="left-sidebar" className="sidebar">
+    <div id="left-sidebar" className="sidebar" style={{ backgroundColor: '#22252a', border: 'none', color: '#bbbec2' }}>
       <div className="navbar-brand">
         <a href="index.html">
           <img
@@ -72,7 +72,7 @@ export default function Sidebar() {
             alt="Oculux Logo"
             className="img-fluid logo"
           />
-          <span>Oculux</span>
+          <span style={{ color: '#bbbec2' }}>Oculux</span>
         </a>
         <button
           type="button"
@@ -91,15 +91,16 @@ export default function Sidebar() {
             />
           </div>
           <div className="dropdown">
-            <span>Welcome,</span>
+            <span style={{ color: '#bbbec2' }}>Welcome,</span>
             <a
               href="javascript:void(0);"
               className="dropdown-toggle user-name"
               data-toggle="dropdown"
+              style={{ color: '#bbbec2' }}
             >
-              <strong>Louis Pierce</strong>
+              <strong style={{ color: '#bbbec2' }}>Louis Pierce</strong>
             </a>
-            <ul className="dropdown-menu dropdown-menu-right account vivify flipInY">
+            <ul className="dropdown-menu dropdown-menu-right account vivify flipInY" style={{ color: '#bbbec2' }}>
               <li>
                 <a href="page-profile.html">
                   <i className="icon-user" />
@@ -129,18 +130,18 @@ export default function Sidebar() {
           </div>
         </div>
         <nav id="left-sidebar-nav" className="sidebar-nav">
-          <ul id="main-menu" className="metismenu">
+          <ul id="main-menu" className="metismenu" style={{ color: '#bbbec2' }}>
             <li className="header">Main</li>
             {
                 sidebarMenu.map((item, key) => (
-                    <li key={key} className={`${item.href === path ? 'active' : ''}`} onClick={ev => handleLink()}>
+                    <li key={key} className={`${item.href === path ? 'active' : ''}`} onClick={ev => handleLink()} style={{ color: '#bbbec2' }}>
                         {
                             
                                 item.dropdown ?
                                 <>
-                                    <a href={`#${item.title}`} className="has-arrow">
+                                    <a href={`#${item.title}`} className="has-arrow" style={{ color: '#bbbec2' }}>
                                         {item.icon}
-                                        <span>{item.title}</span>
+                                        <span style={{ color: '#bbbec2' }}>{item.title}</span>
                                     </a>
                                     {
                                         item.dropdown ? 
@@ -155,7 +156,7 @@ export default function Sidebar() {
                                         </ul> : null
                                     }
                                 </>  : 
-                                <Link to={item.href}>
+                                <Link to={item.href} style={{ color: '#bbbec2' }}>
                                     {item.icon}
                                     <span>{item.title}</span>
                                 </Link>
@@ -191,7 +192,7 @@ export default function Sidebar() {
                                         </ul> : null
                                     }
                                 </>  : 
-                                <Link to={item.href}>
+                                <Link to={item.href} style={{ color: '#bbbec2' }}>
                                     {item.icon}
                                     <span>{item.title}</span>
                                 </Link>

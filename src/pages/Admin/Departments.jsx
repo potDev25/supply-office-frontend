@@ -32,7 +32,7 @@ export default function Applicants() {
                 </ul>
               </div>
               <div className="d-flex align-items-center" style={{gap: '5px', width: '40%'}}>
-                <button className="btn btn-danger btn-round btn-sm" style={{width: '40%'}}><i className="icon-trash"></i> Mass Delete</button>
+                <button className="btn btn-default border border-danger btn-round btn-sm" style={{width: '40%'}}><i className="icon-trash"></i>Delete</button>
                 <input className="form-control" placeholder="Search Applicant Name"/>
                 <select className="form-control" style={{width: '20%'}}>
                   <option value="10" selected>10</option>
