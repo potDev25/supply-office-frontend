@@ -4,6 +4,28 @@ import Select from "../Forms/Select";
 import DateInput from "../Forms/DateInput";
 import UploadRequirementsModal from "../modals/UploadRequirementsModal";
 
+const options = [
+  {
+    text: 'Office',
+    value: 'Office'
+  },
+  {
+    text: 'School',
+    value: 'School'
+  },
+]
+
+const optionsStatus = [
+  {
+    text: 'Active',
+    value: 'Active'
+  },
+  {
+    text: 'Draft',
+    value: 'Draft'
+  },
+]
+
 export default function AddApplicant() {
   const [uploadModal, setUploadModal] = useState(false)
 
@@ -15,70 +37,15 @@ export default function AddApplicant() {
       <div className="body">
         <div className="row clearfix">
           <Input
-            placeholder={"Lastname"}
-            label={"Lastname"}
-            col={"4"}
-            name={"lastname"}
+            placeholder={"Department Name"}
+            label={"Department Name"}
+            col={"12"}
+            name={"department_name"}
           />
 
-          <Input
-            placeholder={"Firstname"}
-            label={"Firstname"}
-            col={"4"}
-            name={"firstname"}
-          />
+          <Select col={"12"} label={"Department Type"} name={"department_type"} options={options}/>
 
-          <Input
-            placeholder={"Middle Name"}
-            label={"Middle Name"}
-            col={"4"}
-            name={"middle_name"}
-          />
-
-          <Select col={"4"} label={"Province"} name={"province"} />
-
-          <Select col={"4"} label={"City/Municipality"} name={"city"} />
-
-          <Select col={"4"} label={"Barangay"} name={"barangay"} />
-
-          <DateInput
-            placeholder={"Birthdate"}
-            label={"Birthdate"}
-            col={"4"}
-            name={"firstname"}
-          />
-
-          <Input
-            placeholder={"Email"}
-            label={"Email"}
-            col={"4"}
-            name={"email"}
-          />
-
-          <Select col={"4"} label={"Gender"} name={"gender"} />
-
-          <Input
-            placeholder={"Username"}
-            label={"Username"}
-            col={"4"}
-            name={"username"}
-          />
-
-          <Input
-            placeholder={"Password"}
-            label={"Password"}
-            col={"4"}
-            name={"password"}
-            type="password"
-          />
-
-          <Input
-            placeholder={"Confirm Password"}
-            label={"Confirm Password"}
-            col={"4"}
-            name={"password_confirmation"}
-            type="password"
-          />
+          <Select col={"12"} label={"Status"} name={"status"} options={optionsStatus}/>
 
           <div className="col-12" style={{ display: "flex", gap: "5px" }}>
             <button

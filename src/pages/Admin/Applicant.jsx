@@ -18,12 +18,12 @@ export default function Applicant() {
     <>
       <div className="d-flex align-items-center justify-content-between">
         <div style={{width: '50%'}}>
-            <PageTitle title={"Applicant Information"} />
+            <PageTitle title={"Users Account Information"} />
         </div>
-        <div className="d-flex" style={{gap: '4px'}}>
+        {/* <div className="d-flex" style={{gap: '4px'}}>
             <button className="btn btn-default btn-round btn-sm border border-success" onClick={ev => setRequirementForm(true)}>Requirements</button>
             <button className="btn btn-success btn-round btn-sm">Business Permit Issuance</button>
-        </div>
+        </div> */}
       </div>
 
       <Clearfix classname={"row"}>

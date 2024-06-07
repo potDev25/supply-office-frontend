@@ -6,11 +6,12 @@ export default function Select({className, col, handleChange, label, value, name
       <label>{label}</label>
       <div className="form-group">
         <select className="custom-select" onChange={handleChange} name={name}>
-          <option selected>Newest first</option>
-          <option value={1}>Oldest first</option>
-          <option value={2}>Low salary first</option>
-          <option value={3}>High salary first</option>
-          <option value={3}>Sort by name</option>
+          <option value='' selected>Select</option>
+          {
+            options.map((option) => (
+              <option value={option.value}>{option.text}</option>
+            ))
+          }
         </select>
         {
             error ? 

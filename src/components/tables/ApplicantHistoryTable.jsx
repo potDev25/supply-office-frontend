@@ -15,22 +15,22 @@ export default function ApplicantHistoryTable() {
             <tbody>
                 <tr>
                     <td>101</td>
-                    <td>Business Certificate Issuance</td>
+                    <td>PPMP Processing</td>
                     <td>2024-05-09</td>
                 </tr>
                 <tr>
                     <td>102</td>
-                    <td>Business Certificate Issuance</td>
+                    <td>PPMP Processing</td>
                     <td>2024-05-09</td>
                 </tr>
                 <tr>
                     <td>103</td>
-                    <td>Business Certificate Issuance</td>
+                    <td>PPMP Processing</td>
                     <td>2024-012-09</td>
                 </tr>
                 <tr>
                     <td>104</td>
-                    <td>Business Certificate Issuance</td>
+                    <td>PPMP Processing</td>
                     <td>2024-06-09</td>
                 </tr>
             </tbody>

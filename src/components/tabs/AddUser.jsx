@@ -4,6 +4,17 @@ import Select from "../Forms/Select";
 import DateInput from "../Forms/DateInput";
 import UploadRequirementsModal from "../modals/UploadRequirementsModal";
 
+const options = [
+  {
+    text: 'Department User',
+    value: 'Department User'
+  },
+  {
+    text: 'Supply Office',
+    value: 'Supply Office'
+  },
+]
+
 export default function AddUser() {
   const [uploadModal, setUploadModal] = useState(false)
 
@@ -49,7 +60,7 @@ export default function AddUser() {
             name={"email"}
           />
 
-          <Select col={"4"} label={"Role"} name={"role"} />
+          <Select col={"4"} label={"Role"} name={"role"} options={options}/>
 
           <Input
             placeholder={"Username"}

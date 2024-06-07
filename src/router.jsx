@@ -16,22 +16,22 @@ import GuestLayout from "./components/Layout/GuestLayout";
 import Landingpage from "./pages/Guest/Landingpage";
 
 const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <GuestLayout/>,
-        children: [
-            {
-                path: '/',
-                element: <Landingpage/>
-            }
-        ]
-    },
+    // {
+    //     path: '/',
+    //     element: <GuestLayout/>,
+    //     children: [
+    //         {
+    //             path: '/',
+    //             element: <Landingpage/>
+    //         }
+    //     ]
+    // },
     {
         path: '/',
         element: <DashboardLayout/>,
         children: [
             {
-                path: '/dashboard',
+                path: '/',
                 element: <Dasboard/>
             },
             {
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
                 element: <Documents/>
             },
             {
-                path: '/applicants',
+                path: '/departments',
                 element: <Applicants/>
             },
             {
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
                 element: <Announcements/>
             },
             {
-                path: '/applicant/view/:id',
+                path: '/users/view/:id',
                 element: <Applicant/>
             },
         ]

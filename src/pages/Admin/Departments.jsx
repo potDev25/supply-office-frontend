@@ -7,7 +7,7 @@ import AddApplicant from "../../components/tabs/AddDepartment";
 export default function Applicants() {
   return (
     <>
-      <PageTitle title={"Applicants"} />
+      <PageTitle title={"Departments"} />
 
       <Clearfix classname={"row"}>
         <div className="col-lg-12">
@@ -21,19 +21,19 @@ export default function Applicants() {
                       data-toggle="tab"
                       href="#e_applicants"
                     >
-                      Applicants
+                      Departments
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" data-toggle="tab" href="#e_add">
-                      Add Applicant
+                      Add Department
                     </a>
                   </li>
                 </ul>
               </div>
               <div className="d-flex align-items-center" style={{gap: '5px', width: '40%'}}>
                 <button className="btn btn-default border border-danger btn-round btn-sm" style={{width: '40%'}}><i className="icon-trash"></i>Delete</button>
-                <input className="form-control" placeholder="Search Applicant Name"/>
+                <input className="form-control" placeholder="Search Department Name"/>
                 <select className="form-control" style={{width: '20%'}}>
                   <option value="10" selected>10</option>
                   <option value="20">20</option>

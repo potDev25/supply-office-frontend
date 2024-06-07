@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Logo from '../../assets1/images/icon.svg'
+import Logo from '../../assets1/images/bipsu_new.png'
 import User from '../../assets1/images/user.png'
 import { Link } from "react-router-dom";
 
@@ -10,19 +10,19 @@ export default function Sidebar() {
           title: 'Dashboard',
           icon: <i className="icon-speedometer" />,
           dropdown: false,
-          href: '/dashboard'
+          href: '/'
       },
       {
-          title: 'Applicants',
+          title: 'Departments',
           icon: <i className="icon-drawer" />,
           dropdown: false,
-          href: '/applicants'
+          href: '/departments'
       },
       {
-          title: 'Registered Business',
-          icon: <i className="icon-briefcase" />,
+          title: 'Documents',
+          icon: <i className="icon-docs" />,
           dropdown: false,
-          href: '/registered-businesses'
+          href: '/documents'
       },
       {
           title: 'Users',
@@ -38,23 +38,11 @@ export default function Sidebar() {
           id: 'users',
           href: '/announcements',
       },
-      {
-          title: 'Settings',
-          icon: <i className="icon-settings" />,
-          dropdown: false,
-          href: '/settings'
-      },
   ]
   const landingPage = [
     {
         title: 'Page Settings',
         icon: <i className="icon-settings" />,
-        dropdown: false,
-        href: '/settings'
-    },
-    {
-        title: 'Key Officials',
-        icon: <i className="icon-user-follow" />,
         dropdown: false,
         href: '/settings'
     },
@@ -78,15 +66,16 @@ export default function Sidebar() {
       setPath(window.location.pathname)
   }
   return (
-    <div id="left-sidebar" className="sidebar" style={{ backgroundColor: '#22252a', border: 'none', color: '#bbbec2' }}>
+    <div id="left-sidebar" className="sidebar" style={{ backgroundColor: '#202f46', border: 'none', color: '#bbbec2' }}>
       <div className="navbar-brand">
         <a href="index.html">
           <img
             src={Logo}
             alt="Oculux Logo"
-            className="img-fluid logo"
+            className="img-fluid"
+            style={{height: '80px', width: '80px'}}
           />
-          <span style={{ color: '#bbbec2' }}>Oculux</span>
+          <span style={{ color: '#bbbec2' }}>BAC OFFICE</span>
         </a>
         <button
           type="button"

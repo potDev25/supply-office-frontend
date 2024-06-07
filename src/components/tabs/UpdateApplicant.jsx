@@ -4,6 +4,18 @@ import Select from "../Forms/Select";
 import DateInput from "../Forms/DateInput";
 import UploadRequirementsModal from "../modals/UploadRequirementsModal";
 
+const options = [
+  {
+    text: 'Department User',
+    value: 'Department User'
+  },
+  {
+    text: 'Supply Office',
+    value: 'Supply Office'
+  },
+]
+
+
 export default function UpdateApplicant({handleCancel}) {
   const [uploadModal, setUploadModal] = useState(false)
 
@@ -17,53 +29,62 @@ export default function UpdateApplicant({handleCancel}) {
           <Input
             placeholder={"Lastname"}
             label={"Lastname"}
-            col={"6"}
+            col={"4"}
             name={"lastname"}
           />
 
           <Input
             placeholder={"Firstname"}
             label={"Firstname"}
-            col={"6"}
+            col={"4"}
             name={"firstname"}
           />
 
           <Input
             placeholder={"Middle Name"}
             label={"Middle Name"}
-            col={"6"}
+            col={"4"}
             name={"middle_name"}
           />
-
-          <Select col={"6"} label={"Province"} name={"province"} />
-
-          <Select col={"6"} label={"City/Municipality"} name={"city"} />
-
-          <Select col={"6"} label={"Barangay"} name={"barangay"} />
 
           <DateInput
             placeholder={"Birthdate"}
             label={"Birthdate"}
-            col={"6"}
+            col={"4"}
             name={"firstname"}
           />
 
           <Input
             placeholder={"Email"}
             label={"Email"}
-            col={"6"}
+            col={"4"}
             name={"email"}
           />
 
-          <Select col={"6"} label={"Gender"} name={"gender"} />
+          <Select col={"4"} label={"Role"} name={"role"} options={options}/>
 
           <Input
             placeholder={"Username"}
             label={"Username"}
-            col={"6"}
+            col={"4"}
             name={"username"}
           />
 
+          <Input
+            placeholder={"Password"}
+            label={"Password"}
+            col={"4"}
+            name={"password"}
+            type="password"
+          />
+
+          <Input
+            placeholder={"Confirm Password"}
+            label={"Confirm Password"}
+            col={"4"}
+            name={"password_confirmation"}
+            type="password"
+          />
           <div className="col-12" style={{ display: "flex", gap: "5px" }}>
             <button
               type="button"
@@ -82,7 +103,7 @@ export default function UpdateApplicant({handleCancel}) {
             >
               Cancel
             </button>
-          </div>
+        </div>
         </div>
       </div>
 

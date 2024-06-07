@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Staffs() {
   return (
@@ -10,9 +11,8 @@ export default function Staffs() {
               <th>#</th>
               <th>Name</th>
               <th>Username</th>
-              <th>Birthdate</th>
-              <th>Registered Date</th>
               <th>Role</th>
+              <th>Registered Date</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -41,138 +41,26 @@ export default function Staffs() {
                 <span className="text-muted">marshall-n@gmail.com</span>
               </td>
               <td>
-                <span>LA-0215</span>
+                <span>Marshall</span>
               </td>
               <td>
-                <span>+ 264-625-2583</span>
+                <span>Supply Office</span>
               </td>
               <td>24 Jun, 2015</td>
-              <td>Web Designer</td>
               <td>
-                <button
+                <Link
                   type="button"
                   className="btn btn-sm btn-default"
                   title="Edit"
+                  to={`/users/view/90`}
                 >
                   <i className="icon-eye" />
-                </button>
+                </Link>
                 <button
                   type="button"
                   className="btn btn-sm btn-default js-sweetalert"
                   title="Delete"
                   data-type="confirm"
-                >
-                  <i className="icon-ban text-warning" />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-default js-sweetalert"
-                  title="Delete"
-                  data-type="confirm"
-                >
-                  <i className="fa fa-trash-o text-danger" />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td className="w60">
-                <label className="fancy-checkbox">
-                  <input
-                    className="checkbox-tick"
-                    type="checkbox"
-                    name="checkbox"
-                  />
-                  <span />
-                </label>
-                <img
-                  src="../assets/images/xs/avatar1.jpg"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="Avatar Name"
-                  alt="Avatar"
-                  className="w35 h35 rounded"
-                />
-              </td>
-              <td>
-                <div className="font-15">Susie Willis</div>
-                <span className="text-muted">sussie-w@gmail.com</span>
-              </td>
-              <td>
-                <span>LA-0216</span>
-              </td>
-              <td>
-                <span>+ 264-625-2583</span>
-              </td>
-              <td>28 Jun, 2015</td>
-              <td>Web Developer</td>
-              <td>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-default"
-                  title="Edit"
-                >
-                  <i className="icon-eye" />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-default"
-                  title="Edit"
-                >
-                  <i className="icon-ban text-warning" />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-default js-sweetalert"
-                  title="Delete"
-                  data-type="confirm"
-                >
-                  <i className="fa fa-trash-o text-danger" />
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td className="w60">
-                <label className="fancy-checkbox">
-                  <input
-                    className="checkbox-tick"
-                    type="checkbox"
-                    name="checkbox"
-                  />
-                  <span />
-                </label>
-                <div
-                  className="avtar-pic w35 bg-pink"
-                  data-toggle="tooltip"
-                  data-placement="top"
-                  title="Avatar Name"
-                >
-                  <span>MN</span>
-                </div>
-              </td>
-              <td>
-                <div className="font-15">Debra Stewart</div>
-                <span className="text-muted">debra@gmail.com</span>
-              </td>
-              <td>
-                <span>LA-0218</span>
-              </td>
-              <td>
-                <span>+ 264-625-2583</span>
-              </td>
-              <td>21 July, 2015</td>
-              <td>Web Developer</td>
-              <td>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-default"
-                  title="Edit"
-                >
-                  <i className="icon-eye" />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-default"
-                  title="Edit"
                 >
                   <i className="icon-ban text-warning" />
                 </button>

@@ -3,11 +3,11 @@ import React from 'react'
 export default function ApplicantBasicInfo() {
   return (
     <>
-        <small class="text-muted">Business Owner: </small>
+        {/* <small class="text-muted">Business Owner: </small>
         <p>Maripipi Sari-sari Store</p>
-        <hr/>
+        <hr/> */}
         <small class="text-muted">Username: </small>
-        <p>Neil Bryan</p>
+        <p>Andy Mar</p>
         <hr/>
         <small class="text-muted">Gender: </small>
         <p>Male</p>

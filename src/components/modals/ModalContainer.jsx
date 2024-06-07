@@ -22,7 +22,7 @@ export default function ModalContainer({show, handleClose, children, cancelText,
             withOkButton ? <>
               <button
                 type="button"
-                className="btn btn-primary btn-round"
+                className="btn btn-primary btn-sm btn-round"
                 onClick={handleClose}
               >
                 {btnText}
@@ -33,7 +33,7 @@ export default function ModalContainer({show, handleClose, children, cancelText,
             withCancel ?
             <button
                 type="button"
-                className="btn btn-secondary btn-round"
+                className="btn btn-secondary btn-sm btn-round"
                 onClick={handleClose}
             >
                 {cancelText}

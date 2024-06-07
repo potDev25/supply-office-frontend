@@ -2,8 +2,31 @@ import React, { useEffect, useState } from "react";
 import PageTitle from "../../components/Layout/PageTitle";
 import Clearfix from "../../components/container/Clearfix";
 import DashboardCards from "../../components/container/DashboardCards";
+import ChangeStatusModal from "../../components/modals/ChangeStatusModal";
+import ReturnStatusModal from "../../components/modals/ReturnStatusModal";
 
 export default function Dasboard() {
+  const [changeStatus, setChangeStatus] = useState(false)
+  const [returnStatus, setReturnStatus] = useState(false)
+  const [requestId, setRequestId] = useState()
+
+  const handleCloseStatusModal = () => {
+    setChangeStatus(false)
+  }
+
+  const handleCloseReturnModal = () => {
+    setReturnStatus(false)
+  }
+
+  const handleOpenStatusModal = (request_id) => {
+    setRequestId(request_id)
+    setChangeStatus(true)
+  }
+
+  const handleOpenReturnModal = (request_id) => {
+    setRequestId(request_id)
+    setReturnStatus(true)
+  }
   return (
     <>
       <PageTitle title={"Dashboard"} />
@@ -12,16 +35,33 @@ export default function Dasboard() {
         <DashboardCards />
       </Clearfix>
       <Clearfix>
-        <h2 style={{fontSize: '14px'}}>Requests Application</h2>
+        <div className="row">
+          <div className="d-flex align-items-center col-lg-6 col-sm-12 col-md-12">
+            <h2 style={{fontSize: '14px'}} className="mt-2 text-uppercase">On Process PPMP</h2>
+            <input type="text" className="form-control ml-2" style={{width: '500px'}} placeholder="Search Department"/>
+          </div>
+          <div className="col-lg-6 col-sm-12 col-md-12" style={{gap: '5px'}}>
+            <div className="d-flex" style={{gap: '5px', float: 'right'}}>
+              <button className="btn btn-default border border-secondary btn-sm">For Review</button>
+              <button className="btn btn-default border border-success btn-sm">Presidents Office</button>
+              <button className="btn btn-default border border-primary btn-sm">VP Office</button>
+              <button className="btn btn-default border border-warning btn-sm">Accounting Office</button>
+              <button className="btn btn-default border border-danger btn-sm">Supply Office</button>
+            </div>
+          </div>
+        </div>
         <div className="table-responsive">
           <table className="table table-hover table-custom spacing5">
             <thead>
               <tr>
                 <th style={{ width: 20 }}>#</th>
-                <th>Client</th>
-                <th style={{ width: 50 }}>Amount</th>
-                <th style={{ width: 50 }}>Status</th>
-                <th style={{ width: 110 }}>Action</th>
+                <th>Department/Office</th>
+                <th>Request By</th>
+                <th>Paper Type</th>
+                <th>File</th>
+                <th>Status</th>
+                <th>Date Submitted</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -32,7 +72,7 @@ export default function Dasboard() {
                 <td>
                   <div className="d-flex align-items-center">
                     <div
-                      className="avtar-pic w35 bg-red"
+                      className="avtar-pic w30 bg-red"
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Avatar Name"
@@ -41,16 +81,29 @@ export default function Dasboard() {
                     </div>
                     <div className="ml-3">
                       <a href="page-invoices-detail.html" title>
-                        South Shyanne
+                        School of Technology and Computer Studies
                       </a>
-                      <p className="mb-0">south.shyanne@example.com</p>
                     </div>
                   </div>
                 </td>
-                <td>$1200</td>
                 <td>
-                  <span className="badge badge-success ml-0 mr-0">Done</span>
+                  <div className="d-flex align-items-center">
+                    <div className="">
+                      <a href="page-invoices-detail.html" title>
+                        South Shyanne
+                      </a>
+                      <p className="mb-0">Chairperson</p>
+                    </div>
+                  </div>
                 </td>
+                <td>PPMP</td>
+                <td className="text-primary">
+                  <span><i className="fa fa-download"></i> PDF FILE</span>
+                </td>
+                <td>
+                  <span className="badge badge-secondary ml-0 mr-0">For Review</span>
+                </td>
+                <td>May 20, 2024</td>
                 <td>
                   <button
                     type="button"
@@ -58,57 +111,61 @@ export default function Dasboard() {
                     title="Send Invoice"
                     data-toggle="tooltip"
                     data-placement="top"
+                    onClick={ev => handleOpenStatusModal(1)}
                   >
-                    <i className="icon-envelope" />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-default "
-                    title="Print"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                  >
-                    <i className="icon-printer" />
+                    <i className="fa fa-edit" />
                   </button>
                   <button
                     type="button"
                     className="btn btn-sm btn-default"
-                    title="Delete"
+                    title="Send Invoice"
                     data-toggle="tooltip"
                     data-placement="top"
+                    onClick={ev => handleOpenReturnModal(1)}
                   >
-                    <i className="icon-trash" />
+                    <i className="fa fa-chevron-right" />
                   </button>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <span>04</span>
+                  <span>01</span>
                 </td>
                 <td>
                   <div className="d-flex align-items-center">
                     <div
-                      className="avtar-pic w35 bg-green"
+                      className="avtar-pic w30 bg-red"
                       data-toggle="tooltip"
                       data-placement="top"
                       title="Avatar Name"
                     >
-                      <span>KG</span>
+                      <span>SS</span>
                     </div>
                     <div className="ml-3">
-                      <a href="javascript:void(0);" title>
-                        Kevin Gill
+                      <a href="page-invoices-detail.html" title>
+                        School of Criminal Justice Education
                       </a>
-                      <p className="mb-0">kevin.gill@example.com</p>
                     </div>
                   </div>
                 </td>
-                <td>$451</td>
                 <td>
-                  <span className="badge badge-warning  ml-0 mr-0">
-                    Panding
-                  </span>
+                  <div className="d-flex align-items-center">
+                    <div className="">
+                      <a href="page-invoices-detail.html" title>
+                        South Shyanne
+                      </a>
+                      <p className="mb-0">Chairperson</p>
+                    </div>
+                  </div>
                 </td>
+                <td>PPMP</td>
+                <td className="text-primary">
+                  <span><i className="fa fa-download"></i> PDF FILE</span>
+                </td>
+                <td>
+                  <span className="badge badge-success ml-0 mr-0">At The President</span>
+                </td>
+                <td>May 20, 2024</td>
                 <td>
                   <button
                     type="button"
@@ -116,26 +173,19 @@ export default function Dasboard() {
                     title="Send Invoice"
                     data-toggle="tooltip"
                     data-placement="top"
+                    onClick={ev => handleOpenStatusModal(1)}
                   >
-                    <i className="icon-envelope" />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-default "
-                    title="Print"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                  >
-                    <i className="icon-printer" />
+                    <i className="fa fa-edit" />
                   </button>
                   <button
                     type="button"
                     className="btn btn-sm btn-default"
-                    title="Delete"
+                    title="Send Invoice"
                     data-toggle="tooltip"
                     data-placement="top"
+                    onClick={ev => handleOpenReturnModal(1)}
                   >
-                    <i className="icon-trash" />
+                    <i className="fa fa-chevron-right" />
                   </button>
                 </td>
               </tr>
@@ -144,138 +194,19 @@ export default function Dasboard() {
         </div>
       </Clearfix>
 
-      <Clearfix classname={'mt-4'}>
-        <h2 style={{fontSize: '14px'}}>Registration Requests</h2>
-        <div className="table-responsive">
-          <table className="table table-hover table-custom spacing5">
-            <thead>
-              <tr>
-                <th style={{ width: 20 }}>#</th>
-                <th>Client</th>
-                <th style={{ width: 50 }}>Amount</th>
-                <th style={{ width: 50 }}>Status</th>
-                <th style={{ width: 110 }}>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <span>01</span>
-                </td>
-                <td>
-                  <div className="d-flex align-items-center">
-                    <div
-                      className="avtar-pic w35 bg-red"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="Avatar Name"
-                    >
-                      <span>SS</span>
-                    </div>
-                    <div className="ml-3">
-                      <a href="page-invoices-detail.html" title>
-                        South Shyanne
-                      </a>
-                      <p className="mb-0">south.shyanne@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td>$1200</td>
-                <td>
-                  <span className="badge badge-success ml-0 mr-0">Done</span>
-                </td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-default"
-                    title="Send Invoice"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                  >
-                    <i className="icon-envelope" />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-default "
-                    title="Print"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                  >
-                    <i className="icon-printer" />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-default"
-                    title="Delete"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                  >
-                    <i className="icon-trash" />
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span>04</span>
-                </td>
-                <td>
-                  <div className="d-flex align-items-center">
-                    <div
-                      className="avtar-pic w35 bg-green"
-                      data-toggle="tooltip"
-                      data-placement="top"
-                      title="Avatar Name"
-                    >
-                      <span>KG</span>
-                    </div>
-                    <div className="ml-3">
-                      <a href="javascript:void(0);" title>
-                        Kevin Gill
-                      </a>
-                      <p className="mb-0">kevin.gill@example.com</p>
-                    </div>
-                  </div>
-                </td>
-                <td>$451</td>
-                <td>
-                  <span className="badge badge-warning  ml-0 mr-0">
-                    Panding
-                  </span>
-                </td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-default"
-                    title="Send Invoice"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                  >
-                    <i className="icon-envelope" />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-default "
-                    title="Print"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                  >
-                    <i className="icon-printer" />
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-default"
-                    title="Delete"
-                    data-toggle="tooltip"
-                    data-placement="top"
-                  >
-                    <i className="icon-trash" />
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Clearfix>
+      <ChangeStatusModal
+        show={changeStatus}
+        handleClose={handleCloseStatusModal}
+        requestId={requestId}
+      />
+
+      <ReturnStatusModal
+        show={returnStatus}
+        handleClose={handleCloseReturnModal}
+        requestId={requestId}
+      />
     </>
   );
 }
+
+// d-flex align-items-center justify-content-between mb-2

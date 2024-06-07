@@ -29,12 +29,12 @@ export default function Users() {
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" data-toggle="tab" href="#e_list">
-                      Staffs
+                      Supply Office Users
                     </a>
                   </li>
                   <li className="nav-item">
                     <a className="nav-link" data-toggle="tab" href="#e_leave">
-                      Treasurers
+                      Department Users
                     </a>
                   </li>
                 </ul>
