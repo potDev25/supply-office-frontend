@@ -1,21 +1,17 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
-// import '../../landingpageAsset/css/bootstrap.min.css'
-// import '../../landingpageAsset/fonts/line-icons.css'
-// import '../../landingpageAsset/css/animate.css'
-// import '../../landingpageAsset/css/slicknav.css'
-// import '../../landingpageAsset/css/owl.carousel.min.css'
-// import '../../landingpageAsset/css/owl.theme.css'
-// import '../../landingpageAsset/css/main.css'
-// import '../../landingpageAsset/css/responsive.css'
-import GuestHeader from "./GuestHeader";
+import React from 'react'
+import { Navigate, Outlet } from 'react-router-dom'
+import { useStateContext } from '../../context/ContextProvider'
 
 export default function GuestLayout() {
-  return (
-    <>
-      <GuestHeader/>
+  const {user_token} = useStateContext()
 
-      <Outlet />
-    </>
-  );
+  if(user_token){
+    return <Navigate to={'/dashboard'}/>
+  }
+
+  return (
+    <div className='flex items-center justify-around h-screen relative' id='form-container'>
+      <Outlet/>
+    </div>
+  )
 }

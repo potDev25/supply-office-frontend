@@ -1,14 +1,19 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { RouterProvider } from 'react-router-dom'
-import router from './router.jsx'
-import guest_router from './guest-router.jsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router } from 'react-router-dom';
+import App from './App';
+import './css/style.css';
+import './css/satoshi.css';
+import 'jsvectormap/dist/css/jsvectormap.css';
+import 'flatpickr/dist/flatpickr.min.css';
+import { ContextProvider } from './context/ContextProvider';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <ContextProvider>
+      <Router>
+        <App />
+      </Router>
+    </ContextProvider>
   </React.StrictMode>,
-)
-
+);
