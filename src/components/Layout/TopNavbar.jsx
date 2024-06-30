@@ -17,7 +17,7 @@ export default function TopNavbar() {
               <i className="lnr lnr-menu fa fa-bars" />
             </button>
           </div>
-          <ul className="nav navbar-nav">
+          {/* <ul className="nav navbar-nav">
             <li className="dropdown">
               <a
                 href="javascript:void(0);"
@@ -259,7 +259,7 @@ export default function TopNavbar() {
                 Blog
               </a>
             </li>
-          </ul>
+          </ul> */}
         </div>
         <div className="navbar-right">
           <div id="navbar-menu">

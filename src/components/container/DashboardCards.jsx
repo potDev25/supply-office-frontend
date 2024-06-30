@@ -12,7 +12,7 @@ export default function DashboardCards() {
               </div>
               <div className="ml-4">
                 <span>Registered Users</span>
-                <h4 className="mb-0 font-weight-medium">$7,805</h4>
+                <h4 className="mb-0 font-weight-medium">805</h4>
               </div>
             </div>
           </div>
