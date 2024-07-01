@@ -16,7 +16,7 @@ const options = [
 const minDate = '2024-06-21';
 const maxDate = '2024-12-31';
 
-export default function DeleteApplicantModal({ deleteApplicant, open, handleModal, loading}) {
+export default function DeleteApplicantModal({ deleteApplicant, open, handleModal, loading, text}) {
   const closeModal = () => {
     handleModal()
   }
@@ -29,7 +29,7 @@ export default function DeleteApplicantModal({ deleteApplicant, open, handleModa
 
       <dialog className={`modal ${open ? 'modal-open' : ''}`}>
         <div className="modal-box">
-          <h3 className="font-bold text-lg text-center">Delete Users Permanently?</h3>
+          <h3 className="font-bold text-lg text-center"> {text ? text : 'Delete Users Permanently?'}</h3>
           <div className={`modal-action ${loading ? '' : 'flex items-center justify-between'}`}>
             
             {

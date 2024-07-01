@@ -1,15 +1,15 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useEffect } from 'react';
 import Header from '../components/Header/index';
 import Sidebar from '../components/Sidebar/index';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useStateContext } from '../context/ContextProvider';
 import 'react-toastify/dist/ReactToastify.css';
 import { Bounce, ToastContainer, toast } from 'react-toastify';
+import axiosClient from '../axiosClinet';
 
 export default function DefaultLayout({children}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const {user_token, notification, notification_error} = useStateContext()
-
+  const {user_token, notification, notification_error, user} = useStateContext()
 
   if(notification){
     toast.success(notification, {

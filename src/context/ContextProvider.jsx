@@ -4,11 +4,13 @@ import { Navigate } from 'react-router-dom';
 const StateContext = createContext({
     user: null,
     user_token: null,
+    departments: null,
     notification: null,
     alertNot: null,
     notification_error: null,
     calendarYear: null,
     setCalendarYear: () => {},
+    setDepartments: () => {},
     setPassengers: () => {},
     setNotification: () => {},
     setAlertNot: () => {},
@@ -22,6 +24,7 @@ export const ContextProvider = ({children}) => {
     const [user, setUser] = useState({})
     const [calendarYear, setCalendarYear] = useState({})
     const [notification, _setNotification] = useState('')          
+    const [departments, _setDepartments] = useState([])          
     const [alertNot, _setAlertNot] = useState('')
     const [notification_error, _setNotificationError] = useState('')
     const [user_token, _setUserToken] = useState(localStorage.getItem('USER_TOKEN'))
@@ -47,6 +50,14 @@ export const ContextProvider = ({children}) => {
         setTimeout(() => {
             _setAlertNot('')
         }, 1500)
+    }
+
+    const setDepartments = (departments) => {
+        _setDepartments((prev) => {
+            return departments.map((item) => ({
+                ...prev, label: item.department_name, value: item.id
+            }))
+        })
     }
 
     const setNotificationError = (notification) => {

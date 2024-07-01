@@ -7,7 +7,7 @@ import axiosClient from '../../axiosClinet';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const {setUserToken, setUser} = useStateContext()
+  const {setUserToken, setUser, user} = useStateContext()
   
   const logout = async () => {
     try {
@@ -28,9 +28,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {user.lastname} {user.firstname}
           </span>
-          <span className="block text-xs">General Admin</span>
+          <span className="block text-xs capitalize">{user.role}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">

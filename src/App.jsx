@@ -26,18 +26,34 @@ import Loader from './components/Loader/Loader';
 import MSignin from './pages/Authentication/MSignin';
 import Departments from './pages/Departments/Departments';
 import RegisterDepartment from './pages/Departments/RegisterDepartment';
+import axiosClient from './axiosClinet';
+import { useStateContext } from './context/ContextProvider';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
+  const {setUser, setDepartments} = useStateContext()
+
+  const fetchData = async () => {
+    try {
+      const {data} = await axiosClient.get('/user')
+      console.log(data);
+      setUser(data.user)
+      setDepartments(data.departments)
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
 
   return loading ? (
     <Loader />
@@ -49,7 +65,7 @@ function App() {
           path='/dashboard'
           element={
             <>
-              <PageTitle title="eCommerce Dashboard | TailAdmin - Tailwind CSS Admin Dashboard Template" />
+              <PageTitle title="Dashboard | University BAC" />
               <Dashboard />
             </>
           }
