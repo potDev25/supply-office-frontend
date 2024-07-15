@@ -80,7 +80,9 @@ export const ContextProvider = ({children}) => {
             setUser,
             setUserToken,
             calendarYear,
-            setCalendarYear
+            setCalendarYear,
+            setDepartments,
+            departments
          }}>
 
             {children}

@@ -11,6 +11,7 @@ import { pdfjs } from 'react-pdf';
 import { Link, useNavigate } from 'react-router-dom';
 import { useStateContext } from '../../context/ContextProvider';
 import axiosClient from '../../axiosClinet';
+import Select from 'react-select'
 
 const config = {
   headers: {
@@ -21,7 +22,7 @@ const config = {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const Register = () => {
-  const {setNotification} = useStateContext()
+  const {setNotification, departments} = useStateContext()
   const navigate = useNavigate()
   const [image, setImage] = useState(null)
   const [sanitary, setSanitary] = useState(null)
@@ -43,7 +44,8 @@ const Register = () => {
     profile_image: '',
     sanitary_permit : '',
     barangay_clearance: '',
-    position: ''
+    position: '',
+    department_id: ''
   })
 
   const toolbarPluginInstance = toolbarPlugin();
@@ -435,6 +437,19 @@ const Register = () => {
                     />
                     {
                       errors.position ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.position}</p> : null
+                    }
+                  </div>
+
+                  <div className="mb-5.5">
+                    <label
+                      className="mb-3 block text-sm font-medium text-black dark:text-white"
+                      htmlFor="position"
+                    >
+                      Select Department
+                    </label>
+                   <Select options={departments} onChange={ev => setPayload({...payload, department_id: ev.value})}/>
+                    {
+                      errors.department_id ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.department_id}</p> : null
                     }
                   </div>
 

@@ -1,11 +1,17 @@
 import React from 'react'
 import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb'
 import ApplicantsTable from '../../components/Tables/ApplicantsTable'
+import { useStateContext } from '../../context/ContextProvider'
 
 export default function Applicants() {
+  const {user} = useStateContext()
+
+  if(user.role !== 'general admin'){
+    window.location.replace('/dashboard')
+  }
   return (
     <>
-      <Breadcrumb pageName="Applicants" />
+      <Breadcrumb pageName="System Users" />
       <ApplicantsTable/>
     </>
   )

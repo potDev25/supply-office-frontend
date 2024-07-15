@@ -97,6 +97,7 @@ const DepartmentsTable = () => {
         setBtnLoading(false)
         setDeleteModal(false)
         setNotification('Department Deleted Successfully')
+        setIds([])
       } catch (error) {
         console.log(error);
         setNotificationError('Unable to delete departments')

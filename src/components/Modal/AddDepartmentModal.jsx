@@ -27,7 +27,7 @@ const maxDate = '2024-12-31';
 
 export default function AddDepartmentModal({ open, handleModal, loading, handleBntLoading, handlePageLoading}) {
   const [errors, setErrors] = useState([])
-  const {setNotification, setNotificationError} = useStateContext()
+  const {setNotification, setNotificationError, setDepartments} = useStateContext()
   const [imageUrl, setImage] = useState(null)
   const [payload, setPayload] = useState({
     department_name: '',
@@ -73,6 +73,7 @@ export default function AddDepartmentModal({ open, handleModal, loading, handleB
     handleBntLoading(true)
     try {
       const {data} = await axiosClient.post('/departments/store', payload, config)
+      setDepartments(data)
       setNotification('Department Added Successfully')
       handleBntLoading(false)
       handlePageLoading()
@@ -80,13 +81,14 @@ export default function AddDepartmentModal({ open, handleModal, loading, handleB
       // handleModal()
       handleCloseModal()
     } catch (error) {
+      setNotificationError('Unable to save department')
+      handleBntLoading(false)
+      console.log(error);
       if(error.response.data.errors){
         setErrors(error.response.data.errors)
       }else{
         setErrors({password: 'Server Error! Please Try Again'})
       }
-      setNotificationError('Unable to save department')
-      handleBntLoading(false)
     }
   }
 

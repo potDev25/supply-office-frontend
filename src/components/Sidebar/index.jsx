@@ -3,11 +3,15 @@ import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import Logo from '../../images/bipsu_new.png';
 import {sidebarItem} from '../SideBarItem/Items'
+import {AdminMenu} from '../SideBarItem/AdminMenu'
+import { useStateContext } from '../../context/ContextProvider';
 
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
   const { pathname } = location;
+  let sideItems = [];
+  const {user} = useStateContext()
 
   const trigger = useRef(null);
   const sidebar = useRef(null);
@@ -52,6 +56,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
     }
   }, [sidebarExpanded]);
 
+  if(user.role === 'general admin'){
+    sideItems = sidebarItem;
+  }
+
+  if(user.role === 'admin'){
+    sideItems = AdminMenu;
+  }
+
   return (
     <aside
       ref={sidebar}
@@ -60,7 +72,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      <div className="flex items-center justify-between gap-2 px-5 py-5">
         <NavLink to="/">
           <div className='flex items-center justify-center'>
             <img src={Logo} alt="Logo" className='h-[100px]'/>
@@ -94,7 +106,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
-        <nav className="mt-2 py-1 px-2 lg:mt-9 lg:px-6">
+        <nav className="mt-2 py-1 px-2 lg:mt-2 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
@@ -105,7 +117,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
               {/* <!-- Menu Item Dashboard --> */}
 
               {
-                sidebarItem.map((item) => (
+                sideItems.map((item) => (
                   item.dropdown ? <>
                      <SidebarLinkGroup
                         activeCondition={

@@ -7,8 +7,12 @@ import ChatCard from '../../components/Chat/ChatCard';
 import MapOne from '../../components/Maps/MapOne';
 import TableOne from '../../components/Tables/TableOne';
 import RequestTable from '../../components/Tables/RequestTable';
+import { useStateContext } from '../../context/ContextProvider';
+import PendingRequests from '../../components/Tables/PendingRequests';
 
 export default function Dashboard() {
+  const {user} = useStateContext()
+
   return (
     <>
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
@@ -104,7 +108,10 @@ export default function Dashboard() {
       {/* <ChartThree /> */}
       {/* <MapOne /> */}
       <div className="col-span-12 xl:col-span-12">
-        <RequestTable />
+        {
+          user.role !== 'general admin' ? 
+          <PendingRequests/> : <RequestTable />
+        }
       </div>
       {/* <ChatCard /> */}
     </div>

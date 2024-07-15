@@ -11,6 +11,7 @@ import Loader from '../Loader/Loader';
 import axiosClient from '../../axiosClinet';
 import DeleteApplicantModal from '../Modal/DeleteApplicantModal';
 import { useStateContext } from '../../context/ContextProvider';
+import DefaultImage from '../../images/bipsu_new.png'
 
 const ApplicantsTable = () => {
   const [request, setRequest] = useState()
@@ -95,6 +96,7 @@ const ApplicantsTable = () => {
         setBtnLoading(false)
         setDeleteModal(false)
         setNotification('Users Deleted Successfully')
+        setIds([])
       } catch (error) {
         console.log(error);
       }
@@ -150,7 +152,7 @@ const ApplicantsTable = () => {
         <div className='flex items-center gap-2'>
           <Link to={'/users/register'} className="btn btn-primary" onClick={ev => openModal(1)}>
           <i className="fa-solid fa-circle-plus"></i>
-            Register Applicant
+            Register User
           </Link>
         </div>
 
@@ -196,7 +198,7 @@ const ApplicantsTable = () => {
                     <div className="flex items-center gap-3">
                       <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
-                          <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${data.profile_image}`} alt="Avatar Tailwind CSS Component" />
+                          <img src={`${data.profile_image ? `${import.meta.env.VITE_API_BASE_URL}/storage/${data.profile_image}` : DefaultImage}`} alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
                       <div>
@@ -209,7 +211,9 @@ const ApplicantsTable = () => {
                     {data.position}
                   </td>
                   <td className='capitalize'>{data.role}</td>
-                  <td>N/A</td>
+                  <td>{
+                    data.department_id ? data.department_name : 'N/A'  
+                  }</td>
                   <td><div className={`badge ${data.status == 1 ? 'badge-success' : ''}  badge-outline`}>{data.status == 1 ? 'Online' : 'Offline'}</div></td>
                   <th className='flex gap-1 items-center justify-center mt-2'>
                     <button className="btn btn-sm btn-default"><i class="fa-solid fa-eye"></i></button>

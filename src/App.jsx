@@ -28,6 +28,7 @@ import Departments from './pages/Departments/Departments';
 import RegisterDepartment from './pages/Departments/RegisterDepartment';
 import axiosClient from './axiosClinet';
 import { useStateContext } from './context/ContextProvider';
+import UploadDocument from './pages/Applicants/UploadDocument';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -67,6 +68,16 @@ function App() {
             <>
               <PageTitle title="Dashboard | University BAC" />
               <Dashboard />
+            </>
+          }
+        />
+        <Route
+          index
+          path='/dashboard/upload'
+          element={
+            <>
+              <PageTitle title="Upload | University BAC" />
+              <UploadDocument />
             </>
           }
         />
