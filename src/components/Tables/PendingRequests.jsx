@@ -11,6 +11,9 @@ import ReturnModal from '../Modal/ReturnModal';
 import { Link } from 'react-router-dom';
 import axiosClient from '../../axiosClinet';
 import Loader from '../Loader/Loader';
+import CancelModal from '../Modal/CancelModal';
+import { useStateContext } from '../../context/ContextProvider';
+import FileModal from '../Modal/FileModal';
 
 const PendingRequests = () => {
   const [request, setRequest] = useState()
@@ -18,13 +21,20 @@ const PendingRequests = () => {
   const [openReturnModal, setReturnModal] = useState(false)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [tableLoading, setTableLoading] = useState(true)
   const [requests, setRequests] = useState([])
+  const [cancel, setCancel] = useState(false)
+  const [btnLoading, setBtnLoading] = useState(false)
+  const [fileModal, setFileModal] = useState(false)
+  const [documentId, setDocumentId] = useState(null)
+  const [file, setFile] = useState(null)
+  const {setNotification, setNotificationError} = useStateContext()
 
   const fetchData = async () => {
     try {
       const {data} = await axiosClient.get('/documents')
-      setRequests(data)
-      setLoading(false)
+      setRequests(data.data)
+      setTableLoading(false)
     } catch (error) {
       console.log(error);
     }
@@ -34,13 +44,26 @@ const PendingRequests = () => {
     setProceedModal(!openProceedModal)
   } 
 
+  const handleCancelModal = () => {
+    setCancel(!cancel)
+  } 
+
+  const handleFileModal = (file) => {
+    setFile(file)
+    setFileModal(!fileModal)
+  } 
+
+  const handleTableLoading = () => {
+    setTableLoading(true)
+  }
+
   const handleReturnModal = () => {
     setReturnModal(!openReturnModal)
   } 
 
   useEffect(() => {
     fetchData()
-  }, [loading])
+  }, [tableLoading])
 
   function formatDate(inputDate) {
     const date = new Date(inputDate);
@@ -54,26 +77,50 @@ const PendingRequests = () => {
     return formatter.format(date);
   }
 
+  const handleCancelClick = (id) => {
+    setCancel(true)
+    setDocumentId(id)
+  } 
+
+  const handleCancelAction = async (id) => {
+    setBtnLoading(true)
+    try {
+      const {data} = await axiosClient.post(`/documents/cancel/${id}`)
+      setBtnLoading(false)
+      setNotification('Transaction Cancel Successfully')
+      setTableLoading(true)
+    } catch (error) {
+      setNotificationError('Server Error, Please Try Again Later')
+      setBtnLoading(false)
+    }
+  }
+
   return (
-    <div className="overflow-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <div className="lg:overflow-x-visible sm:overflow-x-auto md:overflow-x-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className='flex items-center justify-between p-2'>
         <h1 className='font-medium'>Pending Requests</h1>
         <div className='flex items-center gap-2'>
-          <Link to={'/dashboard/upload'} className="btn btn-primary">
-          <i className="fa-solid fa-upload"></i>
-            Upload Document
-          </Link>
+          {
+            requests.length >= 1 ? <button className="btn btn-primary" disabled>Upload Document</button>
+            : 
+            <Link to={'/dashboard/upload'} className="btn btn-primary">
+            <i className="fa-solid fa-upload"></i>
+              Upload Document
+            </Link>
+          }
         </div>
       </div>
       
       <ProceedModal open={openProceedModal} handleModal={handleProceedModal}/>
       <ReturnModal open={openReturnModal} handleModal={handleReturnModal}/>
+      <FileModal open={fileModal} handleModal={handleFileModal} file={file}/>
+      <CancelModal open={cancel} handleModal={handleCancelModal} text={'Cancel Transaction?'} btnText={'Cancel'} id={documentId} handleAction={handleCancelAction} loading={btnLoading}/>
         
       {
-        loading ? <>
+        tableLoading ? <>
           <Loader/>
         </> : 
-        <table className="table table-zebra table-md fade-in">
+        <table className="table w-full table-zebra table-md fade-in">
           {/* head */}
           <thead>
             <tr>
@@ -86,6 +133,7 @@ const PendingRequests = () => {
               <th>Title</th>
               <th>Requested By</th>
               <th>Request Date</th>
+              <th>Deadline</th>
               <th>Status</th>
               <th className='text-center'>Action</th>
               {/* <th></th> */}
@@ -125,129 +173,36 @@ const PendingRequests = () => {
                     <span className="badge badge-ghost badge-sm">{data.position}</span>
                   </td>
                   <td>{formatDate(data.created_at)}</td>
-                  <td><div className="badge badge-success badge-outline">Presidents Office</div></td>
+                  <td>{data.deadline ? formatDate(data.deadline) : 'N/A'}</td>
+                  <td>
+                    {
+                      data.document_status === 'for review' ? <div className={`badge badge-default badge-outline capitalize text-xs`}>{data.document_status}</div> : null
+                    }
+                    {
+                      data.document_status === 'president office' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{data.document_status}</div> : null
+                    }
+                    {
+                      data.document_status === 'supply office' ? <div className={`badge badge-accent badge-outline capitalize text-xs`}>{data.document_status}</div> : null
+                    }
+                    {
+                      data.document_status === 'return' ? <div className={`badge badge-ghost badge-sm capitalize text-xs`}>{data.document_status}</div> : null
+                    }
+                    {
+                      data.document_status === 'accounting office' ? <div className="badge border border-red-500 text-red-500 badge-outline">{data.document_status}</div> : null
+                    }
+                  </td>
                   <th className='flex gap-1 items-center justify-center mt-2'>
-                  <details className="dropdown dropdown-end">
-                      <summary className="btn m-1 bg-blue-500 text-white"><i class="fa-solid fa-location-dot"></i> Action</summary>
-                      <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-49 p-2 shadow">
-                        <li><a onClick={handleProceedModal}>Proceed</a></li>
-                        <li><a onClick={handleReturnModal}>Return</a></li>
-                      </ul>
-                    </details>
+                    <button className='btn bg-blue-500 text-white hover:bg-blue-500 btn-sm' onClick={ev => handleFileModal(data.document)}><i class="fa-regular fa-file"></i> File</button>
+                    {
+                      data.document_status === "for review" ? <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(data.document_id)}>Cancel</button> : null
+                    }
+                    {
+                      data.message ? <button className='btn bg-green-600 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(data.document_id)}><i class="fa-regular fa-message"></i> Message</button> : null
+                    }
                   </th>
                 </tr>
               ))
             }
-
-            
-            {/* row 2 */}
-            {/* <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <img src={Logo} alt="Avatar Tailwind CSS Component" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">School of Technology and Computer Studies</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                Zemlak, Daniel
-                <br/>
-                <span className="badge badge-ghost badge-sm">Chairperson</span>
-              </td>
-              <td>June 5, 2024</td>
-              <td><div className="badge badge-primary badge-outline">Office Supply</div></td>
-              <th className='flex gap-1 items-center justify-center mt-2'>
-                <details className="dropdown dropdown-end">
-                  <summary className="btn m-1 bg-blue-500 text-white"><i class="fa-solid fa-location-dot"></i> Action</summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-49 p-2 shadow">
-                      <li><a onClick={handleProceedModal}>Proceed</a></li>
-                      <li><a onClick={handleReturnModal}>Return</a></li>
-                    </ul>
-                </details>
-              </th>
-            </tr> */}
-            {/* row 3 */}
-            {/* <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <img src={Logo} alt="Avatar Tailwind CSS Component" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">School of Technology and Computer Studies</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                Zemlak, Daniel
-                <br/>
-                <span className="badge badge-ghost badge-sm">Chairperson</span>
-              </td>
-              <td>June 5, 2024</td>
-              <td><div className="badge outline-red-500 badge-outline">For Review</div></td>
-              <th className='flex gap-1 items-center justify-center mt-2'>
-              <details className="dropdown dropdown-end">
-                  <summary className="btn m-1 bg-blue-500 text-white"><i class="fa-solid fa-location-dot"></i> Action</summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-49 p-2 shadow">
-                      <li><a onClick={handleProceedModal}>Proceed</a></li>
-                      <li><a onClick={handleReturnModal}>Return</a></li>
-                    </ul>
-                </details>
-              </th>
-            </tr> */}
-            {/* row 4 */}
-            {/* <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <td>
-                <div className="flex items-center gap-3">
-                  <div className="avatar">
-                    <div className="mask mask-squircle w-12 h-12">
-                      <img src={Logo} alt="Avatar Tailwind CSS Component" />
-                    </div>
-                  </div>
-                  <div>
-                    <div className="font-bold">School of Technology and Computer Studies</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                Zemlak, Daniel
-                <br/>
-                <span className="badge badge-ghost badge-sm">Chairperson</span>
-              </td>
-              <td>June 5, 2024</td>
-              <td><div className="badge border border-red-500 text-red-500 badge-outline">Accounting Office</div></td>
-              <th className='flex gap-1 items-center justify-center mt-2'>
-                <details className="dropdown dropdown-end">
-                  <summary className="btn m-1 bg-blue-500 text-white" role='button'><i class="fa-solid fa-location-dot"></i> Action</summary>
-                    <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-49 p-2 shadow">
-                      <li><a onClick={handleProceedModal}>Proceed</a></li>
-                      <li><a onClick={handleReturnModal}>Return</a></li>
-                    </ul>
-                </details>
-              </th>
-            </tr> */}
           </tbody>
           {/* foot */}
           <tfoot>
@@ -256,6 +211,7 @@ const PendingRequests = () => {
               <th>Department</th>
               <th>Requested By</th>
               <th>Request Date</th>
+              <th>Deadline</th>
               <th>Status</th>
               <th className='text-center'>Action</th>
               {/* <th></th> */}
