@@ -18,13 +18,19 @@ const options = [
 const minDate = '2024-06-21';
 const maxDate = '2024-12-31';
 
-export default function ReturnModal({open, handleModal, data, tableLoading}) {
+const config = {
+  headers: {
+      'content-type': 'multipart/form-data'
+  }
+};
+
+export default function UpdateFileModal({open, handleModal, data, tableLoading}) {
   const [errors, setErrors] = useState([])
   const {setNotification, setNotificationError} = useStateContext()
   const [btnLoading, setBtnLoading] = useState(false)
   const [payload, setPayload] = useState({
-    status: 'return',
-    message: ''
+    status: 'for review',
+    document: ''
   })
 
   const onChange = (e) => {
@@ -35,11 +41,11 @@ export default function ReturnModal({open, handleModal, data, tableLoading}) {
   }
 
   const updateStatus = async () => {
-    setBtnLoading(true)
+    setBtnLoading(true)  
     try {
-        const {res} = await axiosClient.post(`/documents/return-status/${data.document_id}`, payload)
+        const {res} = await axiosClient.post(`/documents/return-file-status/${data.document_id}`, payload, config)
         setBtnLoading(false)
-        setNotification('Action Success!')
+        setNotification('File updated successfully!')
         tableLoading()
         handleModal()
     } catch (error) {
@@ -52,9 +58,9 @@ export default function ReturnModal({open, handleModal, data, tableLoading}) {
   return (
     <dialog id="my_modal_2" className={`modal ${open && 'modal-open'}`}>
         <div className="modal-box w-11/12 max-w-2xl">
-        <h3 className="font-bold text-sm mb-2">Reason For Returning Transaction</h3>
-        <div>
-          <textarea onChange={onChange} value={payload.message} name='message' className="textarea textarea-bordered w-full" placeholder="Enter...."></textarea>
+        <h3 className="font-bold text-sm mb-2">Update File</h3>
+        <div className=''>
+          <input type="file" required className="file-input file-input-bordered w-full" onChange={ev => setPayload({...payload, document: ev.target.files[0]})} accept='application/pdf'/>
         </div>
         <div className="modal-action flex items-center justify-between">
             <form method="dialog">

@@ -14,6 +14,8 @@ import Loader from '../Loader/Loader';
 import CancelModal from '../Modal/CancelModal';
 import { useStateContext } from '../../context/ContextProvider';
 import FileModal from '../Modal/FileModal';
+import MessageModal from '../Modal/MessageModal';
+import UpdateFileModal from '../Modal/UpdateFileModal';
 
 const PendingRequests = () => {
   const [request, setRequest] = useState()
@@ -25,8 +27,11 @@ const PendingRequests = () => {
   const [requests, setRequests] = useState([])
   const [cancel, setCancel] = useState(false)
   const [btnLoading, setBtnLoading] = useState(false)
+  const [messageModal, setMessageModal] = useState(false)
   const [fileModal, setFileModal] = useState(false)
+  const [updateModal, setUpdateModal] = useState(false)
   const [documentId, setDocumentId] = useState(null)
+  const [dataRequest, setDataRequest] = useState({})
   const [file, setFile] = useState(null)
   const {setNotification, setNotificationError} = useStateContext()
 
@@ -42,6 +47,16 @@ const PendingRequests = () => {
 
   const handleProceedModal = () => {
     setProceedModal(!openProceedModal)
+  } 
+
+  const handleMessageModal = (data) => {
+    setDataRequest(data)
+    setMessageModal(!messageModal)
+  } 
+
+  const handleUpdateModal = (data) => {
+    setDataRequest(data)
+    setUpdateModal(!updateModal)
   } 
 
   const handleCancelModal = () => {
@@ -114,6 +129,8 @@ const PendingRequests = () => {
       <ProceedModal open={openProceedModal} handleModal={handleProceedModal}/>
       <ReturnModal open={openReturnModal} handleModal={handleReturnModal}/>
       <FileModal open={fileModal} handleModal={handleFileModal} file={file}/>
+      <UpdateFileModal open={updateModal} handleModal={handleUpdateModal} data={dataRequest} tableLoading={handleTableLoading}/>
+      <MessageModal open={messageModal} handleModal={handleMessageModal} data={dataRequest}/>
       <CancelModal open={cancel} handleModal={handleCancelModal} text={'Cancel Transaction?'} btnText={'Cancel'} id={documentId} handleAction={handleCancelAction} loading={btnLoading}/>
         
       {
@@ -124,11 +141,11 @@ const PendingRequests = () => {
           {/* head */}
           <thead>
             <tr>
-              <th>
+              {/* <th>
                 <label>
                   <input type="checkbox" className="checkbox" />
                 </label>
-              </th>
+              </th> */}
               <th>Department</th>
               <th>Title</th>
               <th>Requested By</th>
@@ -147,11 +164,11 @@ const PendingRequests = () => {
                 return search.toLowerCase === '' ? data : data.lastname.toLowerCase().includes(search) || data.firstname.toLowerCase().includes(search)
               }).map((data) => (
                 <tr>
-                  <th>
+                  {/* <th>
                     <label>
                       <input type="checkbox" className="checkbox" />
                     </label>
-                  </th>
+                  </th> */}
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
@@ -196,8 +213,17 @@ const PendingRequests = () => {
                     {
                       data.document_status === "for review" ? <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(data.document_id)}>Cancel</button> : null
                     }
+                    {/* {
+                      data.message ? <button className='btn bg-green-600 text-white hover:bg-red-500 btn-sm' onClick={ev => handleMessageModal(data)}><i class="fa-regular fa-message"></i> Message</button> : null
+                    } */}
                     {
-                      data.message ? <button className='btn bg-green-600 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(data.document_id)}><i class="fa-regular fa-message"></i> Message</button> : null
+                      data.document_status === "return" ? 
+                      <>
+                        <button className='btn bg-green-600 text-white hover:bg-red-500 btn-sm' onClick={ev => handleMessageModal(data)}><i class="fa-regular fa-message"></i> Message</button>
+                        <button className='btn btn-outline btn-success btn-sm' onClick={ev => handleUpdateModal(data)}><i class="fa-solid fa-pen-to-square"></i> Update</button> 
+                        <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(data.document_id)}>Cancel</button>
+                      </>
+                        : null
                     }
                   </th>
                 </tr>
@@ -207,7 +233,7 @@ const PendingRequests = () => {
           {/* foot */}
           <tfoot>
             <tr>
-              <th></th>
+              {/* <th></th> */}
               <th>Department</th>
               <th>Requested By</th>
               <th>Request Date</th>

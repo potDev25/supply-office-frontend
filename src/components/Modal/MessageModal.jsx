@@ -18,7 +18,7 @@ const options = [
 const minDate = '2024-06-21';
 const maxDate = '2024-12-31';
 
-export default function ReturnModal({open, handleModal, data, tableLoading}) {
+export default function MessageModal({open, handleModal, data, tableLoading}) {
   const [errors, setErrors] = useState([])
   const {setNotification, setNotificationError} = useStateContext()
   const [btnLoading, setBtnLoading] = useState(false)
@@ -53,8 +53,8 @@ export default function ReturnModal({open, handleModal, data, tableLoading}) {
     <dialog id="my_modal_2" className={`modal ${open && 'modal-open'}`}>
         <div className="modal-box w-11/12 max-w-2xl">
         <h3 className="font-bold text-sm mb-2">Reason For Returning Transaction</h3>
-        <div>
-          <textarea onChange={onChange} value={payload.message} name='message' className="textarea textarea-bordered w-full" placeholder="Enter...."></textarea>
+        <div className='text-justify'>
+          <p className='text-lg text-gray-800 normal-case' style={{ whiteSpace: 'pre-line' }}>{data ? data.message : null}</p>
         </div>
         <div className="modal-action flex items-center justify-between">
             <form method="dialog">
