@@ -38,8 +38,8 @@ const DepartmentsTable = () => {
     // setLoading(true)
     try {
       const response = await axiosClient.get(`/departments?page=${page}&limit=${limit}`)
-      setData(response.data.data)
-      setLinks(response.data.links)
+      setData(response.data.departments.data)
+      setLinks(response.data.departments.links)
       console.log(response);
       setLoading(false)
     } catch (error) {

@@ -29,6 +29,7 @@ import RegisterDepartment from './pages/Departments/RegisterDepartment';
 import axiosClient from './axiosClinet';
 import { useStateContext } from './context/ContextProvider';
 import UploadDocument from './pages/Applicants/UploadDocument';
+import Files from './pages/Announcements/Files';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -168,6 +169,15 @@ function App() {
             <>
               <PageTitle title="Archives | University BAC" />
               <Announcements />
+            </>
+          }
+        />
+        <Route
+          path="/archives/files/:id"
+          element={
+            <>
+              <PageTitle title="Archives | University BAC" />
+              <Files />
             </>
           }
         />
