@@ -66,21 +66,27 @@ export default function ProceedModal({open, handleModal, data, tableLoading}) {
                 <option value={'president office'}>President Office</option>
                 <option value={'supply office'}>Supply Office</option>
                 <option value={'accounting office'}>Accounting Office</option>
+                <option value={'done'}>Done</option>
               </select>
               {
                 errors.status ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.status}</p> : null
               }
             </div>
 
-            <div>
-                <label className="mb-2 block text-black dark:text-white">
-                 Set Deadline
-                </label>
-                <input type="date" name='deadline' value={payload.deadline} onChange={onChange} placeholder="Type here" className="input input-bordered w-full" />
-                {
-                    errors.deadline ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.deadline}</p> : null
-                }
-            </div>
+            {
+              payload.status == 'done' ? <></> : <>
+                <div>
+                    <label className="mb-2 block text-black dark:text-white">
+                    Set Deadline
+                    </label>
+                    <input type="date" name='deadline' value={payload.deadline} onChange={onChange} placeholder="Type here" className="input input-bordered w-full" />
+                    {
+                        errors.deadline ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.deadline}</p> : null
+                    }
+                </div>
+              </>
+            }
+
          </div>
 
 

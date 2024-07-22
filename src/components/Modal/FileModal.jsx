@@ -30,7 +30,7 @@ export default function FileModal({open, handleModal, file, loading}) {
     <>
 
       <dialog className={`modal ${open ? 'modal-open' : ''}`}>
-        <div className="modal-box w-11/12 max-w-5xl">
+        <div className="modal-box w-11/12 max-w-[60vw]">
           <h3 className="font-bold text-lg text-center">PDF File</h3>
           <div className='w-full h-[70vh] relative'>
             {

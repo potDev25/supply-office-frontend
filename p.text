@@ -1,0 +1,11 @@
+consolidated => supply
+
+supply => PR
+PR => BAC Office
+Canvas => Awards = supply office
+Awards => supply office = supply office
+supply office => PO
+PO => Pres
+Pres => accounting
+accounting => supply office
+supply office => supplier

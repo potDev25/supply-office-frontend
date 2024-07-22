@@ -30,6 +30,10 @@ import axiosClient from './axiosClinet';
 import { useStateContext } from './context/ContextProvider';
 import UploadDocument from './pages/Applicants/UploadDocument';
 import Files from './pages/Announcements/Files';
+import Reports from './pages/Reports/Files';
+import ReportPage from './pages/Reports/Announcements';
+import { Edit } from 'lucide-react';
+import EditUser from './pages/Applicants/Edit';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -173,6 +177,15 @@ function App() {
           }
         />
         <Route
+          path="/reports/transactions"
+          element={
+            <>
+              <PageTitle title="Reports | University BAC" />
+              <ReportPage />
+            </>
+          }
+        />
+        <Route
           path="/archives/files/:id"
           element={
             <>
@@ -196,6 +209,15 @@ function App() {
             <>
               <PageTitle title="Register User | University BAC" />
               <Register />
+            </>
+          }
+        />
+        <Route
+          path="/users/edit/:id"
+          element={
+            <>
+              <PageTitle title="]Edit User | University BAC" />
+              <EditUser />
             </>
           }
         />

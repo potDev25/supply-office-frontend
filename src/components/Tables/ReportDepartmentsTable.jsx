@@ -11,9 +11,11 @@ import Loader from '../Loader/Loader';
 import axiosClient from '../../axiosClinet';
 import DeleteApplicantModal from '../Modal/DeleteApplicantModal';
 import { useStateContext } from '../../context/ContextProvider';
-import DefaultImage from '../../images/bipsu_new.png'
+import AddDepartmentModal from '../Modal/AddDepartmentModal';
+import FileModal from '../Modal/FileModal';
+import TransactionLogsModal from '../Modal/TransactionLogsModal';
 
-const ApplicantsTable = () => {
+const ReportDepartmentsTable = () => {
   const [request, setRequest] = useState()
   const [limit, setLimit] = useState(10)
   const [page, setPage] = useState(1)
@@ -23,7 +25,12 @@ const ApplicantsTable = () => {
   const [links, setLinks] = useState([])
   const [ids, setIds] = useState([])
   const [deleteModal, setDeleteModal] = useState(false)
+  const [departmentModal, setDepartmentModal] = useState(false)
   const [deleteModalOne, setdeleteModalOne] = useState(false)
+  const [LogsModal, setLogsModal] = useState(false)
+  const [documentId, setDocumentId] = useState({})
+  const [fileModal, setFileModal] = useState(false)
+  const [file, setFile] = useState(null)
   const [btnLoading, setBtnLoading] = useState(false)
   const [user_id, setUserId] = useState(false)
   const {notification_error, setNotificationError, setNotification} = useStateContext()
@@ -33,12 +40,18 @@ const ApplicantsTable = () => {
     document.getElementById('my_modal_2').showModal()
   }
 
+  const handleLogModal = (data) => {
+    setDocumentId(data)
+    setLogsModal(!LogsModal)
+  }
+
   const fetchData = async () => {
     // setLoading(true)
     try {
-      const response = await axiosClient.get(`/applicants?page=${page}&limit=${limit}`)
-      setData(response.data.data)
-      setLinks(response.data.links)
+      const response = await axiosClient.get(`/reports`)
+      console.log(response);
+      setData(response.data.archive)
+      setLinks(response.data.departments.links)
       console.log(response);
       setLoading(false)
     } catch (error) {
@@ -65,7 +78,7 @@ const ApplicantsTable = () => {
   useEffect(() => {
     const checkedInputValue = data
     .filter(item => item.isChecked) // Simplified filter condition
-    .map(item => ({ id: parseInt(item.user_id) }));
+    .map(item => ({ id: parseInt(item.id) }));
 
     setIds(prevIds => [
       ...prevIds,
@@ -82,7 +95,7 @@ const ApplicantsTable = () => {
         setData(checkedvalue);
       } else{
         const checkedvalue= data.map( (user)=>
-        user.username ===name? {...user, isChecked:checked}:user);
+        user.name ===name? {...user, isChecked:checked}:user);
         setData(checkedvalue);
     }
   }
@@ -91,14 +104,15 @@ const ApplicantsTable = () => {
     if(ids.length > 0){
       setBtnLoading(true)
       try {
-        await axiosClient.post('/applicants/batch-delete', ids);
+        await axiosClient.post('/departments/batch-delete', ids);
         setLoading(true)
         setBtnLoading(false)
         setDeleteModal(false)
-        setNotification('Users Deleted Successfully')
+        setNotification('Department Deleted Successfully')
         setIds([])
       } catch (error) {
         console.log(error);
+        setNotificationError('Unable to delete departments')
       }
     }else{
       setBtnLoading(false)
@@ -109,7 +123,7 @@ const ApplicantsTable = () => {
   const deleteSingleUser = async () => {
     setBtnLoading(true)
     try {
-      await axiosClient.post(`/applicants/destroy/${user_id}`);
+      await axiosClient.post(`/departments/destroy/${user_id}`);
       setLoading(true)
       setBtnLoading(false)
       setdeleteModalOne(false)
@@ -117,7 +131,7 @@ const ApplicantsTable = () => {
     } catch (error) {
       console.log(error);
       setBtnLoading(false)
-      setNotificationError('Unable to delete applicant!')
+      setNotificationError('Unable to delete this department!')
     }
   }
 
@@ -125,9 +139,38 @@ const ApplicantsTable = () => {
     setDeleteModal(!deleteModal)
   }
 
+  const handleDepartmentModal = () => {
+    setDepartmentModal(!departmentModal)
+  }
+
   const openDeleteModalOne = (user_id) => {
     setUserId(user_id)
     setdeleteModalOne(!deleteModalOne)
+  }
+
+  const handleBtnLoading = (btn) => {
+    setBtnLoading(btn)
+  }
+
+  const handlePageLoading = () => {
+    setLoading(true)
+  }
+
+  const handleFileModal = (file) => {
+    setFile(file)
+    setFileModal(!fileModal)
+  } 
+
+  function formatDate(inputDate) {
+    const date = new Date(inputDate);
+    const options = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'Asia/Manila',
+    };
+    const formatter = new Intl.DateTimeFormat('en-PH', options);
+    return formatter.format(date);
   }
 
   return (
@@ -136,7 +179,7 @@ const ApplicantsTable = () => {
       <div className='flex items-center justify-between mt-2 mb-2'>
         <div className='flex items-center gap-2'>
           <label className="input input-bordered flex items-center gap-2">
-            <input type="text" className="grow input-xs" onChange={ev => setSearch(ev.target.value)} placeholder="Search Users" />
+            <input type="text" className="grow input-xs" onChange={ev => setSearch(ev.target.value)} placeholder="Search Departments" />
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" /></svg>
           </label>
           <select className="select select-primary w-[100px] max-w-xs" onChange={ev => setLimit(ev.target.value)}>
@@ -144,23 +187,29 @@ const ApplicantsTable = () => {
             <option value='10'>10</option>
             <option value='20'>20</option>
             <option value='30'>30</option>
-            <option value=''>All</option>
+            <option value='10000'>All</option>
           </select>
-          <button className="btn btn-outline" onClick={openDeleteModal}><i class="fa-solid fa-trash-can"></i> Mass Delete</button>
+          {/* <button className="btn btn-outline" onClick={openDeleteModal}><i class="fa-solid fa-trash-can"></i> Mass Delete</button> */}
         </div>
 
         <div className='flex items-center gap-2'>
-          <Link to={'/users/register'} className="btn btn-primary" onClick={ev => openModal(1)}>
-          <i className="fa-solid fa-circle-plus"></i>
-            Register User
-          </Link>
+          <select className="select select-primary w-[200px] max-w-xs" onChange={ev => setLimit(ev.target.value)}>
+            <option disabled selected>Filter Date</option>
+            <option value='10'>10</option>
+            <option value='20'>20</option>
+            <option value='30'>30</option>
+            <option value='10000'>All</option>
+          </select>
         </div>
 
       </div>
       
       <AddApplicantModal/>
-      <DeleteApplicantModal deleteApplicant={handleAllDelete} open={deleteModal} handleModal={openDeleteModal} loading={btnLoading}/>
-      <DeleteApplicantModal deleteApplicant={deleteSingleUser} open={deleteModalOne} handleModal={openDeleteModalOne} loading={btnLoading}/>
+      <FileModal open={fileModal} handleModal={handleFileModal} file={file}/>
+      <TransactionLogsModal open={LogsModal} handleModal={handleLogModal} data={documentId}/>
+      <DeleteApplicantModal text={'Delete Departments?'} deleteApplicant={handleAllDelete} open={deleteModal} handleModal={openDeleteModal} loading={btnLoading}/>
+      <DeleteApplicantModal text={'Delete Departments?'} deleteApplicant={deleteSingleUser} open={deleteModalOne} handleModal={openDeleteModalOne} loading={btnLoading}/>
+      <AddDepartmentModal handlePageLoading={handlePageLoading} open={departmentModal} handleModal={handleDepartmentModal} loading={btnLoading} handleBntLoading={handleBtnLoading}/>
 
       {
         loading ? <Loader/> : 
@@ -168,16 +217,17 @@ const ApplicantsTable = () => {
           {/* head */}
           <thead>
             <tr>
-              <th>
+              {/* <th>
                 <label>
                   <input type="checkbox" name="allselect" checked= { !data.some( (user)=>user?.isChecked!==true)} onChange={ handleChange} className="checkbox" />
                 </label>
-              </th>
-              <th>User</th>
-              <th>Position</th>
-              <th>Role</th>
-              <th>Department</th>
-              <th>Status</th>
+              </th> */}
+              <th>Department Name</th>
+              <th>Department Type</th>
+              <th>Date Complied</th>
+              <th>Submitted By</th>
+              <th>File</th>
+              <th>Date Submitted</th>
               <th className='text-center'>Action</th>
               {/* <th></th> */}
             </tr>
@@ -186,39 +236,43 @@ const ApplicantsTable = () => {
             {/* row 1 */}
             {
               data.filter((data) => {
-                    return search.toLowerCase === '' ? data : data.lastname.toLowerCase().includes(search) || data.firstname.toLowerCase().includes(search)
+                    return search.toLowerCase === '' ? data : data.department_name.toLowerCase().includes(search) || data.department_type.toLowerCase().includes(search)
                 }).map((data) => (
                 <tr>
-                  <th>
+                  {/* <th>
                     <label>
-                      <input type="checkbox" name={data.username} checked={data?.isChecked || false} onChange={ handleChange} className="checkbox" />
+                      <input type="checkbox" name={data.name} checked={data?.isChecked || false} onChange={ handleChange} className="checkbox" />
                     </label>
-                  </th>
+                  </th> */}
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
-                          <img src={`${data.profile_image ? `${import.meta.env.VITE_API_BASE_URL}/storage/${data.profile_image}` : DefaultImage}`} alt="Avatar Tailwind CSS Component" />
+                          <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${data.logo}`} alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
                       <div>
-                        <div className="font-bold">{data.lastname} {data.firstname}</div>
-                        <div className="text-sm opacity-50">{data.email}</div>
+                        <div className="font-bold capitalize">{data.department_name}</div>
                       </div>
                     </div>
                   </td>
                   <td className='capitalize'>
-                    {data.position}
+                    {data.department_type}
                   </td>
-                  <td className='capitalize'>{data.role}</td>
-                  <td>{
-                    data.department_id ? data.department_name : 'N/A'  
-                  }</td>
-                  <td><div className={`badge ${data.status == 1 ? 'badge-success' : ''}  badge-outline`}>{data.status == 1 ? 'Online' : 'Offline'}</div></td>
+                  <td className='capitalize'>
+                    {data.document_data ? formatDate(data.document_data.date_complied) : '--'}
+                  </td>
+                  <td className='capitalize'>
+                    {data.document_data ? data.document_data.lastname + ', ' + data.document_data.firstname : '--'}
+                  </td>
+                  <td className='capitalize'>
+                  {data.files}
+                  </td>
+                  <td className='capitalize'>{formatDate(data.created_at)}</td>
                   <th className='flex gap-1 items-center justify-center mt-2'>
-                    <button className="btn btn-sm btn-default"><i class="fa-solid fa-eye"></i></button>
-                    <Link to={`/users/edit/${data.user_id}`} className="btn btn-sm bg-green-600 text-white hover:bg-green-600"><i class="fa-solid fa-pen-to-square"></i></Link>
-                    <button className="btn btn-sm bg-red-800 text-white hover:bg-red-500" onClick={ev => openDeleteModalOne(data.user_id)}><i class="fa-solid fa-trash-can"></i></button>
+                    <button disabled={data.document_data ? false : true} className="btn btn-sm bg-green-600 text-white hover:text-black" onClick={ev => handleLogModal(data)}>Logs</button>
+                    <button disabled={data.document_data ? false : true} className='btn bg-blue-500 text-white hover:bg-blue-500 btn-sm' onClick={ev => handleFileModal(data.document_data.document)}><i class="fa-regular fa-file"></i> File</button>
+                    {/* <button className="btn btn-sm bg-red-800 text-white hover:bg-red-500" onClick={ev => openDeleteModalOne(data.id)}><i class="fa-solid fa-trash-can"></i></button> */}
                   </th>
                 </tr>
               ))
@@ -227,12 +281,13 @@ const ApplicantsTable = () => {
           {/* foot */}
           <tfoot>
             <tr>
-              <th></th>
-              <th>User</th>
-              <th>Position</th>
-              <th>Role</th>
-              <th>Department</th>
-              <th>Status</th>
+              {/* <th></th> */}
+              <th>Department Name</th>
+              <th>Department Type</th>
+              <th>Date Complied</th>
+              <th>Submitted By</th>
+              <th>File</th>
+              <th>Date Submitted</th>
               <th className='text-center'>Action</th>
               {/* <th></th> */}
             </tr>
@@ -253,4 +308,4 @@ const ApplicantsTable = () => {
   );
 };
 
-export default ApplicantsTable;
+export default ReportDepartmentsTable;
