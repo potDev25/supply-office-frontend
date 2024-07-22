@@ -4,6 +4,7 @@ import SidebarLinkGroup from './SidebarLinkGroup';
 import Logo from '../../images/bipsu_new.png';
 import {sidebarItem} from '../SideBarItem/Items'
 import {AdminMenu} from '../SideBarItem/AdminMenu'
+import {supplyOffice} from '../SideBarItem/SupplyOffice'
 import { useStateContext } from '../../context/ContextProvider';
 
 
@@ -62,6 +63,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
 
   if(user.role === 'admin'){
     sideItems = AdminMenu;
+  }
+
+  if(user.role === 'supply office'){
+    sideItems = supplyOffice;
   }
 
   return (

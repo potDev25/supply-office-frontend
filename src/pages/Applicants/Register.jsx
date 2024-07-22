@@ -45,7 +45,8 @@ const Register = () => {
     sanitary_permit : '',
     barangay_clearance: '',
     position: '',
-    department_id: ''
+    department_id: '',
+    role: 'admin'
   })
 
   const toolbarPluginInstance = toolbarPlugin();
@@ -420,25 +421,34 @@ const Register = () => {
                     }
                   </div>
 
-                  <div className="mb-5.5">
-                    <label
-                      className="mb-3 block text-sm font-medium text-black dark:text-white"
-                      htmlFor="position"
-                    >
-                      Position
-                    </label>
-                    <input
-                      type="text"
-                      className={`${errors.position ? 'border-2 border-red-500 border-solid' : 'border border-stroke bg-gray'} w-full rounded  py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
-                      name="position"
-                      onChange={onChange}
-                      id="position"
-                      placeholder=""
-                    />
-                    {
-                      errors.position ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.position}</p> : null
-                    }
+                  <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className="mb-5.5 w-full sm:w-1/2">
+                      <label
+                        className="mb-3 block text-sm font-medium text-black dark:text-white"
+                        htmlFor="position"
+                      >
+                        Position
+                      </label>
+                      <input
+                        type="text"
+                        className={`${errors.position ? 'border-2 border-red-500 border-solid' : 'border border-stroke bg-gray'} w-full rounded  py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
+                        name="position"
+                        onChange={onChange}
+                        id="position"
+                        placeholder=""
+                      />
+                      {
+                        errors.position ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.position}</p> : null
+                      }
+                    </div>
+                    <div className="form-control w-full sm:w-1/2 flex items-center justify-center">
+                      <label className="cursor-pointer label font-medium text-black dark:text-white">
+                        <span className="label-text">Supply Office User</span>
+                        <input type="checkbox" onChange={ev => setPayload({...payload, role: 'supply office'})} className="checkbox checkbox-success ml-4" />
+                      </label>
+                    </div>
                   </div>
+
 
                   <div className="mb-5.5">
                     <label

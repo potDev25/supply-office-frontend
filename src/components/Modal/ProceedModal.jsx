@@ -55,7 +55,7 @@ export default function ProceedModal({open, handleModal, data, tableLoading}) {
         <h3 className="font-bold text-sm mb-2">Move this Transaction</h3>
         <div>
 
-         <div className='grid lg:grid-cols-2 sm:grid-cols-1 mt-5 gap-2'>
+         <div className='mt-5 gap-2'>
             <div className='mb-2'>
               <label className="mb-2 block text-black dark:text-white">
                 Select Movement
@@ -63,17 +63,19 @@ export default function ProceedModal({open, handleModal, data, tableLoading}) {
               <select value={payload.status} onChange={onChange} className={`select select-bordered  w-full ${errors.department_type ? 'border-[1.5px] border-red-500' : ''}`} name='status'>
                 <option disabled selected value={''}>Select</option>
                 <option value={'for review'}>For Review</option>
-                <option value={'president office'}>President Office</option>
+                {/* <option value={'president office'}>President Office</option>
                 <option value={'supply office'}>Supply Office</option>
-                <option value={'accounting office'}>Accounting Office</option>
-                <option value={'done'}>Done</option>
+                <option value={'accounting office'}>Accounting Office</option> */}
+                <option value={'for consolidation'}>For Consolidation</option>
+                <option value={'consolidated'}>Consolidated</option>
+                {/* <option value={'done'}>Done</option> */}
               </select>
               {
                 errors.status ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.status}</p> : null
               }
             </div>
 
-            {
+            {/* {
               payload.status == 'done' ? <></> : <>
                 <div>
                     <label className="mb-2 block text-black dark:text-white">
@@ -85,7 +87,7 @@ export default function ProceedModal({open, handleModal, data, tableLoading}) {
                     }
                 </div>
               </>
-            }
+            } */}
 
          </div>
 

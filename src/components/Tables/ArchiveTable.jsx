@@ -186,7 +186,7 @@ const ArchiveTable = () => {
               <th>Title</th>
               <th>Requested By</th>
               <th>Request Date</th>
-              <th>Deadline</th>
+              <th>Date Consolidated</th>
               <th>Status</th>
               <th className='text-center'>Action</th>
               {/* <th></th> */}
@@ -226,13 +226,13 @@ const ArchiveTable = () => {
                     <span className="badge badge-ghost badge-sm">{data.position}</span>
                   </td>
                   <td>{formatDate(data.created_at)}</td>
-                  <td>{data.deadline ? formatDate(data.deadline) : 'N/A'}</td>
+                  <td>{data.date_complied ? formatDate(data.date_complied) : 'N/A'}</td>
                   <td>
                     {
                       data.document_status === 'for review' ? <div className={`badge badge-default badge-outline capitalize text-xs`}>{data.document_status}</div> : null
                     }
                     {
-                      data.document_status === 'president office' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{data.document_status}</div> : null
+                      data.document_status === 'consolidated' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{data.document_status}</div> : null
                     }
                     {
                       data.document_status === 'supply office' ? <div className={`badge badge-accent badge-outline capitalize text-xs`}>{data.document_status}</div> : null
@@ -241,10 +241,7 @@ const ArchiveTable = () => {
                       data.document_status === 'return' ? <div className={`badge badge-ghost badge-sm capitalize text-xs`}>{data.document_status}</div> : null
                     }
                     {
-                      data.document_status === 'cancel' ? <div className={`badge badge-outline badge-sm capitalize text-xs`}>{data.document_status}</div> : null
-                    }
-                    {
-                      data.document_status === 'accounting office' ? <div className="badge border border-red-500 text-red-500 badge-outline">{data.document_status}</div> : null
+                      data.document_status === 'for consolidation' ? <div className="badge border border-red-500 text-red-500 badge-outline">{data.document_status}</div> : null
                     }
                   </td>
                   <th className='flex gap-1 items-center justify-center mt-2'>
@@ -264,11 +261,11 @@ const ArchiveTable = () => {
           {/* foot */}
           <tfoot>
             <tr>
-              <th></th>
               <th>Department</th>
+              <th>Title</th>
               <th>Requested By</th>
               <th>Request Date</th>
-              <th>Deadline</th>
+              <th>Date Consolidated</th>
               <th>Status</th>
               <th className='text-center'>Action</th>
               {/* <th></th> */}

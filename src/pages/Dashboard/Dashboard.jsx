@@ -9,6 +9,8 @@ import TableOne from '../../components/Tables/TableOne';
 import RequestTable from '../../components/Tables/RequestTable';
 import { useStateContext } from '../../context/ContextProvider';
 import PendingRequests from '../../components/Tables/PendingRequests';
+import PurchaseRequestTable from '../../components/Tables/PurchaseRequestTable';
+import PurchaseOrderTable from '../../components/Tables/PurchaseOrderTable';
 
 export default function Dashboard() {
   const {user} = useStateContext()
@@ -109,8 +111,21 @@ export default function Dashboard() {
       {/* <MapOne /> */}
       <div className="col-span-12 xl:col-span-12">
         {
-          user.role !== 'general admin' ? 
-          <PendingRequests/> : <RequestTable />
+          user.role === 'admin' ? 
+          <>
+             <PendingRequests/>
+          </>
+          : 
+          <>
+            {
+              user.role === 'general admin' ? 
+              <RequestTable /> : null
+            }
+            <div className='grid grid-cols-2 gap-5'>
+              <PurchaseRequestTable />
+              <PurchaseOrderTable />
+            </div>
+          </>
         }
       </div>
       {/* <ChatCard /> */}

@@ -15,7 +15,7 @@ import CancelModal from '../Modal/CancelModal';
 import { useStateContext } from '../../context/ContextProvider';
 import FileModal from '../Modal/FileModal';
 
-const RequestTable = () => {
+const PurchaseOrderTable = () => {
   const [request, setRequest] = useState()
   const [openProceedModal, setProceedModal] = useState(false)
   const [openReturnModal, setReturnModal] = useState(false)
@@ -31,7 +31,7 @@ const RequestTable = () => {
   const [status, setStatus] = useState(null)
   const [number, setNumber] = useState({})
   const [file, setFile] = useState(null)
-  const {setNotification, setNotificationError} = useStateContext()
+  const {setNotification, setNotificationError, user} = useStateContext()
 
   const fetchData = async () => {
     try {
@@ -109,59 +109,21 @@ const RequestTable = () => {
   return (
     <div className="lg:overflow-x-visible sm:overflow-x-auto md:overflow-x-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 mb-10">
       <div className='lg:flex items-center justify-between p-2 sm:block'>
-        <div className='lg:flex items-center gap-5 sm:block'>
+        <div className='lg:flex items-center gap-5 sm:block justify-center'>
           <div>
-            <h1 className='font-medium'>Pending Requests</h1>
-          </div>
-          <div className='flex items-center gap-1'>
-            <h1 className='font-medium text-sm mt-0.5'>President's Office</h1>
-            <div className="badge bg-red-500 text-white text-xs">{number.president_office}</div>
-          </div>
-          <div className='flex items-center gap-1'>
-            <h1 className='font-medium text-sm mt-0.5'>Accounting Office</h1>
-            <div className="badge bg-red-500 text-white text-xs">{number.accounting_office}</div>
-          </div>
-          <div className='flex items-center gap-1'>
-            <h1 className='font-medium text-sm mt-0.5'>Office Supply</h1>
-            <div className="badge bg-red-500 text-white text-xs">{number.office_supply}</div>
-          </div>
-          <div className='flex items-center gap-1'>
-            <h1 className='font-medium text-sm mt-0.5'>For Review</h1>
-            <div className="badge bg-red-500 text-white text-xs">{number.for_review}</div>
-          </div>
-          <div className='flex items-center gap-1'>
-            <h1 className='font-medium text-sm mt-0.5'>Return</h1>
-            <div className="badge bg-red-500 text-white text-xs">{number.return}</div>
+            <h1 className='font-medium'>Puchase Order</h1>
           </div>
         </div>
 
-        <div className='flex items-center gap-2 sm:mt-5 lg:mt-0'>
-          <select className="select select-primary w-full max-w-xs" onChange={handleStatus}>
-            <option disabled selected value={''}>Filter Status</option>
-            <option value={'for review'}>For Review</option>
-            <option value={'president office'}>President Office</option>
-            <option value={'supply office'}>Supply Office</option>
-            <option value={'accounting office'}>Accounting Office</option>
-            <option value={'return'}>Return</option>
-            <option value={''}>All</option>
-          </select>
+        <div>
+          {
+            user.role === 'supply office' ? <>
+              <button className="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-up-from-bracket"></i> Upload</button>
+            </> : null
+          }
         </div>
       </div>
 
-      <label className="input input-bordered flex items-center gap-2 w-80 mb-4">
-        <input type="text" className="grow" placeholder="Search Department Name | User" onChange={ev => setSearch(ev.target.value)}/>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 16 16"
-          fill="currentColor"
-          className="h-4 w-4 opacity-70">
-          <path
-            fillRule="evenodd"
-            d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-            clipRule="evenodd" />
-        </svg>
-      </label>
-      
       <ProceedModal open={openProceedModal} handleModal={handleProceedModal} tableLoading={handleTableLoading} data={dataRequest}/>
       <ReturnModal open={openReturnModal} handleModal={handleReturnModal} data={dataRequest} tableLoading={handleTableLoading}/>
       <FileModal open={fileModal} handleModal={handleFileModal} file={file}/>
@@ -175,19 +137,11 @@ const RequestTable = () => {
           {/* head */}
           <thead>
             <tr>
-              {/* <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th> */}
-              <th>Department</th>
               <th>Title</th>
-              <th>Requested By</th>
               <th>Request Date</th>
-              <th>Deadline</th>
+              {/* <th>Deadline</th> */}
               <th>Status</th>
               <th className='text-center'>Action</th>
-              {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
@@ -259,14 +213,11 @@ const RequestTable = () => {
           {/* foot */}
           <tfoot>
             <tr>
-              <th></th>
-              <th>Department</th>
-              <th>Requested By</th>
+              <th>Title</th>
               <th>Request Date</th>
-              <th>Deadline</th>
+              {/* <th>Deadline</th> */}
               <th>Status</th>
               <th className='text-center'>Action</th>
-              {/* <th></th> */}
             </tr>
           </tfoot>
           
@@ -277,4 +228,4 @@ const RequestTable = () => {
   );
 };
 
-export default RequestTable;
+export default PurchaseOrderTable;

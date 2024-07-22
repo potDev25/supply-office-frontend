@@ -123,7 +123,7 @@ const TransactionLogsTable = ({documment, department_name}) => {
               <th>Department</th>
               <th>Date Submitted</th>
               <th>Date Processed</th>
-              <th>Deadline</th>
+              {/* <th>Deadline</th> */}
               <th>Status</th>
               {/* <th></th> */}
             </tr>
@@ -157,13 +157,13 @@ const TransactionLogsTable = ({documment, department_name}) => {
                   <td>
                     {formatDate(data.created_at)}
                   </td>
-                  <td>{formatDate(data.deadline)}</td>
+                  {/* <td>{formatDate(data.deadline)}</td> */}
                   <td>
                     {
                       data.status === 'for review' ? <div className={`badge badge-default badge-outline capitalize text-xs`}>{data.status}</div> : null
                     }
                     {
-                      data.status === 'president office' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{data.status}</div> : null
+                      data.status === 'consolidated' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{data.status}</div> : null
                     }
                     {
                       data.status === 'supply office' ? <div className={`badge badge-accent badge-outline capitalize text-xs`}>{data.status}</div> : null
@@ -172,10 +172,7 @@ const TransactionLogsTable = ({documment, department_name}) => {
                       data.status === 'return' ? <div className={`badge badge-ghost badge-sm capitalize text-xs`}>{data.status}</div> : null
                     }
                     {
-                      data.status === 'accounting office' ? <div className="badge border border-red-500 text-red-500 badge-outline">{data.status}</div> : null
-                    }
-                    {
-                      data.status === 'done' ? <div className="badge bg-green-600 text-white">{data.status}</div> : null
+                      data.status === 'for consolidation' ? <div className="badge border border-red-500 text-red-500 badge-outline">{data.status}</div> : null
                     }
                   </td>
                 </tr>
@@ -184,11 +181,11 @@ const TransactionLogsTable = ({documment, department_name}) => {
           </tbody>
           {/* foot */}
           <tfoot>
-           <tr>
+            <tr>
               <th>Department</th>
               <th>Date Submitted</th>
               <th>Date Processed</th>
-              <th>Deadline</th>
+              {/* <th>Deadline</th> */}
               <th>Status</th>
               {/* <th></th> */}
             </tr>
