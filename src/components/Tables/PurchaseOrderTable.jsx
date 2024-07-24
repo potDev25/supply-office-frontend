@@ -14,15 +14,21 @@ import Loader from '../Loader/Loader';
 import CancelModal from '../Modal/CancelModal';
 import { useStateContext } from '../../context/ContextProvider';
 import FileModal from '../Modal/FileModal';
+import UploadPurchaseRequestModal from '../Modal/UploadPurchaseRequestModal';
+import ProceedRequestModal from '../Modal/ProceedRequestModal';
+import UploadPurchaseOrderModal from '../Modal/UploadPurchaseOrderModal';
+import ProceedOrderModal from '../Modal/ProceedOrderModal';
 
 const PurchaseOrderTable = () => {
   const [request, setRequest] = useState()
+  const [departmentModal, setDepartmentModal] = useState(false)
   const [openProceedModal, setProceedModal] = useState(false)
   const [openReturnModal, setReturnModal] = useState(false)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [tableLoading, setTableLoading] = useState(true)
   const [requests, setRequests] = useState([])
+  const [po, setPo] = useState({})
   const [dataRequest, setDataRequest] = useState({})
   const [cancel, setCancel] = useState(false)
   const [btnLoading, setBtnLoading] = useState(false)
@@ -35,9 +41,11 @@ const PurchaseOrderTable = () => {
 
   const fetchData = async () => {
     try {
-      const {data} = await axiosClient.get(`/documents${status ? `?status=${status}` : ''}`)
-      setRequests(data.data)
-      setNumber(data.numbers)
+      // const {data} = await axiosClient.get(`/documents${status ? `?status=${status}` : ''}`)
+      const {data} = await axiosClient.get(`/po-request/request`)
+      setRequests(data)
+      // setNumber(data.numbers)
+      console.log(data);
       setTableLoading(false)
     } catch (error) {
       console.log(error);
@@ -52,6 +60,15 @@ const PurchaseOrderTable = () => {
   const handleCancelModal = () => {
     setCancel(!cancel)
   } 
+
+  const handleDepartmentModal = (data) => {
+    setPo(data)
+    setDepartmentModal(!departmentModal)
+  }
+
+  const handlePageLoading = () => {
+    setTableLoading(true)
+  }
 
   const handleFileModal = (file) => {
     setFile(file)
@@ -91,7 +108,7 @@ const PurchaseOrderTable = () => {
   const handleCancelAction = async (id) => {
     setBtnLoading(true)
     try {
-      const {data} = await axiosClient.post(`/documents/cancel/${id}`)
+      const {data} = await axiosClient.post(`/po-request/po-destroy/${id}`)
       setBtnLoading(false)
       setNotification('Transaction Cancel Successfully')
       setTableLoading(true)
@@ -117,17 +134,26 @@ const PurchaseOrderTable = () => {
 
         <div>
           {
-            user.role === 'supply office' ? <>
-              <button className="btn btn-primary btn-sm"><i class="fa-solid fa-arrow-up-from-bracket"></i> Upload</button>
-            </> : null
+            tableLoading ? null : <> 
+              {
+                requests.length <= 0 ? <>
+                  {
+                    user.role === 'supply office' ? <>
+                      <button className="btn btn-primary btn-sm" onClick={handleDepartmentModal}><i class="fa-solid fa-arrow-up-from-bracket"></i> Upload</button>
+                    </> : null
+                  }
+                </> : null
+              }
+            </>
           }
         </div>
       </div>
 
-      <ProceedModal open={openProceedModal} handleModal={handleProceedModal} tableLoading={handleTableLoading} data={dataRequest}/>
+      <UploadPurchaseOrderModal open={departmentModal} handleModal={handleDepartmentModal} handlePageLoading={handlePageLoading} po={po}/>
+      <ProceedOrderModal open={openProceedModal} handleModal={handleProceedModal} tableLoading={handleTableLoading} data={dataRequest}/>
       <ReturnModal open={openReturnModal} handleModal={handleReturnModal} data={dataRequest} tableLoading={handleTableLoading}/>
       <FileModal open={fileModal} handleModal={handleFileModal} file={file}/>
-      <CancelModal open={cancel} handleModal={handleCancelModal} text={'Cancel Transaction?'} btnText={'Cancel'} id={documentId} handleAction={handleCancelAction} loading={btnLoading}/>
+      <CancelModal open={cancel} handleModal={handleCancelModal} text={'Cancel Purchase Order?'} btnText={'Cancel'} id={documentId} handleAction={handleCancelAction} loading={btnLoading}/>
         
       {
         tableLoading ? <>
@@ -146,69 +172,72 @@ const PurchaseOrderTable = () => {
           </thead>
           <tbody>
             {/* row 1 */}
-
-            {
-              requests.filter((data) => {
-                return search.toLowerCase === '' ? data : data.lastname.toLowerCase().includes(search) || data.firstname.toLowerCase().includes(search) || data.department_name.toLowerCase().includes(search)
-              }).map((data) => (
-                <tr>
-                  {/* <th>
-                    <label>
-                      <input type="checkbox" className="checkbox" />
-                    </label>
-                  </th> */}
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
-                          <img src={Logo} alt="Avatar Tailwind CSS Component" />
+              {
+                requests.map((request) =>(
+                    <tr>
+                    {/* <th>
+                      <label>
+                        <input type="checkbox" className="checkbox" />
+                      </label>
+                    </th> */}
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div>
+                          <div className="font-bold">{request.request_description}</div>
                         </div>
                       </div>
-                      <div>
-                        <div className="font-bold">{data.department_name}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    {data.title}
-                  </td>
-                  <td>
-                    {data.lastname} {data.firstname}
-                    <br/>
-                    <span className="badge badge-ghost badge-sm">{data.position}</span>
-                  </td>
-                  <td>{formatDate(data.created_at)}</td>
-                  <td>{data.deadline ? formatDate(data.deadline) : 'N/A'}</td>
-                  <td>
-                    {
-                      data.document_status === 'for review' ? <div className={`badge badge-default badge-outline capitalize text-xs`}>{data.document_status}</div> : null
-                    }
-                    {
-                      data.document_status === 'consolidated' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{data.document_status}</div> : null
-                    }
-                    {
-                      data.document_status === 'supply office' ? <div className={`badge badge-accent badge-outline capitalize text-xs`}>{data.document_status}</div> : null
-                    }
-                    {
-                      data.document_status === 'return' ? <div className={`badge badge-ghost badge-sm capitalize text-xs`}>{data.document_status}</div> : null
-                    }
-                    {
-                      data.document_status === 'for consolidation' ? <div className="badge border border-red-500 text-red-500 badge-outline">{data.document_status}</div> : null
-                    }
-                  </td>
-                  <th className='flex gap-1 items-center justify-center mt-2'>
-                    <button className='btn bg-blue-500 text-white hover:bg-blue-500 btn-sm' onClick={ev => handleFileModal(data.document)}><i class="fa-regular fa-file"></i> File</button>
-                    <details className="dropdown dropdown-end">
-                      <summary className="btn btn-sm m-1 bg-green-600 text-white" role='button'><i class="fa-solid fa-location-dot"></i> Action</summary>
-                        <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-49 p-2 shadow">
-                          <li><a onClick={ev => handleProceedModal(data)}>Proceed</a></li>
-                          <li><a onClick={ev => handleReturnModal(data)}>Return</a></li>
-                        </ul>
-                    </details>
-                  </th>
-                </tr>
-              ))
-            }
+                    </td>
+                    <td>
+                      { 
+                        request.po_request_date === null ? <div className={`font-extrabold`}>--</div> : <>{formatDate(request.po_request_date)}</>
+                      }
+                    </td>
+                    <td>
+                      {
+                        request.po_status === 'for review' ? <div className={``}>{request.po_status}</div> : null
+                      }
+                      {
+                        request.po_status === 'president office' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{request.po_status}</div> : null
+                      }
+                      {
+                        request.po_status === 'supply office' ? <div className={`badge badge-accent badge-outline capitalize text-xs`}>{request.po_status}</div> : null
+                      }
+                      {
+                        request.po_status === 'return' ? <div className={`badge badge-ghost badge-sm capitalize text-xs`}>{request.po_status}</div> : null
+                      }
+                      {
+                        request.po_status === 'accounting office' ? <div className="badge border border-red-500 text-red-500 badge-outline">{request.po_status}</div> : null
+                      }
+                    </td>
+                    <th className='flex gap-1 items-center justify-center mt-2'>
+                      {
+                        user.role === 'supply office' ? <>
+                          {
+                            request.purchase_order !== null ? <>
+                              <button className='btn bg-blue-500 text-white hover:bg-blue-500 btn-sm' onClick={ev => handleFileModal(request.purchase_order)}>File</button>
+                              <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(request.id)}>Cancel</button>
+                            </> : null
+                          }
+                          
+                          {
+                            request.purchase_order === null ? <button className='btn bg-green-600 text-white hover:bg-blue-500 btn-sm' onClick={ev => handleDepartmentModal(request)}>Upload</button> : null
+                          }
+                        </> : <>
+                          <button className='btn bg-blue-500 text-white hover:bg-blue-500 btn-sm' onClick={ev => handleFileModal(request.purchase_order)}>File</button>
+                          <details className="dropdown dropdown-end">
+                            <summary className="btn btn-sm m-1 bg-green-600 text-white text-xs" role='button'>Action</summary>
+                              <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-49 p-2 shadow">
+                                <li><a onClick={ev => handleProceedModal(request)}>Proceed</a></li>
+                                <li><a onClick={ev => handleReturnModal(request)}>Return</a></li>
+                              </ul>
+                          </details>
+                        </>
+                      }
+                    </th>
+                  </tr>
+                )) 
+              }
+            
           </tbody>
           {/* foot */}
           <tfoot>
