@@ -16,8 +16,11 @@ import { useStateContext } from '../../context/ContextProvider';
 import FileModal from '../Modal/FileModal';
 import UploadPurchaseRequestModal from '../Modal/UploadPurchaseRequestModal';
 import ProceedRequestModal from '../Modal/ProceedRequestModal';
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+import '../../laravel-echo'
 
-const PurchaseRequestTable = () => {
+const PurchaseRequestTable = ({handleLoading, t_loading}) => {
   const [request, setRequest] = useState()
   const [departmentModal, setDepartmentModal] = useState(false)
   const [openProceedModal, setProceedModal] = useState(false)
@@ -82,7 +85,14 @@ const PurchaseRequestTable = () => {
 
   useEffect(() => {
     fetchData()
-  }, [tableLoading, status])
+  }, [tableLoading, status, t_loading])
+
+  useEffect(() => {
+      window.Echo.channel('purchase-requests-orders')
+          .listen('PurchaseDocumentEvent', (e) => {
+              fetchData()
+          });
+  }, []);
 
   function formatDate(inputDate) {
     const date = new Date(inputDate);

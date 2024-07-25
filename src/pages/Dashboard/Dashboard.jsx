@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CardDataStats from '../../components/CardDataStats';
 import ChartOne from '../../components/Charts/ChartOne';
 import ChartThree from '../../components/Charts/ChartThree';
@@ -14,6 +14,12 @@ import PurchaseOrderTable from '../../components/Tables/PurchaseOrderTable';
 
 export default function Dashboard() {
   const {user} = useStateContext()
+  const [loading, setLoading] = useState(true)
+
+  const handleLoading = (bool) => {
+    console.log(bool);
+    setLoading(bool)
+  }
 
   return (
     <>
@@ -122,8 +128,8 @@ export default function Dashboard() {
               <RequestTable /> : null
             }
             <div className='grid grid-cols-2 gap-5'>
-              <PurchaseRequestTable />
-              <PurchaseOrderTable />
+              <PurchaseRequestTable handleLoading={handleLoading} t_loading={loading}/>
+              <PurchaseOrderTable handleLoading={handleLoading}/>
             </div>
           </>
         }

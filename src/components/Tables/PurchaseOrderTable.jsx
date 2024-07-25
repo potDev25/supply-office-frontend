@@ -18,8 +18,9 @@ import UploadPurchaseRequestModal from '../Modal/UploadPurchaseRequestModal';
 import ProceedRequestModal from '../Modal/ProceedRequestModal';
 import UploadPurchaseOrderModal from '../Modal/UploadPurchaseOrderModal';
 import ProceedOrderModal from '../Modal/ProceedOrderModal';
+import '../../laravel-echo'
 
-const PurchaseOrderTable = () => {
+const PurchaseOrderTable = ({handleLoading}) => {
   const [request, setRequest] = useState()
   const [departmentModal, setDepartmentModal] = useState(false)
   const [openProceedModal, setProceedModal] = useState(false)
@@ -45,6 +46,7 @@ const PurchaseOrderTable = () => {
       const {data} = await axiosClient.get(`/po-request/request`)
       setRequests(data)
       // setNumber(data.numbers)
+      handleLoading(false)
       console.log(data);
       setTableLoading(false)
     } catch (error) {
@@ -87,6 +89,13 @@ const PurchaseOrderTable = () => {
   useEffect(() => {
     fetchData()
   }, [tableLoading, status])
+
+  useEffect(() => {
+      window.Echo.channel('purchase-requests-orders')
+          .listen('PurchaseDocumentEvent', (e) => {
+              fetchData()
+          });
+  }, []);
 
   function formatDate(inputDate) {
     const date = new Date(inputDate);
@@ -132,25 +141,11 @@ const PurchaseOrderTable = () => {
           </div>
         </div>
 
-        <div>
-          {
-            tableLoading ? null : <> 
-              {
-                requests.length <= 0 ? <>
-                  {
-                    user.role === 'supply office' ? <>
-                      <button className="btn btn-primary btn-sm" onClick={handleDepartmentModal}><i class="fa-solid fa-arrow-up-from-bracket"></i> Upload</button>
-                    </> : null
-                  }
-                </> : null
-              }
-            </>
-          }
-        </div>
+       
       </div>
 
       <UploadPurchaseOrderModal open={departmentModal} handleModal={handleDepartmentModal} handlePageLoading={handlePageLoading} po={po}/>
-      <ProceedOrderModal open={openProceedModal} handleModal={handleProceedModal} tableLoading={handleTableLoading} data={dataRequest}/>
+      <ProceedOrderModal handleLoading={handleLoading} open={openProceedModal} handleModal={handleProceedModal} tableLoading={handleTableLoading} data={dataRequest}/>
       <ReturnModal open={openReturnModal} handleModal={handleReturnModal} data={dataRequest} tableLoading={handleTableLoading}/>
       <FileModal open={fileModal} handleModal={handleFileModal} file={file}/>
       <CancelModal open={cancel} handleModal={handleCancelModal} text={'Cancel Purchase Order?'} btnText={'Cancel'} id={documentId} handleAction={handleCancelAction} loading={btnLoading}/>
@@ -197,16 +192,16 @@ const PurchaseOrderTable = () => {
                         request.po_status === 'for review' ? <div className={``}>{request.po_status}</div> : null
                       }
                       {
-                        request.po_status === 'president office' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{request.po_status}</div> : null
+                        request.po_status === 'president office' ? <div className={`textblue-600`}>{request.po_status}</div> : null
                       }
                       {
-                        request.po_status === 'supply office' ? <div className={`badge badge-accent badge-outline capitalize text-xs`}>{request.po_status}</div> : null
+                        request.po_status === 'supply office' ? <div className={` text-green-800`}>{request.po_status}</div> : null
                       }
                       {
-                        request.po_status === 'return' ? <div className={`badge badge-ghost badge-sm capitalize text-xs`}>{request.po_status}</div> : null
+                        request.po_status === 'return' ? <div className={``}>{request.po_status}</div> : null
                       }
                       {
-                        request.po_status === 'accounting office' ? <div className="badge border border-red-500 text-red-500 badge-outline">{request.po_status}</div> : null
+                        request.po_status === 'accounting office' ? <div className="text-red-500">{request.po_status}</div> : null
                       }
                     </td>
                     <th className='flex gap-1 items-center justify-center mt-2'>
@@ -215,7 +210,10 @@ const PurchaseOrderTable = () => {
                           {
                             request.purchase_order !== null ? <>
                               <button className='btn bg-blue-500 text-white hover:bg-blue-500 btn-sm' onClick={ev => handleFileModal(request.purchase_order)}>File</button>
-                              <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(request.id)}>Cancel</button>
+                              {
+                                request.po_status === 'for review' ?
+                                <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(request.id)}>Cancel</button> : null
+                              }
                             </> : null
                           }
                           

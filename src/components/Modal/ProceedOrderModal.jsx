@@ -3,6 +3,7 @@ import Select from '../Forms/SelectGroup/Select'
 import DatePickerOne from '../Forms/DatePicker/DatePickerOne'
 import axiosClient from '../../axiosClinet';
 import { useStateContext } from '../../context/ContextProvider';
+import '../../laravel-echo'
 
 const options = [
     {
@@ -18,12 +19,11 @@ const options = [
 const minDate = '2024-06-21';
 const maxDate = '2024-12-31';
 
-export default function ProceedOrderModal({open, handleModal, data, tableLoading}) {
+export default function ProceedOrderModal({open, handleModal, data, tableLoading, handleLoading}) {
   const [errors, setErrors] = useState([])
   const {setNotification, setNotificationError} = useStateContext()
   const [btnLoading, setBtnLoading] = useState(false)
   const [payload, setPayload] = useState({
-    status: '',
     deadline: ''
   })
 
@@ -37,11 +37,12 @@ export default function ProceedOrderModal({open, handleModal, data, tableLoading
   const updateStatus = async () => {
     setBtnLoading(true)
     try {
-        const {res} = await axiosClient.post(`/po-request/update-status/${data.id}`, payload)
+        const {res} = await axiosClient.post(`/po-request/update-po-status/${data.id}`, payload)
         setBtnLoading(false)
         setNotification('Action Success!')
         tableLoading()
         handleModal()
+        handleLoading(true)
     } catch (error) {
         setBtnLoading(false)
         console.log(error)
