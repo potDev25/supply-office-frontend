@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 22, 2024 at 02:28 PM
+-- Generation Time: Jul 28, 2024 at 09:00 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -44,14 +44,6 @@ CREATE TABLE `applicants` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `applicants`
---
-
-INSERT INTO `applicants` (`id`, `user_id`, `lastname`, `firstname`, `middlename`, `province`, `city`, `barangay`, `email`, `contact_number`, `username`, `position`, `created_at`, `updated_at`) VALUES
-(15, 16, 'Maia', 'Bevis', 'Sonya', NULL, NULL, NULL, 'xihekyd@mailinator.com', '43063214598', 'jatysuw', 'Chairperson', '2024-07-13 06:11:31', '2024-07-13 06:11:31'),
-(16, 17, 'Macaulay', 'Kennan', 'Bruce', NULL, NULL, NULL, 'zinu@mailinator.com', '55', 'tavoxi', 'Recusandae A volupt', '2024-07-20 17:23:34', '2024-07-20 17:23:34');
-
 -- --------------------------------------------------------
 
 --
@@ -67,15 +59,6 @@ CREATE TABLE `departments` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `departments`
---
-
-INSERT INTO `departments` (`id`, `department_name`, `department_type`, `logo`, `name`, `created_at`, `updated_at`) VALUES
-(32, 'School of Education', 'Office', 'media/QWh17mYexwPG1XsaZLhMQlM1cNBw4sxk7eviwbG4.png', 'School_of_Education', '2024-07-13 06:09:22', '2024-07-13 06:09:22'),
-(33, 'School of Technology and Computer Studies', 'Office', 'media/FHPBQSQRCVRsPUAnshwum9wYfixaQY1zkkkYFjbY.png', 'School_of_Technology_and_Computer_Studies', '2024-07-20 17:21:34', '2024-07-20 17:21:34'),
-(34, 'School of Criminal Justice', 'School', 'media/Se4Ujqf2CFKwWtWg3FuhdWqscyscmTTovQtjoEIV.png', 'School_of_Criminal_Justice', '2024-07-20 18:42:56', '2024-07-20 18:42:56');
 
 -- --------------------------------------------------------
 
@@ -97,14 +80,6 @@ CREATE TABLE `documents` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `documents`
---
-
-INSERT INTO `documents` (`id`, `user_id`, `department_id`, `title`, `description`, `document`, `deadline`, `message`, `status`, `date_complied`, `created_at`, `updated_at`) VALUES
-(3, 17, 33, 'PPMP', 'ahahahah', 'media/0D4XycV3F8r3N20RqBUm6BkAACtTenMDBQNwMkjQ.pdf', '2024-07-24', NULL, 'done', '2024-07-21 15:11:08', '2024-07-21 07:08:56', '2024-07-21 07:11:08'),
-(5, 17, 34, 'PPMP', 'asliudfyiu', 'media/9yOMRUXIbMdDsh6ItroI3w2QpNNrb6Q72BVDH0IZ.pdf', '2024-07-25', 'Exceed budget', 'done', '2024-07-22 01:55:26', '2024-07-21 17:39:08', '2024-07-21 17:55:26');
 
 -- --------------------------------------------------------
 
@@ -138,14 +113,6 @@ CREATE TABLE `media` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `media`
---
-
-INSERT INTO `media` (`id`, `applicant_id`, `profile_image`, `sanitary_permit`, `barangay_clearance`, `created_at`, `updated_at`) VALUES
-(13, 15, 'media/LIM0LzAwtqX8KrSBlteL7uAJkJ2cfClRJumDYNeL.png', '', '', '2024-07-13 06:11:31', '2024-07-21 16:57:52'),
-(14, 16, 'media/aDq6cUP2M3wlZNOfxx5gbtyyccgPJBIS2M3TJmLQ.png', '', '', '2024-07-20 17:23:34', '2024-07-21 16:58:05');
-
 -- --------------------------------------------------------
 
 --
@@ -171,7 +138,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (6, '2024_06_26_153104_create_media_table', 1),
 (7, '2024_06_28_235508_create_departments_table', 1),
 (8, '2024_07_13_151623_create_documents_table', 2),
-(9, '2024_07_21_145626_create_transaction_logs_table', 3);
+(9, '2024_07_21_145626_create_transaction_logs_table', 3),
+(10, '2024_07_23_144301_create_purchase_documents_table', 4),
+(11, '0000_00_00_000000_create_websockets_statistics_entries_table', 5);
 
 -- --------------------------------------------------------
 
@@ -212,7 +181,33 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (4, 'App\\Models\\User', 1, 'main', 'fda07e1df9de49774618831d5854321d158facd7a99cf81be691cca312aefd0d', '[\"*\"]', '2024-07-01 02:43:47', NULL, '2024-06-30 19:45:36', '2024-07-01 02:43:47'),
 (6, 'App\\Models\\User', 1, 'main', 'cae5c940014a058169445f97ed0c1fb3d64476b73d1b6cea008d02d5e8e7ccb9', '[\"*\"]', '2024-07-13 05:48:07', NULL, '2024-07-09 23:18:03', '2024-07-13 05:48:07'),
 (10, 'App\\Models\\User', 17, 'main', '3b6c7711e030ddb6147e0e44b58bd1417f4e702ab65b2693aec18382588fc169', '[\"*\"]', '2024-07-22 04:26:39', NULL, '2024-07-20 17:25:02', '2024-07-22 04:26:39'),
-(11, 'App\\Models\\User', 1, 'main', '9ca7aebc41f18349164be16a4953caf23cb47c22fc0e3224bcb9d59dbb3abf22', '[\"*\"]', '2024-07-22 04:26:30', NULL, '2024-07-21 17:57:42', '2024-07-22 04:26:30');
+(12, 'App\\Models\\User', 1, 'main', '3d459c87772157e44e6c705e8816bcd4720c50c3e31f043b28cb9fff3a271b74', '[\"*\"]', '2024-07-23 14:17:33', NULL, '2024-07-22 09:27:58', '2024-07-23 14:17:33'),
+(14, 'App\\Models\\User', 20, 'main', '74ae292f312e2527abc4bd1ab1957f9b545375d8ea0eddbc01b03a2233284e65', '[\"*\"]', '2024-07-23 14:17:39', NULL, '2024-07-22 14:36:18', '2024-07-23 14:17:39'),
+(15, 'App\\Models\\User', 20, 'main', '4339e07273f6f9cdadecfeb417d248461f6a5ba7791d068edf3db2c98272e3b6', '[\"*\"]', '2024-07-24 18:59:36', NULL, '2024-07-23 17:31:11', '2024-07-24 18:59:36'),
+(16, 'App\\Models\\User', 1, 'main', '1656ba99fc0d5073709b463aec1072286b47d8e08da01ed400a10ff4b68a6988', '[\"*\"]', '2024-07-27 22:59:51', NULL, '2024-07-27 22:59:04', '2024-07-27 22:59:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_documents`
+--
+
+CREATE TABLE `purchase_documents` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT 'pending',
+  `pr_status` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `po_status` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT 'for review',
+  `pr_request_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `purchase_request` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `purchase_order` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `order_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `request_description` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `return_status` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `po_request_date` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -229,19 +224,6 @@ CREATE TABLE `transaction_logs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `transaction_logs`
---
-
-INSERT INTO `transaction_logs` (`id`, `document_id`, `deadline`, `date_submitted`, `status`, `created_at`, `updated_at`) VALUES
-(1, 3, '2024-07-23', '2024-07-21 15:08:56', 'accounting office', '2024-07-21 07:09:17', '2024-07-21 07:09:17'),
-(2, 3, '2024-07-24', '2024-07-21 15:08:56', 'president office', '2024-07-21 07:10:30', '2024-07-21 07:10:30'),
-(3, 3, '2024-07-24', '2024-07-21 15:08:56', 'supply office', '2024-07-21 07:10:51', '2024-07-21 07:10:51'),
-(4, 3, '2024-07-24', '2024-07-21 15:08:56', 'done', '2024-07-21 07:11:08', '2024-07-21 07:11:08'),
-(5, 5, NULL, '2024-07-22 01:39:08', 'return', '2024-07-21 17:41:15', '2024-07-21 17:41:15'),
-(6, 5, '2024-07-25', '2024-07-22 01:39:08', 'supply office', '2024-07-21 17:47:36', '2024-07-21 17:47:36'),
-(7, 5, '2024-07-25', '2024-07-22 01:39:08', 'done', '2024-07-21 17:55:26', '2024-07-21 17:55:26');
 
 -- --------------------------------------------------------
 
@@ -272,9 +254,23 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `department_id`, `lastname`, `firstname`, `middle_name`, `position`, `role`, `email`, `contact_number`, `username`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, NULL, 'General', 'Admin', NULL, NULL, 'general admin', 'admin@gmail.com', NULL, '', NULL, '$2y$10$jT8C2A3nQBXYN4y6/lBg5.dI39BXRNekX6u5wfwCJi9bGmEdzas1e', NULL, NULL, NULL),
-(16, 32, 'Ann', 'Skyler', 'Imani', 'Earum qui sunt nostr', 'admin', 'veramy@mailinator.com', '672', 'zuwab', NULL, '$2y$12$FixfL0h8d.6mkeeSOo0LQeWm2GLyMIiVgS7wfF27qeR0L6a1E5CkO', NULL, '2024-07-13 06:11:31', '2024-07-21 17:01:28'),
-(17, 34, 'Courtney', 'Tiger', 'William', 'Sint aut error magn', 'admin', 'fybu@mailinator.com', '655', 'bywimaxupi', NULL, '$2y$12$n2kICW//riiGHF0UYb/E8OuNKkCwvJZdcMu41uzVeX/oVq3G5M5R6', NULL, '2024-07-20 17:23:34', '2024-07-21 17:00:26');
+(1, NULL, 'General', 'Admin', NULL, NULL, 'general admin', 'admin@gmail.com', NULL, '', NULL, '$2y$10$jT8C2A3nQBXYN4y6/lBg5.dI39BXRNekX6u5wfwCJi9bGmEdzas1e', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `websockets_statistics_entries`
+--
+
+CREATE TABLE `websockets_statistics_entries` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `app_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `peak_connection_count` int(11) NOT NULL,
+  `websocket_message_count` int(11) NOT NULL,
+  `api_message_count` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables
@@ -335,6 +331,13 @@ ALTER TABLE `personal_access_tokens`
   ADD KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`);
 
 --
+-- Indexes for table `purchase_documents`
+--
+ALTER TABLE `purchase_documents`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `purchase_documents_user_id_foreign` (`user_id`);
+
+--
 -- Indexes for table `transaction_logs`
 --
 ALTER TABLE `transaction_logs`
@@ -350,6 +353,12 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_username_unique` (`username`);
 
 --
+-- Indexes for table `websockets_statistics_entries`
+--
+ALTER TABLE `websockets_statistics_entries`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -357,19 +366,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `applicants`
 --
 ALTER TABLE `applicants`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -381,31 +390,43 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `purchase_documents`
+--
+ALTER TABLE `purchase_documents`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `transaction_logs`
 --
 ALTER TABLE `transaction_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `websockets_statistics_entries`
+--
+ALTER TABLE `websockets_statistics_entries`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -428,6 +449,12 @@ ALTER TABLE `documents`
 --
 ALTER TABLE `media`
   ADD CONSTRAINT `media_applicant_id_foreign` FOREIGN KEY (`applicant_id`) REFERENCES `applicants` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `purchase_documents`
+--
+ALTER TABLE `purchase_documents`
+  ADD CONSTRAINT `purchase_documents_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `transaction_logs`
