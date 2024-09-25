@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import Select from '../Forms/SelectGroup/Select'
+// import Select from '../Forms/SelectGroup/Select'
+import Select from 'react-select'
 import DatePickerOne from '../Forms/DatePicker/DatePickerOne'
 import axiosClient from '../../axiosClinet';
 import { useStateContext } from '../../context/ContextProvider';
@@ -20,7 +21,7 @@ const maxDate = '2024-12-31';
 
 export default function ReturnModal({open, handleModal, data, tableLoading}) {
   const [errors, setErrors] = useState([])
-  const {setNotification, setNotificationError} = useStateContext()
+  const {setNotification, setNotificationError, returnStatus} = useStateContext()
   const [btnLoading, setBtnLoading] = useState(false)
   const [payload, setPayload] = useState({
     status: 'return',
@@ -54,7 +55,11 @@ export default function ReturnModal({open, handleModal, data, tableLoading}) {
         <div className="modal-box w-11/12 max-w-2xl">
         <h3 className="font-bold text-sm mb-2">Reason For Returning Transaction</h3>
         <div>
-          <textarea onChange={onChange} value={payload.message} name='message' className="textarea textarea-bordered w-full" placeholder="Enter...."></textarea>
+          <Select
+            options={returnStatus}
+            onChange={ev => setPayload({...payload, message: ev.value})}
+          />
+          {/* <textarea onChange={onChange} value={payload.message} name='message' className="textarea textarea-bordered w-full" placeholder="Enter...."></textarea> */}
         </div>
         <div className="modal-action flex items-center justify-between">
             <form method="dialog">

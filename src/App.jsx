@@ -34,6 +34,9 @@ import Reports from './pages/Reports/Files';
 import ReportPage from './pages/Reports/Announcements';
 import { Edit } from 'lucide-react';
 import EditUser from './pages/Applicants/Edit';
+import ReturnModal from './components/Modal/ReturnModal';
+import ReturnStatus from './pages/Departments/ReturnStatus';
+import Annual from './pages/Departments/Annual';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -186,6 +189,15 @@ function App() {
           }
         />
         <Route
+          path="/return-status"
+          element={
+            <>
+              <PageTitle title="Return Status | University BAC" />
+              <ReturnStatus />
+            </>
+          }
+        />
+        <Route
           path="/archives/files/:id"
           element={
             <>
@@ -245,6 +257,15 @@ function App() {
             <>
               <PageTitle title="Departments | University BAC" />
               <Departments />
+            </>
+          }
+        />
+        <Route
+          path="/app"
+          element={
+            <>
+              <PageTitle title="Annual Procurement Plan | University BAC" />
+              <Annual />
             </>
           }
         />

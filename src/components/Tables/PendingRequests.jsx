@@ -152,7 +152,7 @@ const PendingRequests = () => {
               <th>Request Date</th>
               <th>Deadline</th>
               <th>Status</th>
-              <th className='text-center'>Action</th>
+              <th className='text-center'></th>
               {/* <th></th> */}
             </tr>
           </thead>

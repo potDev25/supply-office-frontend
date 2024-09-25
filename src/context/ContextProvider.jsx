@@ -9,7 +9,9 @@ const StateContext = createContext({
     alertNot: null,
     notification_error: null,
     calendarYear: null,
+    returnStatus: null,
     setCalendarYear: () => {},
+    setReturnStatus: () => {},
     setDepartments: () => {},
     setPassengers: () => {},
     setNotification: () => {},
@@ -25,6 +27,7 @@ export const ContextProvider = ({children}) => {
     const [calendarYear, setCalendarYear] = useState({})
     const [notification, _setNotification] = useState('')          
     const [departments, _setDepartments] = useState([])          
+    const [returnStatus, _setReturnStatus] = useState([])          
     const [alertNot, _setAlertNot] = useState('')
     const [notification_error, _setNotificationError] = useState('')
     const [user_token, _setUserToken] = useState(localStorage.getItem('USER_TOKEN'))
@@ -60,6 +63,14 @@ export const ContextProvider = ({children}) => {
         })
     }
 
+    const setReturnStatus = (data) => {
+        _setReturnStatus((prev) => {
+            return data.map((item) => ({
+                ...prev, label: item.return_status, value: item.return_status
+            }))
+        })
+    }
+
     const setNotificationError = (notification) => {
         _setNotificationError(notification)
         setTimeout(() => {
@@ -73,6 +84,8 @@ export const ContextProvider = ({children}) => {
             user_token,
             notification,
             alertNot,
+            returnStatus,
+            setReturnStatus,
             setAlertNot,
             notification_error,
             setNotification,

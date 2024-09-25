@@ -173,7 +173,7 @@ const PurchaseRequestTable = ({handleLoading, t_loading}) => {
               <th>Request Date</th>
               {/* <th>Deadline</th> */}
               <th>Status</th>
-              <th className='text-center'>Action</th>
+              <th className='text-center'></th>
             </tr>
           </thead>
           <tbody>
@@ -237,15 +237,7 @@ const PurchaseRequestTable = ({handleLoading, t_loading}) => {
             
           </tbody>
           {/* foot */}
-          <tfoot>
-            <tr>
-              <th>Title</th>
-              <th>Request Date</th>
-              {/* <th>Deadline</th> */}
-              <th>Status</th>
-              <th className='text-center'>Action</th>
-            </tr>
-          </tfoot>
+        
           
         </table>
       }
