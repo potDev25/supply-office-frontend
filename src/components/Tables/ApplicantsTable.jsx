@@ -146,7 +146,7 @@ const ApplicantsTable = () => {
             <option value='30'>30</option>
             <option value=''>All</option>
           </select>
-          <button className="btn btn-outline" onClick={openDeleteModal}><i class="fa-solid fa-trash-can"></i> Mass Delete</button>
+          {/* <button className="btn btn-outline" onClick={openDeleteModal}><i class="fa-solid fa-trash-can"></i> Mass Delete</button> */}
         </div>
 
         <div className='flex items-center gap-2'>
@@ -216,9 +216,9 @@ const ApplicantsTable = () => {
                   }</td>
                   <td><div className={`badge ${data.status == 1 ? 'badge-success' : ''}  badge-outline`}>{data.status == 1 ? 'Online' : 'Offline'}</div></td>
                   <th className='flex gap-1 items-center justify-center mt-2'>
-                    <button className="btn btn-sm btn-default"><i class="fa-solid fa-eye"></i></button>
+                    {/* <button className="btn btn-sm btn-default"><i class="fa-solid fa-eye"></i></button> */}
                     <Link to={`/users/edit/${data.user_id}`} className="btn btn-sm bg-green-600 text-white hover:bg-green-600"><i class="fa-solid fa-pen-to-square"></i></Link>
-                    <button className="btn btn-sm bg-red-800 text-white hover:bg-red-500" onClick={ev => openDeleteModalOne(data.user_id)}><i class="fa-solid fa-trash-can"></i></button>
+                    {/* <button className="btn btn-sm bg-red-800 text-white hover:bg-red-500" onClick={ev => openDeleteModalOne(data.user_id)}><i class="fa-solid fa-trash-can"></i></button> */}
                   </th>
                 </tr>
               ))

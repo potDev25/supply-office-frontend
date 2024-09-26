@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from '../Forms/SelectGroup/Select';
 import DatePickerOne from '../Forms/DatePicker/DatePickerOne';
 import Uploader from '../Forms/Uploader';
 import axiosClient from '../../axiosClinet';
 import { useStateContext } from '../../context/ContextProvider';
-import UploadPdf from '../Forms/UploadPdf';
 
 const options = [
   {
@@ -26,7 +25,7 @@ const config = {
 const minDate = '2024-06-21';
 const maxDate = '2024-12-31';
 
-export default function AddAnnualModal({ open, handleModal, loading, handleBntLoading, handlePageLoading}) {
+export default function EditDepartmentModal({ open, handleModal, loading, handleBntLoading, handlePageLoading, department}) {
   const [errors, setErrors] = useState([])
   const {setNotification, setNotificationError, setDepartments} = useStateContext()
   const [imageUrl, setImage] = useState(null)
@@ -73,9 +72,8 @@ export default function AddAnnualModal({ open, handleModal, loading, handleBntLo
     setErrors([])
     handleBntLoading(true)
     try {
-      const {data} = await axiosClient.post('/departments/store', payload, config)
-      setDepartments(data)
-      setNotification('Department Added Successfully')
+      const {data} = await axiosClient.post(`/departments/update/${department.id}`, payload, config)
+      setNotification('Department Edited Successfully')
       handleBntLoading(false)
       handlePageLoading()
       // setImage(null)
@@ -93,17 +91,34 @@ export default function AddAnnualModal({ open, handleModal, loading, handleBntLo
     }
   }
 
+  const getDepartment = async () => {
+    try {
+      const {data} = await axiosClient.get(`/departments/show/${department.id}`)
+      setPayload({
+        department_name: data.department_name,
+        department_type: data.department_type,
+      })
+      setImage(`${import.meta.env.VITE_API_BASE_URL}/storage/${data.logo}`)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getDepartment()
+  }, [department])
+
   return (
     <>
 
       <dialog className={`modal ${open ? 'modal-open' : ''}`}>
         <div className="modal-box">
-          <h3 className="font-bold text-sm uppercase">Upload Annual Procurement Plan</h3>
+          <h3 className="font-bold text-sm uppercase">Add Department</h3>
 
           <div className='mt-5'>
             <div className='mb-4'>
               <label className="mb-2 block text-black dark:text-white">
-                Document Title
+                Department Name
               </label>
               <input
                 type="text"
@@ -136,7 +151,7 @@ export default function AddAnnualModal({ open, handleModal, loading, handleBntLo
               <label className="mb-2 block text-black dark:text-white">
                 Upload Logo
               </label>
-              <UploadPdf handleImageChange={ev => handleImageChange(ev)} pdf={imageUrl} error={errors.logo}/>
+              <Uploader handleImageChange={ev => handleImageChange(ev)} image={imageUrl} error={errors.logo}/>
             </div>
           </div>
 

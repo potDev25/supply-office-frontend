@@ -13,6 +13,7 @@ import DeleteApplicantModal from '../Modal/DeleteApplicantModal';
 import { useStateContext } from '../../context/ContextProvider';
 import AddDepartmentModal from '../Modal/AddDepartmentModal';
 import AddAnnualModal from '../Modal/AddAnnualModal';
+import FileModal from '../Modal/FileModal';
 
 const AnnualTable = () => {
   const [request, setRequest] = useState()
@@ -20,6 +21,8 @@ const AnnualTable = () => {
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [fileModal, setFileModal] = useState(false)
+  const [file, setFile] = useState('')
   const [data, setData] = useState([])
   const [links, setLinks] = useState([])
   const [ids, setIds] = useState([])
@@ -38,10 +41,10 @@ const AnnualTable = () => {
   const fetchData = async () => {
     // setLoading(true)
     try {
-      const response = await axiosClient.get(`/departments?page=${page}&limit=${limit}`)
-      setData(response.data.departments.data)
-      setLinks(response.data.departments.links)
-      console.log(response);
+      const {data} = await axiosClient.get(`/annual?page=${page}&limit=${limit}`)
+      setData(data.data)
+      setLinks(data.links)
+      console.log(data.data);
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -84,7 +87,7 @@ const AnnualTable = () => {
         setData(checkedvalue);
       } else{
         const checkedvalue= data.map( (user)=>
-        user.name ===name? {...user, isChecked:checked}:user);
+        user.document_id ===name? {...user, isChecked:checked}:user);
         setData(checkedvalue);
     }
   }
@@ -137,6 +140,15 @@ const AnnualTable = () => {
     setdeleteModalOne(!deleteModalOne)
   }
 
+  const openFileModal = (file) => {
+    setFile(file)
+    setFileModal(!fileModal)
+  }
+
+  const hideFileModal = (file) => {
+    setFileModal(false)
+  }
+
   const handleBtnLoading = (btn) => {
     setBtnLoading(btn)
   }
@@ -163,7 +175,7 @@ const AnnualTable = () => {
       <div className='flex items-center justify-between mt-2 mb-2'>
         <div className='flex items-center gap-2'>
           <label className="input input-bordered flex items-center gap-2">
-            <input type="text" className="grow input-xs" onChange={ev => setSearch(ev.target.value)} placeholder="Search Departments" />
+            <input type="text" className="grow input-xs" onChange={ev => setSearch(ev.target.value)} placeholder="Search Title, Document ID" />
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" /></svg>
           </label>
           <select className="select select-primary w-[100px] max-w-xs" onChange={ev => setLimit(ev.target.value)}>
@@ -173,19 +185,24 @@ const AnnualTable = () => {
             <option value='30'>30</option>
             <option value='10000'>All</option>
           </select>
-          <button className="btn btn-outline" onClick={openDeleteModal}><i class="fa-solid fa-trash-can"></i> Mass Delete</button>
+          {/* <button className="btn btn-outline" onClick={openDeleteModal}><i class="fa-solid fa-trash-can"></i> Mass Delete</button> */}
         </div>
 
         <div className='flex items-center gap-2'>
-          <button className="btn btn-primary" onClick={handleDepartmentModal}>
-          <i className="fa-solid fa-circle-plus"></i>
-            Add Department
-          </button>
+          <Link className="btn btn-primary" to={'/app/upload'}>
+          <i class="fa-solid fa-upload"></i>
+            Upload
+          </Link>
         </div>
 
       </div>
       
       <AddApplicantModal/>
+      <FileModal
+        file={file}
+        open={fileModal}
+        handleModal={hideFileModal}
+      />
       <DeleteApplicantModal text={'Delete Departments?'} deleteApplicant={handleAllDelete} open={deleteModal} handleModal={openDeleteModal} loading={btnLoading}/>
       <DeleteApplicantModal text={'Delete Departments?'} deleteApplicant={deleteSingleUser} open={deleteModalOne} handleModal={openDeleteModalOne} loading={btnLoading}/>
       <AddAnnualModal handlePageLoading={handlePageLoading} open={departmentModal} handleModal={handleDepartmentModal} loading={btnLoading} handleBntLoading={handleBtnLoading}/>
@@ -196,66 +213,61 @@ const AnnualTable = () => {
           {/* head */}
           <thead>
             <tr>
-              <th>
+              {/* <th>
                 <label>
                   <input type="checkbox" name="allselect" checked= { !data.some( (user)=>user?.isChecked!==true)} onChange={ handleChange} className="checkbox" />
                 </label>
-              </th>
-              <th>Department Name</th>
-              <th>Department Type</th>
+              </th> */}
+              <th>Document ID</th>
+              <th>Title</th>
+              <th>File Name</th>
               <th>Created At</th>
-              <th className='text-center'>Action</th>
+              <th className='text-center'></th>
               {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
+        
             {
               data.filter((data) => {
-                    return search.toLowerCase === '' ? data : data.department_name.toLowerCase().includes(search) || data.department_type.toLowerCase().includes(search)
+                    return search.toLowerCase === '' ? data : data.title.toLowerCase().includes(search) || data.document_id.toLowerCase().includes(search)
                 }).map((data) => (
                 <tr>
-                  <th>
+                  {/* <th>
                     <label>
-                      <input type="checkbox" name={data.name} checked={data?.isChecked || false} onChange={ handleChange} className="checkbox" />
+                      <input type="checkbox" name={data.document_id} checked={data?.isChecked || false} onChange={ handleChange} className="checkbox" />
                     </label>
-                  </th>
+                  </th> */}
                   <td>
                     <div className="flex items-center gap-3">
                       <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
+                        {/* <div className="mask mask-squircle w-12 h-12">
                           <img src={`${import.meta.env.VITE_API_BASE_URL}/storage/${data.logo}`} alt="Avatar Tailwind CSS Component" />
-                        </div>
+                        </div> */}
                       </div>
                       <div>
-                        <div className="font-bold capitalize">{data.department_name}</div>
+                        <div className="font-bold capitalize text-primary">{data.document_id}</div>
                       </div>
                     </div>
                   </td>
                   <td className='capitalize'>
-                    {data.department_type}
+                    {data.title}
+                  </td>
+                  <td className='capitalize text-primary'>
+                  <i class="fa-solid fa-file-lines"></i> {data.file_name}
                   </td>
                   <td className='capitalize'>{formatDate(data.created_at)}</td>
                   <th className='flex gap-1 items-center justify-center mt-2'>
                     {/* <button className="btn btn-sm btn-default"><i class="fa-solid fa-eye"></i></button> */}
-                    <button className="btn btn-sm bg-red-800 text-white hover:bg-red-500" onClick={ev => openDeleteModalOne(data.id)}><i class="fa-solid fa-trash-can"></i></button>
+                    <button className="btn btn-outline btn-sm btn-success" onClick={ev => openFileModal(data.document)}>FIle</button>
+                    <Link className="btn btn-outline btn-sm btn-primary" to={`/app/edit/${data.id}`}><i class="fa-solid fa-pen-to-square"></i> Upadate</Link>
                   </th>
                 </tr>
               ))
             }
           </tbody>
-          {/* foot */}
-          <tfoot>
-            <tr>
-              <th></th>
-              <th>Department Name</th>
-              <th>Department Type</th>
-              <th>Created At</th>
-              <th className='text-center'>Action</th>
-              {/* <th></th> */}
-            </tr>
+       
 
-          </tfoot>
           
         </table>
       }

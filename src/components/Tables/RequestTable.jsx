@@ -46,6 +46,12 @@ const RequestTable = () => {
     }
   };
 
+  const refresh = async () => {
+    setTableLoading(true);
+    await fetchData()
+    setTableLoading(false);
+  }
+
   const handleProceedModal = (data) => {
     setDataRequest(data);
     setProceedModal(!openProceedModal);
@@ -135,6 +141,9 @@ const RequestTable = () => {
             <h1 className='font-medium text-sm mt-0.5'>Return</h1>
             <div className="badge bg-red-500 text-white text-xs">{number.return}</div>
           </div> */}
+        </div>
+        <div>
+          <button className='btn btn-outline btn-default btn-sm' onClick={refresh}><i class="fa-solid fa-arrows-rotate"></i> Refresh</button>
         </div>
 
         {/* <div className='flex items-center gap-2 sm:mt-5 lg:mt-0'>

@@ -12,6 +12,23 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useStateContext } from '../../context/ContextProvider';
 import axiosClient from '../../axiosClinet';
 import Select from 'react-select'
+import 'ckeditor5/ckeditor5.css';
+import 'ckeditor5-premium-features/ckeditor5-premium-features.css';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import {
+  ClassicEditor,
+  Bold,
+  Essentials,
+  Italic,
+  Mention,
+  Paragraph,
+  Undo,
+  Heading,
+  Font,
+  List,
+  Table,
+  MediaEmbed,
+} from 'ckeditor5';
 
 const config = {
   headers: {
@@ -117,7 +134,50 @@ const UploadDocument = () => {
                     >
                       Description
                     </label>
-                    <textarea name='description' onChange={onChange} className={`${errors.description ? 'border border-red-500 border-solid' : ''} textarea textarea-bordered w-full`} placeholder="Bio"></textarea>
+                    <CKEditor
+                    editor={ClassicEditor}
+                    config={{
+                      toolbar: {
+                        items: [
+                          'heading',
+                          'fontSize',
+                          'fontColor',
+                          'fontBackgroundColor', // Text styling options
+                          '|', // Separator
+                          'bold',
+                          'italic',
+                          'underline',
+                          'strikethrough', // Basic formatting options
+                          '|',
+                          'bulletedList',
+                          'numberedList',
+                          'blockQuote', // List and block options
+                          '|',
+                          'link',
+                          'insertTable',
+                          'mediaEmbed', // Insertion options
+                          '|',
+                          'undo',
+                          'redo', // Undo and redo actions
+                        ],
+                      },
+                      plugins: [
+                        Bold,
+                        Italic,
+                        Essentials,
+                        Paragraph,
+                        Mention,
+                        Undo,
+                        Heading,
+                        Font,
+                      ],
+                    }}
+                    onChange={(event, editor) => {
+                      const data = editor.getData();
+                      setPayload({...payload, description: data}); // Update the state with the current data
+                    }}
+                    // Add custom style here for height
+                  />
                     {
                       errors.description ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.description}</p> : null
                     }
@@ -221,7 +281,7 @@ const UploadDocument = () => {
                         </svg>
                       </span>
                       <p>
-                        <span className="text-primary">Click to upload Your Sanitary Permit</span> or
+                        <span className="text-primary">Click to upload Your PDF File</span> or
                         drag and drop
                       </p>
                       <p className="mt-1.5">PDF</p>

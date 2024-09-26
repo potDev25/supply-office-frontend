@@ -40,7 +40,9 @@ const EditUser = () => {
     username: '',
     profile_image: '',
     position: '',
-    department_id: ''
+    department_id: '',
+    password: '',
+    password_confirmationL: ''
   })
   const {id} = useParams()
 
@@ -59,7 +61,9 @@ const EditUser = () => {
         contact_number: data.contact_number,
         username: data.username,
         position: data.position,
-        department_id: data.department_id
+        department_id: data.department_id,
+        password: '',
+        password_confirmationL: ''
       })
       setPic(data.profile_image)
       setpageLoading(false)
@@ -400,6 +404,8 @@ const EditUser = () => {
                     }
                   </div>
 
+                  
+
                   <div className="mb-5.5">
                     <label
                       className="mb-3 block text-sm font-medium text-black dark:text-white"
@@ -411,6 +417,48 @@ const EditUser = () => {
                     {
                       errors.department_id ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.department_id}</p> : null
                     }
+                  </div>
+
+                  <div className="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div className='w-full sm:w-1/2 mb5.5'>
+                      <label
+                        className="mb-3 block text-sm font-medium text-black dark:text-white"
+                        htmlFor="emailAddress"
+                      >
+                        Change Password
+                      </label>
+                        <div className="relative">
+                          <input
+                            className={`${errors.password ? 'border-2 border-red-500 border-solid' : 'border border-stroke bg-gray'} w-full rounded  py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary`}
+                            type="password"
+                            name="password"
+                            onChange={onChange}
+                            id="password"
+                            placeholder="Create Password"
+                          />
+                          {
+                            errors.password ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.password}</p> : null
+                          }
+                        </div>
+                      </div>
+                      <div className='w-full sm:w-1/2 mb5.5'>
+                      <label
+                        className="mb-3 block text-sm font-medium text-black dark:text-white"
+                        htmlFor="password_confirmation"
+                      >
+                        Confirm Password
+                      </label>
+                        <div className="relative">
+                          <input
+                            className="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 text-black focus:border-primary focus-visible:outline-none dark:border-strokedark dark:bg-meta-4 dark:text-white dark:focus:border-primary"
+                            type="password"
+                            name="password_confirmation"
+                            onChange={onChange}
+                            id="emailAddress"
+                            placeholder="Confirm Your Password"
+                          />
+                        </div>
+                      </div>
                   </div>
 
                   {sanitary && (<div className='fade-in mb-5'>

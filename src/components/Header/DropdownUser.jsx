@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ClickOutside from '../ClickOutside';
-import UserOne from '../../images/user/user-01.png';
+import UserOne from '../../images/user/user.jpg';
 import { useStateContext } from '../../context/ContextProvider';
 import axiosClient from '../../axiosClinet';
 

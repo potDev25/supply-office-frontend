@@ -48,7 +48,9 @@ export default function Dashboard() {
 
   return (
     <>
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+     {
+        user.role === 'general admin' || user.role === 'supply office' ? 
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
       <CardDataStats title="Departments" total={numbers.departments}>
       <i class="fa-solid fa-building-columns"></i>
       </CardDataStats>
@@ -61,7 +63,9 @@ export default function Dashboard() {
       <CardDataStats title="Total Users" total={numbers.users}>
       <i class="fa-solid fa-users"></i>
       </CardDataStats>
-    </div>
+    </div> : null
+      }
+    
 
     <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
       {/* <ChartOne />

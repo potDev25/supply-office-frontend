@@ -37,6 +37,8 @@ import EditUser from './pages/Applicants/Edit';
 import ReturnModal from './components/Modal/ReturnModal';
 import ReturnStatus from './pages/Departments/ReturnStatus';
 import Annual from './pages/Departments/Annual';
+import UploadApp from './pages/Applicants/UploadApp';
+import EditApp from './pages/Applicants/EditApp';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -86,6 +88,26 @@ function App() {
             <>
               <PageTitle title="Upload | University BAC" />
               <UploadDocument />
+            </>
+          }
+        />
+        <Route
+          index
+          path='/app/upload'
+          element={
+            <>
+              <PageTitle title="Upload | University BAC" />
+              <UploadApp />
+            </>
+          }
+        />
+        <Route
+          index
+          path='/app/edit/:id'
+          element={
+            <>
+              <PageTitle title="Upload | University BAC" />
+              <EditApp />
             </>
           }
         />

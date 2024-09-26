@@ -192,7 +192,7 @@ const ReportDepartmentsTable = () => {
           {/* <button className="btn btn-outline" onClick={openDeleteModal}><i class="fa-solid fa-trash-can"></i> Mass Delete</button> */}
         </div>
 
-        <div className='flex items-center gap-2'>
+        {/* <div className='flex items-center gap-2'>
           <select className="select select-primary w-[200px] max-w-xs" onChange={ev => setLimit(ev.target.value)}>
             <option disabled selected>Filter Date</option>
             <option value='10'>10</option>
@@ -200,7 +200,7 @@ const ReportDepartmentsTable = () => {
             <option value='30'>30</option>
             <option value='10000'>All</option>
           </select>
-        </div>
+        </div> */}
 
       </div>
       
