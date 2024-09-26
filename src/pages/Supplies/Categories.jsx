@@ -8,9 +8,9 @@ import CategoriesTable from '../../components/Tables/CategoriesTable'
 export default function Categories() {
   const {user} = useStateContext()
 
-  if(user.role !== 'general admin'){
-    window.location.replace('/dashboard')
-  }
+  // if(user.role !== 'general admin' || user.role == 'supply office'){
+  //   window.location.replace('/dashboard')
+  // }
   return (
     <>
       <Breadcrumb pageName="Manage Categories" />

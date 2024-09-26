@@ -7,9 +7,9 @@ import { useStateContext } from '../../context/ContextProvider'
 export default function Departments() {
   const {user} = useStateContext()
 
-  if(user.role !== 'general admin'){
-    window.location.replace('/dashboard')
-  }
+  // if(user.role !== 'general admin'){
+  //   window.location.replace('/dashboard')
+  // }
   return (
     <>
       <Breadcrumb pageName="Departments" />

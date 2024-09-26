@@ -113,9 +113,9 @@ const ArchiveTable = () => {
       <div className='lg:flex items-center justify-between p-2 sm:block'>
         <div className='lg:flex items-center gap-5 sm:block'>
           <div>
-            <h1 className='font-medium'>Pending Requests</h1>
+            <h1 className='font-medium'>Requesation and Issue Slip</h1>
           </div>
-          <div className='flex items-center gap-1'>
+          {/* <div className='flex items-center gap-1'>
             <h1 className='font-medium text-sm mt-0.5'>President's Office</h1>
             <div className="badge bg-red-500 text-white text-xs">{number.president_office}</div>
           </div>
@@ -134,10 +134,10 @@ const ArchiveTable = () => {
           <div className='flex items-center gap-1'>
             <h1 className='font-medium text-sm mt-0.5'>Return</h1>
             <div className="badge bg-red-500 text-white text-xs">{number.return}</div>
-          </div>
+          </div> */}
         </div>
 
-        <div className='flex items-center gap-2 sm:mt-5 lg:mt-0'>
+        {/* <div className='flex items-center gap-2 sm:mt-5 lg:mt-0'>
           <select className="select select-primary w-full max-w-xs" onChange={handleStatus}>
             <option disabled selected value={''}>Filter Status</option>
             <option value={'for review'}>For Review</option>
@@ -147,7 +147,7 @@ const ArchiveTable = () => {
             <option value={'return'}>Return</option>
             <option value={''}>All</option>
           </select>
-        </div>
+        </div> */}
       </div>
 
       <label className="input input-bordered flex items-center gap-2 w-80 mb-4">
@@ -184,6 +184,7 @@ const ArchiveTable = () => {
               </th> */}
               <th>Department</th>
               <th>Title</th>
+              <th>File Name</th>
               <th>Requested By</th>
               <th>Request Date</th>
               <th>Date Consolidated</th>
@@ -220,6 +221,9 @@ const ArchiveTable = () => {
                   <td>
                     {data.title}
                   </td>
+                  <td className='capitalize text-primary'>
+                    <i class="fa-solid fa-file-lines"></i> {data.file_name}
+                    </td>
                   <td>
                     {data.lastname} {data.firstname}
                     <br/>
@@ -232,7 +236,7 @@ const ArchiveTable = () => {
                       data.document_status === 'for review' ? <div className={`badge badge-default badge-outline capitalize text-xs`}>{data.document_status}</div> : null
                     }
                     {
-                      data.document_status === 'consolidated' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{data.document_status}</div> : null
+                      data.document_status === 'consolidated' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>Done</div> : null
                     }
                     {
                       data.document_status === 'supply office' ? <div className={`badge badge-accent badge-outline capitalize text-xs`}>{data.document_status}</div> : null
@@ -259,18 +263,6 @@ const ArchiveTable = () => {
             }
           </tbody>
           {/* foot */}
-          <tfoot>
-            <tr>
-              <th>Department</th>
-              <th>Title</th>
-              <th>Requested By</th>
-              <th>Request Date</th>
-              <th>Date Consolidated</th>
-              <th>Status</th>
-              <th className='text-center'>Action</th>
-              {/* <th></th> */}
-            </tr>
-          </tfoot>
           
         </table>
       }

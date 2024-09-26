@@ -8,9 +8,9 @@ import AnnualTable from '../../components/Tables/AnnualTable'
 export default function Annual() {
   const {user} = useStateContext()
 
-  if(user.role !== 'general admin'){
-    window.location.replace('/dashboard')
-  }
+  // if(user.role !== 'general admin'){
+  //   window.location.replace('/dashboard')
+  // }
   return (
     <>
       <Breadcrumb pageName="Annual Procurement Plan" />

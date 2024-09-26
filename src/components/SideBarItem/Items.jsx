@@ -183,7 +183,17 @@ const sidebarItem = [
     ),
     dropdown_item: [
       {
-        title: 'Transactions',
+        title: 'Processed RIS',
+        includes: 'reports',
+        url: '/reports/transactions',
+      },
+      {
+        title: 'Stock-Out Report',
+        includes: 'reports',
+        url: '/reports/transactions',
+      },
+      {
+        title: 'Stock-In Report',
         includes: 'reports',
         url: '/reports/transactions',
       },

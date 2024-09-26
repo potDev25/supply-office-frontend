@@ -6,7 +6,7 @@ import ReportDepartmentsTable from '../../components/Tables/ReportDepartmentsTab
 export default function ReportPage() {
   return (
     <>
-      <Breadcrumb pageName="PPMP Reports" />
+      <Breadcrumb pageName="Processed Requisation and Issue Slip" />
       <ReportDepartmentsTable/>
     </>
   )

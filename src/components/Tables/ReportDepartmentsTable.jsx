@@ -226,7 +226,6 @@ const ReportDepartmentsTable = () => {
               <th>Department Type</th>
               <th>Date Complied</th>
               <th>Submitted By</th>
-              <th>File</th>
               <th>Date Submitted</th>
               <th className='text-center'>Action</th>
               {/* <th></th> */}
@@ -265,9 +264,7 @@ const ReportDepartmentsTable = () => {
                   <td className='capitalize'>
                     {data.document_data ? data.document_data.lastname + ', ' + data.document_data.firstname : '--'}
                   </td>
-                  <td className='capitalize'>
-                  {data.files}
-                  </td>
+                
                   <td className='capitalize'>{formatDate(data.created_at)}</td>
                   <th className='flex gap-1 items-center justify-center mt-2'>
                     <button disabled={data.document_data ? false : true} className="btn btn-sm bg-green-600 text-white hover:text-black" onClick={ev => handleLogModal(data)}>Logs</button>
@@ -279,20 +276,7 @@ const ReportDepartmentsTable = () => {
             }
           </tbody>
           {/* foot */}
-          <tfoot>
-            <tr>
-              {/* <th></th> */}
-              <th>Department Name</th>
-              <th>Department Type</th>
-              <th>Date Complied</th>
-              <th>Submitted By</th>
-              <th>File</th>
-              <th>Date Submitted</th>
-              <th className='text-center'>Action</th>
-              {/* <th></th> */}
-            </tr>
 
-          </tfoot>
           
         </table>
       }

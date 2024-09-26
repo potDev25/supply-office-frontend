@@ -41,16 +41,19 @@ import UploadApp from './pages/Applicants/UploadApp';
 import EditApp from './pages/Applicants/EditApp';
 import Supplies from './pages/Supplies/Supplies';
 import Categories from './pages/Supplies/Categories';
+import AddSupply from './pages/Applicants/AddSupply';
+import EditSupply from './pages/Applicants/EditSupply';
 
 function App() {
   const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
-  const {setUser, setDepartments} = useStateContext()
+  const {setUser, setDepartments, setCategories} = useStateContext()
 
   const fetchData = async () => {
     try {
       const {data} = await axiosClient.get('/user')
       console.log(data);
+      setCategories(data.categories)
       setUser(data.user)
       setDepartments(data.departments)
       setLoading(false)
@@ -245,6 +248,24 @@ function App() {
             <>
               <PageTitle title="Register User | University BAC" />
               <Register />
+            </>
+          }
+        />
+        <Route
+          path="/supply/add"
+          element={
+            <>
+              <PageTitle title="Add Supply | University Supply Office" />
+              <AddSupply />
+            </>
+          }
+        />
+        <Route
+          path="/supply/edit/:id"
+          element={
+            <>
+              <PageTitle title="Add Supply | University Supply Office" />
+              <EditSupply />
             </>
           }
         />

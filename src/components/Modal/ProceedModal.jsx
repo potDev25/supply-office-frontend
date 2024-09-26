@@ -23,7 +23,7 @@ export default function ProceedModal({open, handleModal, data, tableLoading}) {
   const {setNotification, setNotificationError} = useStateContext()
   const [btnLoading, setBtnLoading] = useState(false)
   const [payload, setPayload] = useState({
-    status: '',
+    status: 'consolidated',
     deadline: ''
   })
 
@@ -51,29 +51,12 @@ export default function ProceedModal({open, handleModal, data, tableLoading}) {
 
   return (
     <dialog id="my_modal_2" className={`modal ${open && 'modal-open'}`}>
-        <div className="modal-box w-11/12 max-w-2xl">
-        <h3 className="font-bold text-sm mb-2">Move this Transaction</h3>
+        <div className="modal-box w-11/12 max-w-lg">
+        <h3 className="font-bold text-lg mb-2 text-center">Mark As Done?</h3>
         <div>
 
          <div className='mt-5 gap-2'>
-            <div className='mb-2'>
-              <label className="mb-2 block text-black dark:text-white">
-                Select Movement
-              </label>
-              <select value={payload.status} onChange={onChange} className={`select select-bordered  w-full ${errors.department_type ? 'border-[1.5px] border-red-500' : ''}`} name='status'>
-                <option disabled selected value={''}>Select</option>
-                <option value={'for review'}>For Review</option>
-                {/* <option value={'president office'}>President Office</option>
-                <option value={'supply office'}>Supply Office</option>
-                <option value={'accounting office'}>Accounting Office</option> */}
-                <option value={'for consolidation'}>For Consolidation</option>
-                <option value={'consolidated'}>Consolidated</option>
-                {/* <option value={'done'}>Done</option> */}
-              </select>
-              {
-                errors.status ? <p className='text-red-500 italic'><i className="fa-solid fa-circle-exclamation"></i> {errors.status}</p> : null
-              }
-            </div>
+           
 
             {/* {
               payload.status == 'done' ? <></> : <>
@@ -102,7 +85,7 @@ export default function ProceedModal({open, handleModal, data, tableLoading}) {
             </form>
             <button className='btn btn-primary' disabled={btnLoading ? true : false} onClick={updateStatus}>
                 {
-                    btnLoading ? <><span className="loading loading-infinity loading-lg"></span></> : 'Proceed'
+                    btnLoading ? <><span className="loading loading-infinity loading-lg"></span></> : 'Done'
                 }
             </button>
         </div>

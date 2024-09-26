@@ -32,6 +32,7 @@ const RequestTable = () => {
   const [number, setNumber] = useState({});
   const [file, setFile] = useState(null);
   const { setNotification, setNotificationError } = useStateContext();
+  
 
   const fetchData = async () => {
     try {
@@ -221,7 +222,7 @@ const RequestTable = () => {
               <th>Title</th>
               <th>Requested By</th>
               <th>Request Date</th>
-              <th>Deadline</th>
+              <th>File Name</th>
               <th>Status</th>
               <th className="text-center"></th>
               {/* <th></th> */}
@@ -275,9 +276,9 @@ const RequestTable = () => {
                         </span>
                       </td>
                       <td>{formatDate(data.created_at)}</td>
-                      <td>
-                        {data.deadline ? formatDate(data.deadline) : 'N/A'}
-                      </td>
+                      <td className='capitalize text-primary'>
+                    <i class="fa-solid fa-file-lines"></i> {data.file_name}
+                    </td>
                       <td>
                         {data.document_status === 'for review' ? (
                           <div
@@ -320,26 +321,7 @@ const RequestTable = () => {
                         >
                           <i class="fa-regular fa-file"></i> File
                         </button>
-                        <details className="dropdown dropdown-end">
-                          <summary
-                            className="btn btn-sm m-1 bg-green-600 text-white"
-                            role="button"
-                          >
-                            <i class="fa-solid fa-location-dot"></i> Action
-                          </summary>
-                          <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-49 p-2 shadow">
-                            <li>
-                              <a onClick={(ev) => handleProceedModal(data)}>
-                                Proceed
-                              </a>
-                            </li>
-                            <li>
-                              <a onClick={(ev) => handleReturnModal(data)}>
-                                Return
-                              </a>
-                            </li>
-                          </ul>
-                        </details>
+                        <button onClick={ev => handleProceedModal(data)} className='btn btn-sm btn-success text-white'><i class="fa-solid fa-circle-check"></i> Mark As Done</button>
                       </th>
                     </tr>
                   ))}

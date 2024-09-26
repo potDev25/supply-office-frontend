@@ -48,7 +48,7 @@ export default function DefaultLayout({children}) {
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
       {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex h-screen overflow-hidden bg-gray-200">
         {/* <!-- ===== Sidebar Start ===== --> */}
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         {/* <!-- ===== Sidebar End ===== --> */}
@@ -60,7 +60,7 @@ export default function DefaultLayout({children}) {
           {/* <!-- ===== Header End ===== --> */}
 
           {/* <!-- ===== Main Content Start ===== --> */}
-          <main>
+          <main className=''>
             <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-5">
               {/* {children} */}
               <Outlet/>

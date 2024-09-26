@@ -113,7 +113,7 @@ const PendingRequests = () => {
   return (
     <div className="lg:overflow-x-visible sm:overflow-x-auto md:overflow-x-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className='flex items-center justify-between p-2'>
-        <h1 className='font-medium'>Pending PPMP Requests</h1>
+        <h1 className='font-medium'>Uploaded Requisation and Issue Slip</h1>
         <div className='flex items-center gap-2'>
           {
             requests.length >= 1 ? <button className="btn btn-primary" disabled>Upload Document</button>
@@ -148,9 +148,9 @@ const PendingRequests = () => {
               </th> */}
               <th>Department</th>
               <th>Title</th>
+              <th>File Name</th>
               <th>Requested By</th>
               <th>Request Date</th>
-              <th>Deadline</th>
               <th>Status</th>
               <th className='text-center'></th>
               {/* <th></th> */}
@@ -160,90 +160,90 @@ const PendingRequests = () => {
             {/* row 1 */}
 
             {
-              requests.filter((data) => {
-                return search.toLowerCase === '' ? data : data.lastname.toLowerCase().includes(search) || data.firstname.toLowerCase().includes(search)
-              }).map((data) => (
-                <tr>
-                  {/* <th>
-                    <label>
-                      <input type="checkbox" className="checkbox" />
-                    </label>
-                  </th> */}
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
-                          <img src={Logo} alt="Avatar Tailwind CSS Component" />
+              requests.length != 0 ? (<>
+              
+              {
+                requests.filter((data) => {
+                  return search.toLowerCase === '' ? data : data.lastname.toLowerCase().includes(search) || data.firstname.toLowerCase().includes(search)
+                }).map((data) => (
+                  <tr>
+                    {/* <th>
+                      <label>
+                        <input type="checkbox" className="checkbox" />
+                      </label>
+                    </th> */}
+                    <td>
+                      <div className="flex items-center gap-3">
+                        <div className="avatar">
+                          <div className="mask mask-squircle w-12 h-12">
+                            <img src={Logo} alt="Avatar Tailwind CSS Component" />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="font-bold">{data.department_name}</div>
                         </div>
                       </div>
-                      <div>
-                        <div className="font-bold">{data.department_name}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    {data.title}
-                  </td>
-                  <td>
-                    {data.lastname} {data.firstname}
-                    <br/>
-                    <span className="badge badge-ghost badge-sm">{data.position}</span>
-                  </td>
-                  <td>{formatDate(data.created_at)}</td>
-                  <td>{data.deadline ? formatDate(data.deadline) : 'N/A'}</td>
-                  <td>
-                    {
-                      data.document_status === 'for review' ? <div className={`badge badge-default badge-outline capitalize text-xs`}>{data.document_status}</div> : null
-                    }
-                    {
-                      data.document_status === 'president office' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{data.document_status}</div> : null
-                    }
-                    {
-                      data.document_status === 'supply office' ? <div className={`badge badge-accent badge-outline capitalize text-xs`}>{data.document_status}</div> : null
-                    }
-                    {
-                      data.document_status === 'return' ? <div className={`badge badge-ghost badge-sm capitalize text-xs`}>{data.document_status}</div> : null
-                    }
-                    {
-                      data.document_status === 'accounting office' ? <div className="badge border border-red-500 text-red-500 badge-outline">{data.document_status}</div> : null
-                    }
-                  </td>
-                  <th className='flex gap-1 items-center justify-center mt-2'>
-                    <button className='btn bg-blue-500 text-white hover:bg-blue-500 btn-sm' onClick={ev => handleFileModal(data.document)}><i class="fa-regular fa-file"></i> File</button>
-                    {
-                      data.document_status === "for review" ? <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(data.document_id)}>Cancel</button> : null
-                    }
-                    {/* {
-                      data.message ? <button className='btn bg-green-600 text-white hover:bg-red-500 btn-sm' onClick={ev => handleMessageModal(data)}><i class="fa-regular fa-message"></i> Message</button> : null
-                    } */}
-                    {
-                      data.document_status === "return" ? 
-                      <>
-                        <button className='btn bg-green-600 text-white hover:bg-red-500 btn-sm' onClick={ev => handleMessageModal(data)}><i class="fa-regular fa-message"></i> Message</button>
-                        <button className='btn btn-outline btn-success btn-sm' onClick={ev => handleUpdateModal(data)}><i class="fa-solid fa-pen-to-square"></i> Update</button> 
-                        <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(data.document_id)}>Cancel</button>
-                      </>
-                        : null
-                    }
-                  </th>
+                    </td>
+                    <td>
+                      {data.title}
+                    </td>
+                    <td className='capitalize text-primary'>
+                    <i class="fa-solid fa-file-lines"></i> {data.file_name}
+                    </td>
+                    <td>
+                      {data.lastname} {data.firstname}
+                      <br/>
+                      <span className="badge badge-ghost badge-sm">{data.position}</span>
+                    </td>
+                    <td>{formatDate(data.created_at)}</td>
+                    <td>{data.deadline ? formatDate(data.deadline) : 'N/A'}</td>
+                    <td>
+                      {
+                        data.document_status === 'for review' ? <div className={`badge badge-default badge-outline capitalize text-xs`}>{data.document_status}</div> : null
+                      }
+                      {
+                        data.document_status === 'president office' ? <div className={`badge badge-success badge-outline capitalize text-xs`}>{data.document_status}</div> : null
+                      }
+                      {
+                        data.document_status === 'supply office' ? <div className={`badge badge-accent badge-outline capitalize text-xs`}>{data.document_status}</div> : null
+                      }
+                      {
+                        data.document_status === 'return' ? <div className={`badge badge-ghost badge-sm capitalize text-xs`}>{data.document_status}</div> : null
+                      }
+                      {
+                        data.document_status === 'accounting office' ? <div className="badge border border-red-500 text-red-500 badge-outline">{data.document_status}</div> : null
+                      }
+                    </td>
+                    <th className='flex gap-1 items-center justify-center mt-2'>
+                      <button className='btn bg-blue-500 text-white hover:bg-blue-500 btn-sm' onClick={ev => handleFileModal(data.document)}><i class="fa-regular fa-file"></i> File</button>
+                      {
+                        data.document_status === "for review" ? <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(data.document_id)}>Cancel</button> : null
+                      }
+                      {/* {
+                        data.message ? <button className='btn bg-green-600 text-white hover:bg-red-500 btn-sm' onClick={ev => handleMessageModal(data)}><i class="fa-regular fa-message"></i> Message</button> : null
+                      } */}
+                      {
+                        data.document_status === "return" ? 
+                        <>
+                          <button className='btn bg-green-600 text-white hover:bg-red-500 btn-sm' onClick={ev => handleMessageModal(data)}><i class="fa-regular fa-message"></i> Message</button>
+                          <button className='btn btn-outline btn-success btn-sm' onClick={ev => handleUpdateModal(data)}><i class="fa-solid fa-pen-to-square"></i> Update</button> 
+                          <button className='btn bg-red-500 text-white hover:bg-red-500 btn-sm' onClick={ev => handleCancelClick(data.document_id)}>Cancel</button>
+                        </>
+                          : null
+                      }
+                    </th>
+                  </tr>
+                ))
+              }
+              </>) : (<>
+                <tr className='text-center border-none'>
+                  <td colSpan={6}>No Data</td>
                 </tr>
-              ))
+              </>)
             }
+
           </tbody>
-          {/* foot */}
-          <tfoot>
-            <tr>
-              {/* <th></th> */}
-              <th>Department</th>
-              <th>Requested By</th>
-              <th>Request Date</th>
-              <th>Deadline</th>
-              <th>Status</th>
-              <th className='text-center'>Action</th>
-              {/* <th></th> */}
-            </tr>
-          </tfoot>
-          
+          {/* foot */}   
         </table>
       }
 
