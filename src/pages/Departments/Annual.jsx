@@ -14,7 +14,7 @@ export default function Annual() {
   // }
   return (
     <>
-      <Breadcrumb pageName="Requesation and Issue Slip" />
+      <Breadcrumb pageName="Requesition and Issue Slip" />
       <RequestTable />
     </>
   )

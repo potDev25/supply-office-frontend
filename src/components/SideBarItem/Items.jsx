@@ -87,7 +87,7 @@ const sidebarItem = [
     ],
   },
   {
-    title: 'Requisation and Issue Slip',
+    title: 'Requisition and Issue Slip',
     includes: 'app',
     url: '/app',
     icon: (
