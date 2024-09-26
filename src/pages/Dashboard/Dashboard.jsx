@@ -65,6 +65,17 @@ export default function Dashboard() {
         </div>
       ) : null}
 
+<div className="col-span-12 xl:col-span-12">
+        {
+          user.role === 'admin' ? 
+          <>
+             <PendingRequests/>
+          </>
+          : 
+          null
+        }
+      </div>
+
       
     </>
   );

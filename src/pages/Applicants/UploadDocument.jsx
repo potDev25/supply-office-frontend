@@ -294,7 +294,7 @@ const UploadDocument = () => {
 
                   <div className="flex justify-end gap-4.5">
                     <Link
-                    to={'/users'}
+                    to={'/dashboard'}
                       className="flex justify-center rounded border border-stroke py-2 px-6 font-medium text-black hover:shadow-1 dark:border-strokedark dark:text-white"
                     >
                       Cancel
