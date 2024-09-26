@@ -7,13 +7,16 @@ import './css/satoshi.css';
 import 'jsvectormap/dist/css/jsvectormap.css';
 import 'flatpickr/dist/flatpickr.min.css';
 import { ContextProvider } from './context/ContextProvider';
+import { ChakraProvider } from '@chakra-ui/react'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ContextProvider>
-      <Router>
-        <App />
-      </Router>
+      <ChakraProvider>
+        <Router>
+          <App />
+        </Router>
+      </ChakraProvider>
     </ContextProvider>
   </React.StrictMode>,
 );

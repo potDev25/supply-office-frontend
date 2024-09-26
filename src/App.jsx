@@ -39,6 +39,8 @@ import ReturnStatus from './pages/Departments/ReturnStatus';
 import Annual from './pages/Departments/Annual';
 import UploadApp from './pages/Applicants/UploadApp';
 import EditApp from './pages/Applicants/EditApp';
+import Supplies from './pages/Supplies/Supplies';
+import Categories from './pages/Supplies/Categories';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -279,6 +281,24 @@ function App() {
             <>
               <PageTitle title="Departments | University BAC" />
               <Departments />
+            </>
+          }
+        />
+        <Route
+          path="/supplies"
+          element={
+            <>
+              <PageTitle title="Supplies | University Supply Office" />
+              <Supplies />
+            </>
+          }
+        />
+        <Route
+          path="/categories"
+          element={
+            <>
+              <PageTitle title="Categories | University Supply Office" />
+              <Categories />
             </>
           }
         />
