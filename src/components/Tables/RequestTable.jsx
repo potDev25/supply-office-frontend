@@ -314,7 +314,7 @@ const RequestTable = () => {
                           </div>
                         ) : null}
                       </td>
-                      <th className="flex gap-1 items-center justify-center mt-2">
+                      {/* <th className="flex gap-1 items-center justify-center mt-2">
                         <button
                           className="btn bg-blue-500 text-white hover:bg-blue-500 btn-sm"
                           onClick={(ev) => handleFileModal(data.document)}
@@ -322,6 +322,34 @@ const RequestTable = () => {
                           <i class="fa-regular fa-file"></i> File
                         </button>
                         <button onClick={ev => handleProceedModal(data)} className='btn btn-sm btn-success text-white'><i class="fa-solid fa-circle-check"></i> Mark As Done</button>
+                      </th> */}
+                      <th className="flex gap-1 items-center justify-center mt-2">
+                      <button
+                          className="btn bg-blue-500 text-white hover:bg-blue-500 btn-sm"
+                          onClick={(ev) => handleFileModal(data.document)}
+                        >
+                          <i class="fa-regular fa-file"></i> File
+                        </button>
+                      <details className="dropdown dropdown-end">
+                          <summary
+                            className="btn btn-sm m-1 bg-green-600 text-white"
+                            role="button"
+                          >
+                            <i class="fa-solid fa-location-dot"></i> Options
+                          </summary>
+                          <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-49 p-2 shadow">
+                            <li>
+                              <a onClick={(ev) => handleProceedModal(data)}>
+                                Mark As Done
+                              </a>
+                            </li>
+                            <li>
+                              <a onClick={(ev) => handleReturnModal(data)}>
+                                Return
+                              </a>
+                            </li>
+                          </ul>
+                        </details>
                       </th>
                     </tr>
                   ))}

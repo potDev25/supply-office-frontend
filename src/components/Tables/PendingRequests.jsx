@@ -196,7 +196,7 @@ const PendingRequests = () => {
                       <span className="badge badge-ghost badge-sm">{data.position}</span>
                     </td>
                     <td>{formatDate(data.created_at)}</td>
-                    <td>{data.deadline ? formatDate(data.deadline) : 'N/A'}</td>
+                    {/* <td>{data.deadline ? formatDate(data.deadline) : 'N/A'}</td> */}
                     <td>
                       {
                         data.document_status === 'for review' ? <div className={`badge badge-default badge-outline capitalize text-xs`}>{data.document_status}</div> : null
