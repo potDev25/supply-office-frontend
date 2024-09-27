@@ -305,7 +305,7 @@ const DepartmentsTable = () => {
                           <img
                             src={`${
                               import.meta.env.VITE_API_BASE_URL
-                            }/storage/${data.logo}`}
+                            }/storage/public/${data.logo}`}
                             alt="Avatar Tailwind CSS Component"
                           />
                         </div>
