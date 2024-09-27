@@ -56,7 +56,7 @@ export default function Dashboard() {
           <CardDataStats title="Total Supplies" total={numbers.pr}>
             <i class="fa-regular fa-newspaper"></i>
           </CardDataStats>
-          <CardDataStats title="Total Requisation and Issue Slip" total={numbers.po}>
+          <CardDataStats title="Total Requisition and Issue Slip" total={numbers.po}>
             <i class="fa-solid fa-newspaper"></i>
           </CardDataStats>
           <CardDataStats title="Total Users" total={numbers.users}>
