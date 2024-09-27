@@ -120,7 +120,7 @@ const RequestTable = () => {
       <div className="lg:flex items-center justify-between p-2 sm:block">
         <div className="lg:flex items-center gap-5 sm:block">
           <div>
-            <h1 className="font-medium">Pending Requests | PPMP</h1>
+            <h1 className="font-medium">Pending Requests</h1>
           </div>
           {/* <div className='flex items-center gap-1'>
             <h1 className='font-medium text-sm mt-0.5'>President's Office</h1>
