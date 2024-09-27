@@ -100,7 +100,7 @@ export default function AddReturnStatusModal({ open, handleModal, loading, handl
           <div className='mt-5'>
             <div className='mb-4'>
               <label className="mb-2 block text-black dark:text-white">
-                Department Name
+                Return Status
               </label>
               <input
                 type="text"
