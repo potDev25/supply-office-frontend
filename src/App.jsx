@@ -95,7 +95,7 @@ function App() {
           path='/dashboard'
           element={
             <>
-              <PageTitle title="Dashboard | University BAC" />
+              <PageTitle title="Dashboard | University Supply Office" />
               <Dashboard />
             </>
           }
@@ -105,7 +105,7 @@ function App() {
           path='/dashboard/upload'
           element={
             <>
-              <PageTitle title="Upload | University BAC" />
+              <PageTitle title="Upload | University Supply Office" />
               <UploadDocument />
             </>
           }
@@ -115,7 +115,7 @@ function App() {
           path='/app/upload'
           element={
             <>
-              <PageTitle title="Upload | University BAC" />
+              <PageTitle title="Upload | University Supply Office" />
               <UploadApp />
             </>
           }
@@ -125,7 +125,7 @@ function App() {
           path='/app/edit/:id'
           element={
             <>
-              <PageTitle title="Upload | University BAC" />
+              <PageTitle title="Upload | University Supply Office" />
               <EditApp />
             </>
           }
@@ -170,7 +170,7 @@ function App() {
           path="/receiving/store/:id"
           element={
             <>
-              <PageTitle title="Receiving | University BAC OFFICE" />
+              <PageTitle title="Receiving | University Supply Office OFFICE" />
               <ReceivingSupplies />
             </>
           }
@@ -179,7 +179,7 @@ function App() {
           path="/par/store/:id"
           element={
             <>
-              <PageTitle title="Receiving | University BAC OFFICE" />
+              <PageTitle title="Receiving | University Supply Office OFFICE" />
               <ParSupplies />
             </>
           }
@@ -188,7 +188,7 @@ function App() {
           path="/par/client/"
           element={
             <>
-              <PageTitle title="Receiving | University BAC OFFICE" />
+              <PageTitle title="Receiving | University Supply Office OFFICE" />
               <ParClient />
             </>
           }
@@ -197,7 +197,7 @@ function App() {
           path="/request/store/:id"
           element={
             <>
-              <PageTitle title="Receiving | University BAC OFFICE" />
+              <PageTitle title="Receiving | University Supply Office OFFICE" />
               <RequestManage />
             </>
           }
@@ -251,7 +251,7 @@ function App() {
           path="/archives"
           element={
             <>
-              <PageTitle title="Archives | University BAC" />
+              <PageTitle title="Archives | University Supply Office" />
               <Announcements />
             </>
           }
@@ -260,7 +260,7 @@ function App() {
           path="/receiving"
           element={
             <>
-              <PageTitle title="Archives | University BAC" />
+              <PageTitle title="Archives | University Supply Office" />
               <Receiving />
             </>
           }
@@ -269,7 +269,7 @@ function App() {
           path="/par"
           element={
             <>
-              <PageTitle title="Archives | University BAC" />
+              <PageTitle title="Archives | University Supply Office" />
               <Par />
             </>
           }
@@ -278,7 +278,7 @@ function App() {
           path="/requests"
           element={
             <>
-              <PageTitle title="Archives | University BAC" />
+              <PageTitle title="Archives | University Supply Office" />
               <RequestSupply />
             </>
           }
@@ -287,7 +287,7 @@ function App() {
           path="/reports/transactions"
           element={
             <>
-              <PageTitle title="Reports | University BAC" />
+              <PageTitle title="Reports | University Supply Office" />
               <ReportPage />
             </>
           }
@@ -296,7 +296,7 @@ function App() {
           path="/return-status"
           element={
             <>
-              <PageTitle title="Return Status | University BAC" />
+              <PageTitle title="Return Status | University Supply Office" />
               <ReturnStatus />
             </>
           }
@@ -305,7 +305,7 @@ function App() {
           path="/archives/files/:id"
           element={
             <>
-              <PageTitle title="Archives | University BAC" />
+              <PageTitle title="Archives | University Supply Office" />
               <Files />
             </>
           }
@@ -314,7 +314,7 @@ function App() {
           path="/users"
           element={
             <>
-              <PageTitle title="Users | University BAC" />
+              <PageTitle title="Users | University Supply Office" />
               <Applicants />
             </>
           }
@@ -323,7 +323,7 @@ function App() {
           path="/users/register"
           element={
             <>
-              <PageTitle title="Register User | University BAC" />
+              <PageTitle title="Register User | University Supply Office" />
               <Register />
             </>
           }
@@ -350,7 +350,7 @@ function App() {
           path="/users/edit/:id"
           element={
             <>
-              <PageTitle title="]Edit User | University BAC" />
+              <PageTitle title="]Edit User | University Supply Office" />
               <EditUser />
             </>
           }
@@ -359,7 +359,7 @@ function App() {
           path="/business"
           element={
             <>
-              <PageTitle title="Registered Business | University BAC" />
+              <PageTitle title="Registered Business | University Supply Office" />
               <Business />
             </>
           }
@@ -368,7 +368,7 @@ function App() {
           path="/users"
           element={
             <>
-              <PageTitle title="System Users | University BAC" />
+              <PageTitle title="System Users | University Supply Office" />
               <Users />
             </>
           }
@@ -377,7 +377,7 @@ function App() {
           path="/form/:id"
           element={
             <>
-              <PageTitle title="System Users | University BAC" />
+              <PageTitle title="System Users | University Supply Office" />
               <From />
             </>
           }
@@ -386,7 +386,7 @@ function App() {
           path="/departments"
           element={
             <>
-              <PageTitle title="Departments | University BAC" />
+              <PageTitle title="Departments | University Supply Office" />
               <Departments />
             </>
           }
@@ -395,7 +395,7 @@ function App() {
           path="/e-signature"
           element={
             <>
-              <PageTitle title="Departments | University BAC" />
+              <PageTitle title="Departments | University Supply Office" />
               <SignaturePad />
             </>
           }
@@ -431,7 +431,7 @@ function App() {
           path="/app"
           element={
             <>
-              <PageTitle title="Annual Procurement Plan | University BAC" />
+              <PageTitle title="Annual Procurement Plan | University Supply Office" />
               <Annual />
             </>
           }
@@ -440,7 +440,7 @@ function App() {
           path="/departments/register"
           element={
             <>
-              <PageTitle title="Departments | University BAC" />
+              <PageTitle title="Departments | University Supply Office" />
               <RegisterDepartment />
             </>
           }
@@ -451,7 +451,7 @@ function App() {
           path="/"
           element={
             <>
-              <PageTitle title="Signin | University BAC" />
+              <PageTitle title="Signin | University Supply Office" />
               <SignIn />
             </>
           }
@@ -460,7 +460,7 @@ function App() {
           path="/auth/signup"
           element={
             <>
-              <PageTitle title="Signup | University BAC" />
+              <PageTitle title="Signup | University Supply Office" />
               <SignUp />
             </>
           }
