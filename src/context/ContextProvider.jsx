@@ -13,6 +13,8 @@ const StateContext = createContext({
     categories: null,
     supplier: null,
     supplies: null,
+    users: null,
+    setUsers: () => {},
     setSupplies: () => {},
     setSupplier: () => {},
     setCategories: () => {},
@@ -35,6 +37,7 @@ export const ContextProvider = ({children}) => {
     const [departments, _setDepartments] = useState([])          
     const [returnStatus, _setReturnStatus] = useState([])          
     const [supplier, _setSupplier] = useState([])          
+    const [users, _setUsers] = useState([])          
     const [categories, _setCategories] = useState([])          
     const [supplies, _setSupplies] = useState([])          
     const [alertNot, _setAlertNot] = useState('')
@@ -68,6 +71,14 @@ export const ContextProvider = ({children}) => {
         _setDepartments((prev) => {
             return departments.map((item) => ({
                 ...prev, label: item.department_name, value: item.id
+            }))
+        })
+    }
+
+    const setUsers = (departments) => {
+        _setUsers((prev) => {
+            return departments.map((item) => ({
+                ...prev, label: item.lastname + ' ' + item.firstname, value: item.id
             }))
         })
     }
@@ -121,6 +132,8 @@ export const ContextProvider = ({children}) => {
             categories,
             setCategories,
             setReturnStatus,
+            users,
+            setUsers,
             setAlertNot,
             notification_error,
             setNotification,

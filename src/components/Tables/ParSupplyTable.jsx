@@ -6,21 +6,20 @@ import BrandFour from '../../images/brand/brand-04.svg';
 import BrandFive from '../../images/brand/brand-05.svg';
 import { useEffect, useState } from 'react';
 import AddApplicantModal from '../Modal/AddApplicantModal';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import axiosClient from '../../axiosClinet';
 import DeleteApplicantModal from '../Modal/DeleteApplicantModal';
 import { useStateContext } from '../../context/ContextProvider';
 import AddDepartmentModal from '../Modal/AddDepartmentModal';
 import EditDepartmentModal from '../Modal/EditDepartmentModal';
-import { Button } from '@chakra-ui/react';
-import AddCategoryModal from '../Modal/AddCategoryModal';
-import EditCategoryModal from '../Modal/EditCategoryModal';
-import AddReceivingModal from '../Modal/AddReceivingModal';
-import AddRisModal from '../Modal/AddRisModal';
+import { Box, Image } from '@chakra-ui/react';
+import StoreSupplyModal from '../Modal/StoreSupplyModal';
+import StoreParSupplyModal from '../Modal/StoreParSupplyModal';
 import { Badge } from '@chakra-ui/react';
+import UpdateParStatusModal from '../Modal/UpdateParStatusModal';
 
-const RequestSupplyTable = () => {
+const ParSupplyTable = () => {
   const [request, setRequest] = useState();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -28,16 +27,23 @@ const RequestSupplyTable = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [links, setLinks] = useState([]);
+  const [item, setItem] = useState({});
   const [ids, setIds] = useState([]);
   const [deleteModal, setDeleteModal] = useState(false);
   const [departmentModal, setDepartmentModal] = useState(false);
   const [editDepartment, setEditDepartment] = useState(false);
+  const [updateStatusModal, setUpdateStatusModal] = useState(false);
   const [department, setDepartment] = useState([]);
   const [deleteModalOne, setdeleteModalOne] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [user_id, setUserId] = useState(false);
-  const { notification_error, setNotificationError, setNotification, user } =
-    useStateContext();
+  const { id } = useParams();
+  const {
+    notification_error,
+    setNotificationError,
+    setNotification,
+    setSupplies,
+  } = useStateContext();
 
   const openModal = (id) => {
     setRequest(id);
@@ -48,16 +54,25 @@ const RequestSupplyTable = () => {
     // setLoading(true)
     try {
       const { data } = await axiosClient.get(
-        `/ris?page=${page}&limit=${limit}`,
+        `/par-supplies/${id}?page=${page}&limit=${limit}`,
       );
       setData(data.data);
-      setLinks(data.links);
-      console.log(response);
+      setSupplies(data.supplies);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   };
+
+  const handleStatusModal = (data) => {
+    setItem(data)
+    setUpdateStatusModal(true)
+  }
+
+  const handleCloseStatusModal = () => {
+    setItem({})
+    setUpdateStatusModal(false)
+  }
 
   const incrementPage = () => {
     setLoading(true);
@@ -177,13 +192,15 @@ const RequestSupplyTable = () => {
     return formatter.format(date);
   }
 
+  function formatToPeso(amount) {
+    return new Intl.NumberFormat('en-PH', {
+      style: 'currency',
+      currency: 'PHP',
+    }).format(amount);
+  }
+
   return (
-    <div className="overflow-x-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      {
-        user.role === 'general admin' ? (<>
-          <h2 className='text-lg font-semibold'>Request Supplies</h2>
-        </>) : null
-      }
+    <div className="overflow-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex items-center justify-between mt-2 mb-2">
         <div className="flex items-center gap-2">
           <label className="input input-bordered flex items-center gap-2">
@@ -191,7 +208,7 @@ const RequestSupplyTable = () => {
               type="text"
               className="grow input-xs"
               onChange={(ev) => setSearch(ev.target.value)}
-              placeholder="Search Receiving ID | supplier"
+              placeholder="Search Supply | Description"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -224,17 +241,14 @@ const RequestSupplyTable = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          {
-            user.role == 'admin' ? <>
-              <Button
-                colorScheme="blue"
-                onClick={handleDepartmentModal}
-                className="uppercase"
-              >
-                ADD RIS
-              </Button>
-            </> : null
-          }
+          <button
+            onClick={(ev) => setDepartmentModal(true)}
+            className="btn btn-primary"
+            to={'/supply/add'}
+          >
+            <i className="fa-solid fa-circle-plus"></i>
+            Assign Supply
+          </button>
         </div>
       </div>
 
@@ -253,111 +267,111 @@ const RequestSupplyTable = () => {
         handleModal={openDeleteModalOne}
         loading={btnLoading}
       />
-      <AddRisModal
+      <StoreParSupplyModal
         handlePageLoading={handlePageLoading}
         open={departmentModal}
         handleModal={handleDepartmentModal}
         loading={btnLoading}
         handleBntLoading={handleBtnLoading}
       />
-      <EditCategoryModal
+      <UpdateParStatusModal
+        handlePageLoading={handlePageLoading}
+        open={updateStatusModal}
+        handleModal={handleCloseStatusModal}
+        loading={btnLoading}
+        handleBntLoading={handleBtnLoading}
+        data={item}
+      />
+      <EditDepartmentModal
         handlePageLoading={handlePageLoading}
         open={editDepartment}
         handleModal={hideEditModal}
         loading={btnLoading}
-        category={department}
+        department={department}
         handleBntLoading={handleBtnLoading}
       />
 
       {loading ? (
         <Loader />
       ) : (
-        <table className="table table-zebra fade-in">
+        <table className="table table-zebra fade-in overflow-auto mb-3">
           {/* head */}
           <thead>
             <tr>
-              <th>RIS ID</th>
-              <th>Requested By</th>
+              {/* <th>
+                <label>
+                  <input
+                    type="checkbox"
+                    name="allselect"
+                    checked={!data.some((user) => user?.isChecked !== true)}
+                    onChange={handleChange}
+                    className="checkbox"
+                  />
+                </label>
+              </th> */}
+              <th>Receiving ID</th>
+              <th>Client Name</th>
+              <th>Supply Name</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Unit</th>
               <th>Status</th>
-              <th>Date Added</th>
-              <th className="text-center">Option</th>
+              <th>Quantity</th>
+              <th>Added Date</th>
+              <th className="text-center">Options</th>
               {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
-            {data.length == 0 ? (
-              <tr>
-                <td className="text-center" colSpan={5}>
-                  No Data
-                </td>
-              </tr>
-            ) : (
-              <>
-                {data
-                  .filter((data) => {
-                    return search.toLowerCase === ''
-                      ? data
-                      : data.ris_number.toLowerCase().includes(search);
-                  })
-                  .map((data) => (
-                    <tr>
-                      <td>
-                        <div className="flex items-center gap-3">
-                          <div>
-                            <div className="font-bold capitalize">
-                              {data.ris_number}
-                            </div>
-                          </div>
+            {data
+              .filter((data) => {
+                return search.toLowerCase === ''
+                  ? data
+                  : data.supply_name.toLowerCase().includes(search) ||
+                      data.description.toLowerCase().includes(search);
+              })
+              .map((data) => (
+                <tr>
+                  <td className="capitalize font-bold">{data.par_id}</td>
+                  <td className="capitalize font-bold">{data.client_name}</td>
+                  <td>
+                    <div className="flex items-center gap-3">
+                      <div>
+                        <div className="font-bold capitalize">
+                          {data.supply_name}
                         </div>
-                      </td>
-                      <td className="capitalize">
-                        {data.lastname} {data.firstname}
-                      </td>
-                      <td className="capitalize">
-                        <Badge variant="solid" colorScheme={data.status == 'pending' ? 'gray' : 'green'}>
-                        {data.status}
-                        </Badge>
-                      </td>
-                      <td className="capitalize">
-                        {formatDate(data.created_at)}
-                      </td>
-                      <th className="flex gap-1 items-center justify-center mt-2">
-                        <Link
-                          className="btn btn-outline btn-sm btn-primary text-white hover:bg-red-500"
-                          to={`/request/store/${data.id}`}
-                        >
-                          Manage
-                        </Link>
-                      </th>
-                    </tr>
-                  ))}
-              </>
-            )}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="capitalize">{data.description}</td>
+                  <td className="capitalize">{data.name}</td>
+                  <td className="capitalize">{data.unit}</td>
+                  <td className="capitalize">
+                    {data.status == 'issued' && (
+                      <Badge colorScheme="green">Issued</Badge>
+                    )}
+                    {data.status == 'return' && (
+                      <Badge colorScheme="gray">Return</Badge>
+                    )}
+                    {data.status == 'unserviceable' && (
+                      <Badge colorScheme="red">Unserviceable</Badge>
+                    )}
+                  </td>
+                  <td className="capitalize">{data.qnty}</td>
+                  <td className="capitalize">{formatDate(data.created_at)}</td>
+                  <th className="flex gap-1 items-center justify-center mt-2">
+                    <button className="btn btn-outline btn-sm btn-success text-white hover:bg-red-500" onClick={ev => handleStatusModal(data)}>
+                      <i class="fa-solid fa-pen-to-square"></i> Update
+                    </button>
+                  </th>
+                </tr>
+              ))}
           </tbody>
+          {/* foot */}
         </table>
       )}
-      <div className="flex items-center justify-between mt-2 mb-2">
-        <div></div>
-        <div className="join">
-          <button
-            className="join-item btn"
-            onClick={(ev) => minusPage()}
-            disabled={page == 1 ? true : false}
-          >
-            «
-          </button>
-          <button className="join-item btn">Page {page}</button>
-          <button
-            className="join-item btn"
-            onClick={(ev) => incrementPage()}
-            disabled={loading || links.length == 3 ? true : false}
-          >
-            »
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
 
-export default RequestSupplyTable;
+export default ParSupplyTable;

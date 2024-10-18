@@ -20,7 +20,7 @@ import AddReceivingModal from '../Modal/AddReceivingModal';
 import AddRisModal from '../Modal/AddRisModal';
 import { Badge } from '@chakra-ui/react';
 
-const RequestSupplyTable = () => {
+const RequestSupplyDashboardTable = () => {
   const [request, setRequest] = useState();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -48,7 +48,7 @@ const RequestSupplyTable = () => {
     // setLoading(true)
     try {
       const { data } = await axiosClient.get(
-        `/ris?page=${page}&limit=${limit}`,
+        `/ris?page=${page}&limit=${limit}&status=pending`,
       );
       setData(data.data);
       setLinks(data.links);
@@ -179,11 +179,7 @@ const RequestSupplyTable = () => {
 
   return (
     <div className="overflow-x-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      {
-        user.role === 'general admin' ? (<>
-          <h2 className='text-lg font-semibold'>Request Supplies</h2>
-        </>) : null
-      }
+      <h2 className='text-lg font-semibold'>Pending RIS</h2>
       <div className="flex items-center justify-between mt-2 mb-2">
         <div className="flex items-center gap-2">
           <label className="input input-bordered flex items-center gap-2">
@@ -221,20 +217,6 @@ const RequestSupplyTable = () => {
           {/* <button className="btn btn-outline" onClick={openDeleteModal}>
             <i class="fa-solid fa-trash-can"></i> Mass Delete
           </button> */}
-        </div>
-
-        <div className="flex items-center gap-2">
-          {
-            user.role == 'admin' ? <>
-              <Button
-                colorScheme="blue"
-                onClick={handleDepartmentModal}
-                className="uppercase"
-              >
-                ADD RIS
-              </Button>
-            </> : null
-          }
         </div>
       </div>
 
@@ -360,4 +342,4 @@ const RequestSupplyTable = () => {
   );
 };
 
-export default RequestSupplyTable;
+export default RequestSupplyDashboardTable;

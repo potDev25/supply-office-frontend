@@ -31,7 +31,7 @@ const SupplyTable = () => {
   const [deleteModalOne, setdeleteModalOne] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [user_id, setUserId] = useState(false);
-  const { notification_error, setNotificationError, setNotification } =
+  const { notification_error, setNotificationError, setNotification, user } =
     useStateContext();
 
   const openModal = (id) => {
@@ -42,7 +42,7 @@ const SupplyTable = () => {
   const fetchData = async () => {
     // setLoading(true)
     try {
-      const {data} = await axiosClient.get(
+      const { data } = await axiosClient.get(
         `/supply?page=${page}&limit=${limit}`,
       );
       setData(data.data);
@@ -147,7 +147,7 @@ const SupplyTable = () => {
   };
 
   const hideEditModal = () => {
-    setDepartment([])
+    setDepartment([]);
     setEditDepartment(false);
   };
 
@@ -211,13 +211,16 @@ const SupplyTable = () => {
             <i class="fa-solid fa-trash-can"></i> Mass Delete
           </button> */}
         </div>
-
-        <div className="flex items-center gap-2">
-          <Link className="btn btn-primary" to={'/supply/add'}>
-            <i className="fa-solid fa-circle-plus"></i>
-            Add Supply
-          </Link>
-        </div>
+        {user.role === 'general admin' ? (
+          <>
+            <div className="flex items-center gap-2">
+              <Link className="btn btn-primary" to={'/supply/add'}>
+                <i className="fa-solid fa-circle-plus"></i>
+                Add Supply
+              </Link>
+            </div>
+          </>
+        ) : null}
       </div>
 
       <AddApplicantModal />
@@ -275,8 +278,12 @@ const SupplyTable = () => {
               <th>Category</th>
               <th>Unit</th>
               <th>Quantity</th>
-              <th>Added Date</th>
-              <th className="text-center">Options</th>
+              {user.role === 'general admin' && (
+                <>
+                  <th>Added Date</th>
+                  <th className="text-center">Options</th>
+                </>
+              )}
               {/* <th></th> */}
             </tr>
           </thead>
@@ -291,11 +298,13 @@ const SupplyTable = () => {
               .map((data) => (
                 <tr>
                   <td>
-
-                      <Image src={`${
-                          import.meta.env.VITE_API_BASE_URL
-                        }/storage/${data.image_url}`} alt='Dan Abramov' className='h-20 w-20 rounded'/>
-
+                    <Image
+                      src={`${import.meta.env.VITE_API_BASE_URL}/storage/${
+                        data.image_url
+                      }`}
+                      alt="Dan Abramov"
+                      className="h-20 w-20 rounded"
+                    />
                   </td>
                   <td>
                     <div className="flex items-center gap-3">
@@ -310,15 +319,21 @@ const SupplyTable = () => {
                   <td className="capitalize">{data.name}</td>
                   <td className="capitalize">{data.unit}</td>
                   <td className="capitalize">{data.qnty}</td>
-                  <td className="capitalize">{formatDate(data.created_at)}</td>
-                  <th className="flex gap-1 items-center justify-center mt-2">
-                    <Link to={`/supply/edit/${data.id}`}
-                      className="btn btn-outline btn-sm btn-success text-white hover:bg-red-500"
-                    
-                    >
-                      <i class="fa-solid fa-pen-to-square"></i> Update
-                    </Link>
-                  </th>
+                  {user.role === 'general admin' && (
+                    <>
+                      <td className="capitalize">
+                        {formatDate(data.created_at)}
+                      </td>
+                      <th className="flex gap-1 items-center justify-center mt-2">
+                        <Link
+                          to={`/supply/edit/${data.id}`}
+                          className="btn btn-outline btn-sm btn-success text-white hover:bg-red-500"
+                        >
+                          <i class="fa-solid fa-pen-to-square"></i> Update
+                        </Link>
+                      </th>
+                    </>
+                  )}
                 </tr>
               ))}
           </tbody>

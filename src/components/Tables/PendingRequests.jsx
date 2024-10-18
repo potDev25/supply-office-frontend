@@ -113,7 +113,7 @@ const PendingRequests = () => {
   return (
     <div className="lg:overflow-x-visible sm:overflow-x-auto md:overflow-x-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className='flex items-center justify-between p-2'>
-        <h1 className='font-medium'>Uploaded Requisation and Issue Slip</h1>
+        <h1 className='font-medium'>Uploaded Requisition and Issue Slip</h1>
         <div className='flex items-center gap-2'>
           {
             requests.length >= 1 ? <button className="btn btn-primary" disabled>Upload Document</button>

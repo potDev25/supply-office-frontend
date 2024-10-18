@@ -16,6 +16,8 @@ import EditDepartmentModal from '../Modal/EditDepartmentModal';
 import { Box, Image } from '@chakra-ui/react';
 import StoreSupplyModal from '../Modal/StoreSupplyModal';
 import StoreRequestModal from '../Modal/StoreRequestModal';
+import IssueModal from '../Modal/IssueModal';
+import { Badge } from '@chakra-ui/react'
 
 const RequestStoreSupplyTable = () => {
   const [request, setRequest] = useState();
@@ -35,13 +37,30 @@ const RequestStoreSupplyTable = () => {
   const [user_id, setUserId] = useState(false);
   const { id } = useParams();
   const [ris, setRis] = useState([]);
-  const { notification_error, setNotificationError, setNotification, setSupplies } =
-    useStateContext();
+  const [item, setItem] = useState({});
+  const [issueModal, setIssueModal] = useState(false);
+  const {
+    notification_error,
+    setNotificationError,
+    setNotification,
+    setSupplies,
+    user,
+  } = useStateContext();
 
   const openModal = (id) => {
     setRequest(id);
     document.getElementById('my_modal_2').showModal();
   };
+
+  const handleIssueModal = (data) => {
+    setItem(data)
+    setIssueModal(true)
+  }
+
+  const handleCloseIssueModal = () => {
+    setItem({})
+    setIssueModal(false)
+  }
 
   const fetchData = async () => {
     // setLoading(true)
@@ -50,8 +69,8 @@ const RequestStoreSupplyTable = () => {
         `/stocks/requests/${id}?page=${page}&limit=${limit}`,
       );
       setData(data.data);
-      setSupplies(data.supplies)
-      setRis(data.requesition)
+      setSupplies(data.supplies);
+      setRis(data.ris);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -185,6 +204,16 @@ const RequestStoreSupplyTable = () => {
 
   return (
     <div className="overflow-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+      {user.role === 'general admin' ? (
+        <>
+          <h2 className="text-lg font-semibold">
+            <span className="uppercase">Requested By: </span>{' '}
+            <span className="text-blue-600">
+              {ris.lastname} {ris.firstname}
+            </span>
+          </h2>
+        </>
+      ) : null}
       <div className="flex items-center justify-between mt-2 mb-2">
         <div className="flex items-center gap-2">
           <label className="input input-bordered flex items-center gap-2">
@@ -225,24 +254,27 @@ const RequestStoreSupplyTable = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          {
-            data.length == 0 ? <></> :<Link
-            className="btn btn-success text-white"
-            to={`/form/${id}`}
-          >
-            View RIS Form
-          </Link>
-          }
-          
-          <button
-            onClick={(ev) => setDepartmentModal(true)}
-            className="btn btn-primary"
-            to={'/supply/add'}
-            disabled={ris.submit == 0 ? false : true}
-          >
-            <i className="fa-solid fa-circle-plus"></i>
-            Stock in
-          </button>
+          {data.length == 0 ? (
+            <></>
+          ) : (
+            <Link className="btn btn-success text-white" to={`/form/${id}`}>
+              View RIS Form
+            </Link>
+          )}
+
+          {user.role == 'admin' ? (
+            <>
+              <button
+                onClick={(ev) => setDepartmentModal(true)}
+                className="btn btn-primary"
+                to={'/supply/add'}
+                disabled={ris.submit == 0 ? false : true}
+              >
+                <i className="fa-solid fa-circle-plus"></i>
+                Request
+              </button>
+            </>
+          ) : null}
         </div>
       </div>
 
@@ -268,6 +300,16 @@ const RequestStoreSupplyTable = () => {
         loading={btnLoading}
         handleBntLoading={handleBtnLoading}
       />
+
+      <IssueModal
+        handlePageLoading={handlePageLoading}
+        open={issueModal}
+        handleModal={handleCloseIssueModal}
+        loading={btnLoading}
+        handleBntLoading={handleBtnLoading}
+        data={item}
+      />
+
       <EditDepartmentModal
         handlePageLoading={handlePageLoading}
         open={editDepartment}
@@ -280,7 +322,7 @@ const RequestStoreSupplyTable = () => {
       {loading ? (
         <Loader />
       ) : (
-        <table className="table table-zebra fade-in overflow-auto">
+        <table className="table table-zebra fade-in overflow-auto mb-5">
           {/* head */}
           <thead>
             <tr>
@@ -303,7 +345,16 @@ const RequestStoreSupplyTable = () => {
               <th>Quantity</th>
               <th>Price</th>
               <th>Total Price</th>
-              <th>Added Date</th>
+              {user.role == 'general admin' ? (
+                <>
+                  <th>Issue Item</th>
+                </>
+              ) : (
+                <>
+                  <th>Added Date</th>
+                </>
+              )}
+
               {/* <th className="text-center">Options</th> */}
               {/* <th></th> */}
             </tr>
@@ -333,15 +384,37 @@ const RequestStoreSupplyTable = () => {
                   <td className="capitalize">{data.unit}</td>
                   <td className="capitalize">{data.qnty}</td>
                   <td className="capitalize">{formatToPeso(data.price)}</td>
-                  <td className="capitalize">{formatToPeso(data.total_price)}</td>
-                  <td className="capitalize">{formatDate(data.created_at)}</td>
+                  <td className="capitalize">
+                    {formatToPeso(data.total_price)}
+                  </td>
+                  {user.role == 'general admin' ? (
+                    <>
+                      <td>
+                        {
+                          data.status != 'pending' ? (<>
+                          {
+                            data.status == 'issued' ? <><Badge colorScheme='green'>Issued</Badge></> : <>
+                            <Badge colorScheme='gray'>Not Available</Badge>
+                            </>
+                          }
+                          </>) : (<>
+                            <button className='btn btn-primary btn-sm text-white' onClick={ev => handleIssueModal(data)}>Issue Item</button>
+                          </>)
+                        }
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td className="capitalize">{formatDate(data.created_at)}</td>
+                    </>
+                  )}
+                  
                 </tr>
               ))}
           </tbody>
           {/* foot */}
         </table>
       )}
-      
     </div>
   );
 };

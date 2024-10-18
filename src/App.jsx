@@ -51,6 +51,9 @@ import Supplier from './pages/Supplies/Supplier';
 import ReceivingSupplies from './pages/Supplies/ReceivingSupplies';
 import RequestSupply from './pages/Announcements/RequestSupply';
 import RequestManage from './pages/Supplies/RequestManage';
+import Par from './pages/Announcements/Par';
+import ParSupplies from './pages/Supplies/ParSupplies';
+import ParClient from './pages/Supplies/ParClient';
 
 
 function App() {
@@ -173,6 +176,24 @@ function App() {
           }
         />
         <Route
+          path="/par/store/:id"
+          element={
+            <>
+              <PageTitle title="Receiving | University BAC OFFICE" />
+              <ParSupplies />
+            </>
+          }
+        />
+        <Route
+          path="/par/client/"
+          element={
+            <>
+              <PageTitle title="Receiving | University BAC OFFICE" />
+              <ParClient />
+            </>
+          }
+        />
+        <Route
           path="/request/store/:id"
           element={
             <>
@@ -241,6 +262,15 @@ function App() {
             <>
               <PageTitle title="Archives | University BAC" />
               <Receiving />
+            </>
+          }
+        />
+        <Route
+          path="/par"
+          element={
+            <>
+              <PageTitle title="Archives | University BAC" />
+              <Par />
             </>
           }
         />

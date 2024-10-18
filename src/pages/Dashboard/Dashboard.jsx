@@ -12,6 +12,8 @@ import PendingRequests from '../../components/Tables/PendingRequests';
 import PurchaseRequestTable from '../../components/Tables/PurchaseRequestTable';
 import PurchaseOrderTable from '../../components/Tables/PurchaseOrderTable';
 import axiosClient from '../../axiosClinet';
+import RequestSupplyTable from '../../components/Tables/RequestSupplyTable';
+import RequestSupplyDashboardTable from '../../components/Tables/RequestSupplyDashboardTable';
 
 export default function Dashboard() {
   const { user } = useStateContext();
@@ -49,44 +51,61 @@ export default function Dashboard() {
   return (
     <>
       {user.role === 'general admin' || user.role === 'supply office' ? (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-          <CardDataStats title="Departments" total={numbers.departments}>
-            <i class="fa-solid fa-building-columns"></i>
-          </CardDataStats>
-          <CardDataStats title="Total Supplies" total={numbers.pr}>
-            <i class="fa-regular fa-newspaper"></i>
-          </CardDataStats>
-          <CardDataStats title="Total Requisition and Issue Slip" total={numbers.po}>
-            <i class="fa-solid fa-newspaper"></i>
-          </CardDataStats>
-          <CardDataStats title="Total Users" total={numbers.users}>
-            <i class="fa-solid fa-users"></i>
-          </CardDataStats>
-        </div>
+        <>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+            <CardDataStats title="Departments" total={numbers.departments}>
+              <i class="fa-solid fa-building-columns"></i>
+            </CardDataStats>
+            <CardDataStats title="Total Supplies" total={numbers.pr}>
+              <i class="fa-regular fa-newspaper"></i>
+            </CardDataStats>
+            <CardDataStats
+              title="Total Requisition and Issue Slip"
+              total={numbers.po}
+            >
+              <i class="fa-solid fa-newspaper"></i>
+            </CardDataStats>
+            <CardDataStats title="Total Users" total={numbers.users}>
+              <i class="fa-solid fa-users"></i>
+            </CardDataStats>
+          </div>
+
+          <div className='mt-4'>
+            <RequestSupplyTable/>
+          </div>
+        </>
       ) : null}
 
-<div className="col-span-12 xl:col-span-12">
-        {
-          user.role === 'admin' ? 
+      <div className="col-span-12 xl:col-span-12">
+        {user.role === 'admin' ? (
           <>
-             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
-              <CardDataStats title="Total Available Supplies" total={numbers.departments}>
+            {/* <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+              <CardDataStats
+                title="Total Available Supplies"
+                total={numbers.departments}
+              >
                 <i class="fa-solid fa-building-columns"></i>
               </CardDataStats>
-              <CardDataStats title="Number of Requested Supplies" total={numbers.pr}>
+              <CardDataStats
+                title="Number of Requested Supplies"
+                total={numbers.pr}
+              >
                 <i class="fa-regular fa-newspaper"></i>
               </CardDataStats>
-              <CardDataStats title="Total Requisition and Issue Slip" total={numbers.po}>
+              <CardDataStats
+                title="Total Requisition and Issue Slip"
+                total={numbers.po}
+              >
                 <i class="fa-solid fa-newspaper"></i>
               </CardDataStats>
+            </div> */}
+
+            <div className='mt-5'>
+              <RequestSupplyDashboardTable/>
             </div>
           </>
-          : 
-          null
-        }
+        ) : null}
       </div>
-
-      
     </>
   );
 }

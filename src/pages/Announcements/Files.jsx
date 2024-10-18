@@ -5,7 +5,7 @@ import ArchiveTable from '../../components/Tables/ArchiveTable'
 export default function Files() {
   return (
     <>
-      <Breadcrumb pageName="Archives | Requesation and Issue Slip" />
+      <Breadcrumb pageName="Archives | Requisition and Issue Slip" />
       <ArchiveTable/>
     </>
   )

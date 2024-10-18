@@ -17,10 +17,9 @@ import { Button } from '@chakra-ui/react';
 import AddCategoryModal from '../Modal/AddCategoryModal';
 import EditCategoryModal from '../Modal/EditCategoryModal';
 import AddReceivingModal from '../Modal/AddReceivingModal';
-import AddRisModal from '../Modal/AddRisModal';
-import { Badge } from '@chakra-ui/react';
+import AddParModal from '../Modal/AddParModal';
 
-const RequestSupplyTable = () => {
+const ParTable = () => {
   const [request, setRequest] = useState();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -36,7 +35,7 @@ const RequestSupplyTable = () => {
   const [deleteModalOne, setdeleteModalOne] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [user_id, setUserId] = useState(false);
-  const { notification_error, setNotificationError, setNotification, user } =
+  const { notification_error, setNotificationError, setNotification, setUsers } =
     useStateContext();
 
   const openModal = (id) => {
@@ -47,11 +46,12 @@ const RequestSupplyTable = () => {
   const fetchData = async () => {
     // setLoading(true)
     try {
-      const { data } = await axiosClient.get(
-        `/ris?page=${page}&limit=${limit}`,
+      const {data} = await axiosClient.get(
+        `/par?page=${page}&limit=${limit}`,
       );
-      setData(data.data);
-      setLinks(data.links);
+      setData(data.pars.data);
+      setLinks(data.pars.links);
+      setUsers(data.users)
       console.log(response);
       setLoading(false);
     } catch (error) {
@@ -153,7 +153,7 @@ const RequestSupplyTable = () => {
   };
 
   const hideEditModal = () => {
-    setDepartment([]);
+    setDepartment([])
     setEditDepartment(false);
   };
 
@@ -179,11 +179,6 @@ const RequestSupplyTable = () => {
 
   return (
     <div className="overflow-x-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      {
-        user.role === 'general admin' ? (<>
-          <h2 className='text-lg font-semibold'>Request Supplies</h2>
-        </>) : null
-      }
       <div className="flex items-center justify-between mt-2 mb-2">
         <div className="flex items-center gap-2">
           <label className="input input-bordered flex items-center gap-2">
@@ -224,17 +219,7 @@ const RequestSupplyTable = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          {
-            user.role == 'admin' ? <>
-              <Button
-                colorScheme="blue"
-                onClick={handleDepartmentModal}
-                className="uppercase"
-              >
-                ADD RIS
-              </Button>
-            </> : null
-          }
+          <Button colorScheme='blue' onClick={handleDepartmentModal} className='uppercase'>{" "}Add</Button>
         </div>
       </div>
 
@@ -253,7 +238,7 @@ const RequestSupplyTable = () => {
         handleModal={openDeleteModalOne}
         loading={btnLoading}
       />
-      <AddRisModal
+      <AddParModal
         handlePageLoading={handlePageLoading}
         open={departmentModal}
         handleModal={handleDepartmentModal}
@@ -276,28 +261,27 @@ const RequestSupplyTable = () => {
           {/* head */}
           <thead>
             <tr>
-              <th>RIS ID</th>
-              <th>Requested By</th>
-              <th>Status</th>
+              <th>PAR ID</th>
+              <th>Client Name</th>
               <th>Date Added</th>
               <th className="text-center">Option</th>
               {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
-            {data.length == 0 ? (
-              <tr>
-                <td className="text-center" colSpan={5}>
-                  No Data
-                </td>
+            {
+              data.length == 0 ? (
+                <tr>
+                <td className='text-center' colSpan={5}>No Data</td>
               </tr>
-            ) : (
-              <>
-                {data
+                
+              ) : (
+                <>
+                  {data
                   .filter((data) => {
                     return search.toLowerCase === ''
                       ? data
-                      : data.ris_number.toLowerCase().includes(search);
+                      : data.lastname.toLowerCase().includes(search)
                   })
                   .map((data) => (
                     <tr>
@@ -305,34 +289,26 @@ const RequestSupplyTable = () => {
                         <div className="flex items-center gap-3">
                           <div>
                             <div className="font-bold capitalize">
-                              {data.ris_number}
+                              {data.par_id}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="capitalize">
-                        {data.lastname} {data.firstname}
-                      </td>
-                      <td className="capitalize">
-                        <Badge variant="solid" colorScheme={data.status == 'pending' ? 'gray' : 'green'}>
-                        {data.status}
-                        </Badge>
-                      </td>
-                      <td className="capitalize">
-                        {formatDate(data.created_at)}
-                      </td>
+                      <td className="capitalize">{data.lastname + ' ' + data.firstname}</td>
+                      <td className="capitalize">{formatDate(data.created_at)}</td>
                       <th className="flex gap-1 items-center justify-center mt-2">
                         <Link
                           className="btn btn-outline btn-sm btn-primary text-white hover:bg-red-500"
-                          to={`/request/store/${data.id}`}
+                          to={`/par/store/${data.id}`}
                         >
                           Manage
                         </Link>
                       </th>
                     </tr>
                   ))}
-              </>
-            )}
+                </>
+              )
+            }
           </tbody>
         </table>
       )}
@@ -360,4 +336,4 @@ const RequestSupplyTable = () => {
   );
 };
 
-export default RequestSupplyTable;
+export default ParTable;

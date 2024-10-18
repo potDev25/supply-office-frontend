@@ -7,9 +7,11 @@ import { useStateContext } from '../context/ContextProvider';
 export default function From() {
   const [data, setData] = useState([]);
   const [ris, setRis] = useState([]);
+  const [total_price, setTotal] = useState(0);
+  const [approve, setApprove] = useState([]);
   const [loading, setLoading] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
-  const {setNotification, setNotificationError} = useStateContext()
+  const { setNotification, setNotificationError } = useStateContext();
   const { user } = useStateContext();
   const { id } = useParams();
 
@@ -20,7 +22,9 @@ export default function From() {
         `/stocks/requests/${id}?limit=${1000}`,
       );
       setData(data.data);
-      setRis(data.requesition);
+      setRis(data.ris);
+      setApprove(data.approve)
+      setTotal(data.total_price)
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -34,6 +38,17 @@ export default function From() {
     }).format(amount);
   }
 
+  function getCurrentDateFormatted() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(today.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  console.log(getCurrentDateFormatted()); // Outputs current date in yyyy-mm-dd format
+
   function formatDate(date) {
     const d = new Date(date);
 
@@ -45,17 +60,30 @@ export default function From() {
   }
 
   const submitForm = async () => {
-    setBtnLoading(true)
+    setBtnLoading(true);
     try {
-      const {data} = await axiosClient.post(`/stocks/submit-form/${ris.id}`)
-      setNotification('RIS form Submitted Successfully')
-      setBtnLoading(false)
-      setLoading(true)
+      const { data } = await axiosClient.post(`/stocks/submit-form/${ris.id}`);
+      setNotification('RIS form Submitted Successfully');
+      setBtnLoading(false);
+      setLoading(true);
     } catch (error) {
-      setNotificationError('Fail to Submit Form')
-      setBtnLoading(false)
+      setNotificationError('Fail to Submit Form');
+      setBtnLoading(false);
     }
-  }
+  };
+
+  const approveForm = async () => {
+    setBtnLoading(true);
+    try {
+      const { data } = await axiosClient.post(`/stocks/approve-form/${ris.id}`);
+      setNotification('RIS form Submitted Successfully');
+      setBtnLoading(false);
+      setLoading(true);
+    } catch (error) {
+      setNotificationError('Fail to Submit Form');
+      setBtnLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchData();
@@ -196,14 +224,14 @@ export default function From() {
                   {data.map((item) => (
                     <tr>
                       <td className="border border-black border-t-0 border-l-0 font-normal">
-                        {item.available == 1 ? (
+                        {item.availbale == 1 ? (
                           '/'
                         ) : (
                           <span className="text-white">/</span>
                         )}
                       </td>
                       <td className="border border-black border-t-0 border-l-0 font-normal">
-                        {item.available == 2 ? (
+                        {item.availbale == 2 ? (
                           '/'
                         ) : (
                           <span className="text-white">/</span>
@@ -245,10 +273,10 @@ export default function From() {
                         {formatToPeso(item.price)}
                       </td>
                       <td className="border border-black border-t-0 border-l-0 font-normal">
-                        <span className="text-white">/</span>
+                        {item.issued_qnty ?? 0}
                       </td>
                       <td className="border border-black border-t-0 border-l-0 font-normal">
-                        <span className="text-white">/</span>
+                        {formatToPeso(item.issued_total_price ?? 0.0)}
                       </td>
                       <td className="border border-black border-t-0 border-l-0 font-normal border-r-0">
                         <span className="text-white">/</span>
@@ -271,7 +299,7 @@ export default function From() {
             </div>
             <div className="text-center w-[10%]"></div>
             <div className="text-center w-[45%]"></div>
-            <div className="text-center w-[45%]">0</div>
+            <div className="text-center w-[45%]">{formatToPeso(total_price)}</div>
           </div>
 
           <div className="font-bold mt-4 text-sm flex">
@@ -321,16 +349,22 @@ export default function From() {
                     Printed Name :
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-bold uppercase px-2 text-center">
-                    {user.lastname} {user.firstname}
+                    {ris.lastname} {ris.firstname}
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-bold uppercase px-2 text-center">
-                    {user.lastname} {user.firstname}
+                    {ris.approved_by ? approve.lastname + ' ' + approve.firstname : ''}
                   </td>
-                  <td className="border border-black border-t-0 border-l-0 font-normal px-2">
-                    <span className="text-white">/</span>
+                  <td className="border border-black border-t-0 border-l-0 font-bold uppercase px-2 text-center">
+                    {ris.approved_by ? approve.lastname + ' ' + approve.firstname : ''}
                   </td>
-                  <td className="border border-black border-t-0 border-l-0 border-r-0 font-normal">
-                    <span className="text-white">/</span>
+                  <td className="border border-black border-t-0 border-l-0 font-bold uppercase px-2 text-center">
+                    {ris.status == 'pending' ? (
+                      <></>
+                    ) : (
+                      <>
+                        {ris.lastname} {ris.firstname}
+                      </>
+                    )}
                   </td>
                 </tr>
                 <tr>
@@ -338,16 +372,22 @@ export default function From() {
                     Designation :
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal text-center capitalize px-2">
-                    <span className="">{user.position}</span>
+                    <span className="">{ris.position}</span>
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal text-center capitalize px-2">
-                    <span className="">{user.position}</span>
+                  {ris.approved_by ? approve.position: ''}
                   </td>
-                  <td className="border border-black border-t-0 border-l-0 font-normal px-2">
-                    <span className="text-white">/</span>
+                  <td className="border border-black border-t-0 border-l-0 font-normal text-center capitalize px-2">
+                  {ris.approved_by ? approve.position: ''}
                   </td>
-                  <td className="border border-black border-t-0 border-l-0 border-r-0 font-normal">
-                    <span className="text-white">/</span>
+                  <td className="border border-black border-t-0 border-l-0 font-normal text-center capitalize px-2">
+                    {ris.status == 'pending' ? (
+                      <></>
+                    ) : (
+                      <>
+                        <span className="">{ris.position}</span>
+                      </>
+                    )}
                   </td>
                 </tr>
                 <tr>
@@ -358,13 +398,19 @@ export default function From() {
                     <span className="">{formatDate(ris.created_at)}</span>
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal text-center capitalize px-2">
-                    <span className="">{formatDate(ris.created_at)}</span>
+                    {ris.status == 'pending' ? (
+                      <></>
+                    ) : (
+                      <>
+                        <span className="">{formatDate(ris.updated_at)}</span>
+                      </>
+                    )}
                   </td>
-                  <td className="border border-black border-t-0 border-l-0 font-normal px-2">
-                    <span className="text-white">/</span>
+                  <td className="border border-black border-t-0 border-l-0 font-normal px-2 text-center">
+                    <span className="">{ris.approved_by ? formatDate(ris.updated_at) : ''}</span>
                   </td>
-                  <td className="border border-black border-t-0 border-l-0 border-r-0 font-normal">
-                    <span className="text-white">/</span>
+                  <td className="border border-black border-t-0 border-l-0 font-normal px-2 text-center">
+                    <span className="">{ris.approved_by ? formatDate(ris.updated_at) : ''}</span>
                   </td>
                 </tr>
               </tbody>
@@ -403,20 +449,35 @@ export default function From() {
             </button>
           </div>
           <div>
-            {
-              ris.submit == 0 ? <>
+            {ris.submit == 0 ? (
+              <>
                 {' '}
                 <button
                   onClick={(ev) => submitForm()}
                   className="btn btn-primary"
                   to={'/supply/add'}
                 >
-                  {
-                    btnLoading ? 'Loading...' : 'Submit'
-                  }
+                  {btnLoading ? 'Loading...' : 'Submit'}
                 </button>
+              </>
+            ) : null}
+
+            {
+              ris.status == 'pending' ? <>
+                {
+                  user.role === 'general admin' ? <>
+                    <button
+                      onClick={(ev) => approveForm()}
+                      className="btn btn-primary"
+                      to={'/supply/add'}
+                    >
+                      {btnLoading ? 'Loading...' : 'Issue RIS'}
+                    </button>
+                  </> : null
+                }
               </> : null
             }
+
           </div>
         </div>
       </div>

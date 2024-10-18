@@ -15,8 +15,15 @@ const AdminMenu = [
     },
     {
       title : 'Supplies',
-      includes : 'request-supplies',
-      url : '/request-supplies',
+      includes : 'supplies',
+      url : '/supplies',
+      icon : <i class="fa-solid fa-book"></i>,
+      dropdown : false,
+    },
+    {
+      title : 'PAR',
+      includes : 'par',
+      url : '/par/client/',
       icon : <i class="fa-solid fa-book"></i>,
       dropdown : false,
     },
