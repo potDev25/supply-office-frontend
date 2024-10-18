@@ -121,6 +121,11 @@ const sidebarItem = [
         includes: 'supplies',
         url: '/supplies',
       },
+      {
+        title: 'Stock-out',
+        includes: 'supplies',
+        url: '/supplies',
+      },
       // {
       //   title : 'Sales Report',
       //   includes : 'reports',
