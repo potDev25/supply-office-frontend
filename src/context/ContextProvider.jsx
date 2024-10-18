@@ -11,6 +11,10 @@ const StateContext = createContext({
     calendarYear: null,
     returnStatus: null,
     categories: null,
+    supplier: null,
+    supplies: null,
+    setSupplies: () => {},
+    setSupplier: () => {},
     setCategories: () => {},
     setCalendarYear: () => {},
     setReturnStatus: () => {},
@@ -30,7 +34,9 @@ export const ContextProvider = ({children}) => {
     const [notification, _setNotification] = useState('')          
     const [departments, _setDepartments] = useState([])          
     const [returnStatus, _setReturnStatus] = useState([])          
+    const [supplier, _setSupplier] = useState([])          
     const [categories, _setCategories] = useState([])          
+    const [supplies, _setSupplies] = useState([])          
     const [alertNot, _setAlertNot] = useState('')
     const [notification_error, _setNotificationError] = useState('')
     const [user_token, _setUserToken] = useState(localStorage.getItem('USER_TOKEN'))
@@ -62,6 +68,22 @@ export const ContextProvider = ({children}) => {
         _setDepartments((prev) => {
             return departments.map((item) => ({
                 ...prev, label: item.department_name, value: item.id
+            }))
+        })
+    }
+
+    const setSupplies = (departments) => {
+        _setSupplies((prev) => {
+            return departments.map((item) => ({
+                ...prev, label: item.supply_name, value: item.id
+            }))
+        })
+    }
+
+    const setSupplier = (departments) => {
+        _setSupplier((prev) => {
+            return departments.map((item) => ({
+                ...prev, label: item.supplier_name, value: item.id
             }))
         })
     }
@@ -108,7 +130,11 @@ export const ContextProvider = ({children}) => {
             calendarYear,
             setCalendarYear,
             setDepartments,
-            departments
+            departments,
+            supplier,
+            setSupplier,
+            supplies,
+            setSupplies
          }}>
 
             {children}

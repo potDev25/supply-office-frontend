@@ -43,11 +43,20 @@ import Supplies from './pages/Supplies/Supplies';
 import Categories from './pages/Supplies/Categories';
 import AddSupply from './pages/Applicants/AddSupply';
 import EditSupply from './pages/Applicants/EditSupply';
+import From from './pages/From';
+// import Signature from './pages/Signature';
+import SignaturePad from './pages/Signature';
+import Receiving from './pages/Announcements/Receiving';
+import Supplier from './pages/Supplies/Supplier';
+import ReceivingSupplies from './pages/Supplies/ReceivingSupplies';
+import RequestSupply from './pages/Announcements/RequestSupply';
+import RequestManage from './pages/Supplies/RequestManage';
+
 
 function App() {
   const [loading, setLoading] = useState(true);
   const { pathname } = useLocation();
-  const {setUser, setDepartments, setCategories} = useStateContext()
+  const {setUser, setDepartments, setCategories, setSupplier, setSupplies} = useStateContext()
 
   const fetchData = async () => {
     try {
@@ -56,6 +65,8 @@ function App() {
       setCategories(data.categories)
       setUser(data.user)
       setDepartments(data.departments)
+      setSupplier(data.supplier)
+      setSupplies(data.supplies)
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -153,6 +164,24 @@ function App() {
           }
         />
         <Route
+          path="/receiving/store/:id"
+          element={
+            <>
+              <PageTitle title="Receiving | University BAC OFFICE" />
+              <ReceivingSupplies />
+            </>
+          }
+        />
+        <Route
+          path="/request/store/:id"
+          element={
+            <>
+              <PageTitle title="Receiving | University BAC OFFICE" />
+              <RequestManage />
+            </>
+          }
+        />
+        <Route
           path="/tables"
           element={
             <>
@@ -203,6 +232,24 @@ function App() {
             <>
               <PageTitle title="Archives | University BAC" />
               <Announcements />
+            </>
+          }
+        />
+        <Route
+          path="/receiving"
+          element={
+            <>
+              <PageTitle title="Archives | University BAC" />
+              <Receiving />
+            </>
+          }
+        />
+        <Route
+          path="/requests"
+          element={
+            <>
+              <PageTitle title="Archives | University BAC" />
+              <RequestSupply />
             </>
           }
         />
@@ -297,11 +344,29 @@ function App() {
           }
         />
         <Route
+          path="/form/:id"
+          element={
+            <>
+              <PageTitle title="System Users | University BAC" />
+              <From />
+            </>
+          }
+        />
+        <Route
           path="/departments"
           element={
             <>
               <PageTitle title="Departments | University BAC" />
               <Departments />
+            </>
+          }
+        />
+        <Route
+          path="/e-signature"
+          element={
+            <>
+              <PageTitle title="Departments | University BAC" />
+              <SignaturePad />
             </>
           }
         />
@@ -320,6 +385,15 @@ function App() {
             <>
               <PageTitle title="Categories | University Supply Office" />
               <Categories />
+            </>
+          }
+        />
+        <Route
+          path="/supplier"
+          element={
+            <>
+              <PageTitle title="Supplier | University Supply Office" />
+              <Supplier />
             </>
           }
         />

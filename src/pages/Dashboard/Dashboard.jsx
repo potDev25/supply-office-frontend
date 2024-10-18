@@ -69,7 +69,17 @@ export default function Dashboard() {
         {
           user.role === 'admin' ? 
           <>
-             <PendingRequests/>
+             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+              <CardDataStats title="Total Available Supplies" total={numbers.departments}>
+                <i class="fa-solid fa-building-columns"></i>
+              </CardDataStats>
+              <CardDataStats title="Number of Requested Supplies" total={numbers.pr}>
+                <i class="fa-regular fa-newspaper"></i>
+              </CardDataStats>
+              <CardDataStats title="Total Requisition and Issue Slip" total={numbers.po}>
+                <i class="fa-solid fa-newspaper"></i>
+              </CardDataStats>
+            </div>
           </>
           : 
           null
