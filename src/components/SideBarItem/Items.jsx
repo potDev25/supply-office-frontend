@@ -246,9 +246,14 @@ const sidebarItem = [
     ),
     dropdown_item: [
       {
-        title: 'Processed RIS',
+        title: 'PAR Reports',
         includes: 'reports',
         url: '/reports/transactions',
+      },
+      {
+        title: 'Supplies and Materials Issued',
+        includes: 'issued',
+        url: '/issued/transactions',
       },
       // {
       //   title: 'Stock-Out Report',

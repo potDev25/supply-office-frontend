@@ -168,7 +168,7 @@ export default function IssueModal({
       // handleModal()
       handleCloseModal();
     } catch (error) {
-      setNotificationError('Unable to save department');
+      setNotificationError('Server Error! Please Try Again');
       handleBntLoading(false);
       console.log(error);
       if (error.response.data.errors) {

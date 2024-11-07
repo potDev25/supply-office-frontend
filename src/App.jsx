@@ -54,6 +54,8 @@ import RequestManage from './pages/Supplies/RequestManage';
 import Par from './pages/Announcements/Par';
 import ParSupplies from './pages/Supplies/ParSupplies';
 import ParClient from './pages/Supplies/ParClient';
+import ReportByDepartment from './pages/Announcements/ReportByDepartment';
+import ReportSupplies from './pages/Supplies/ReportSupplies';
 
 
 function App() {
@@ -176,6 +178,15 @@ function App() {
           }
         />
         <Route
+          path="/issued/transactions/view/:id"
+          element={
+            <>
+              <PageTitle title="University Supply Office OFFICE" />
+              <ReportSupplies />
+            </>
+          }
+        />
+        <Route
           path="/par/store/:id"
           element={
             <>
@@ -280,6 +291,15 @@ function App() {
             <>
               <PageTitle title="Archives | University Supply Office" />
               <RequestSupply />
+            </>
+          }
+        />
+        <Route
+          path="/issued/transactions"
+          element={
+            <>
+              <PageTitle title="University Supply Office" />
+              <ReportByDepartment />
             </>
           }
         />

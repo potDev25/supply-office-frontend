@@ -6,7 +6,7 @@ import BrandFour from '../../images/brand/brand-04.svg';
 import BrandFive from '../../images/brand/brand-05.svg';
 import { useEffect, useState } from 'react';
 import AddApplicantModal from '../Modal/AddApplicantModal';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import axiosClient from '../../axiosClinet';
 import DeleteApplicantModal from '../Modal/DeleteApplicantModal';
@@ -15,11 +15,8 @@ import AddDepartmentModal from '../Modal/AddDepartmentModal';
 import EditDepartmentModal from '../Modal/EditDepartmentModal';
 import { Box, Image } from '@chakra-ui/react';
 import StoreSupplyModal from '../Modal/StoreSupplyModal';
-import StoreParSupplyModal from '../Modal/StoreParSupplyModal';
-import { Badge } from '@chakra-ui/react';
-import UpdateParStatusModal from '../Modal/UpdateParStatusModal';
 
-const ParSupplyTable = () => {
+const ReportSuppliesTable = ({setDepartmentName, setCosts, setCountSupplies}) => {
   const [request, setRequest] = useState();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -27,12 +24,10 @@ const ParSupplyTable = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [links, setLinks] = useState([]);
-  const [item, setItem] = useState({});
   const [ids, setIds] = useState([]);
   const [deleteModal, setDeleteModal] = useState(false);
   const [departmentModal, setDepartmentModal] = useState(false);
   const [editDepartment, setEditDepartment] = useState(false);
-  const [updateStatusModal, setUpdateStatusModal] = useState(false);
   const [department, setDepartment] = useState([]);
   const [deleteModalOne, setdeleteModalOne] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
@@ -44,6 +39,14 @@ const ParSupplyTable = () => {
     setNotification,
     setSupplies,
   } = useStateContext();
+  const location = useLocation();
+
+  // Create an instance of URLSearchParams to parse the query string
+  const queryParams = new URLSearchParams(location.search);
+
+  // Get month and year from query parameters
+  const month = queryParams.get('month') || new Date().getMonth() + 1; // Default to current month
+  const year = queryParams.get('year') || new Date().getFullYear();
 
   const openModal = (id) => {
     setRequest(id);
@@ -51,28 +54,19 @@ const ParSupplyTable = () => {
   };
 
   const fetchData = async () => {
-    // setLoading(true)
     try {
       const { data } = await axiosClient.get(
-        `/par-supplies/${id}?page=${page}&limit=${limit}`,
+        `/stocks/report/${id}?page=${page}&limit=${limit}&month=${month}&year=${year}`,
       );
       setData(data.data);
-      setSupplies(data.supplies);
+      setDepartmentName(data.department)
+      setCosts(data.costs)
+      setCountSupplies(data.count_supplies)
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
   };
-
-  const handleStatusModal = (data) => {
-    setItem(data)
-    setUpdateStatusModal(true)
-  }
-
-  const handleCloseStatusModal = () => {
-    setItem({})
-    setUpdateStatusModal(false)
-  }
 
   const incrementPage = () => {
     setLoading(true);
@@ -241,14 +235,14 @@ const ParSupplyTable = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <button
+          {/* <button
             onClick={(ev) => setDepartmentModal(true)}
             className="btn btn-primary"
             to={'/supply/add'}
           >
             <i className="fa-solid fa-circle-plus"></i>
-            Assign Supply
-          </button>
+            Stock in
+          </button> */}
         </div>
       </div>
 
@@ -267,20 +261,12 @@ const ParSupplyTable = () => {
         handleModal={openDeleteModalOne}
         loading={btnLoading}
       />
-      <StoreParSupplyModal
+      <StoreSupplyModal
         handlePageLoading={handlePageLoading}
         open={departmentModal}
         handleModal={handleDepartmentModal}
         loading={btnLoading}
         handleBntLoading={handleBtnLoading}
-      />
-      <UpdateParStatusModal
-        handlePageLoading={handlePageLoading}
-        open={updateStatusModal}
-        handleModal={handleCloseStatusModal}
-        loading={btnLoading}
-        handleBntLoading={handleBtnLoading}
-        data={item}
       />
       <EditDepartmentModal
         handlePageLoading={handlePageLoading}
@@ -294,84 +280,65 @@ const ParSupplyTable = () => {
       {loading ? (
         <Loader />
       ) : (
-        <table className="table table-zebra fade-in overflow-auto mb-3">
+        <table className="table table-zebra fade-in overflow-auto mb-4">
           {/* head */}
           <thead>
             <tr>
-              {/* <th>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="allselect"
-                    checked={!data.some((user) => user?.isChecked !== true)}
-                    onChange={handleChange}
-                    className="checkbox"
-                  />
-                </label>
-              </th> */}
-              {/* <th>Receiving ID</th> */}
-              <th>Client Name</th>
+              <th>RIS Number</th>
               <th>Supply Name</th>
               <th>Description</th>
               <th>Category</th>
               <th>Unit</th>
-              <th>Status</th>
               <th>Quantity</th>
+              <th>Price</th>
+              <th>Total Price</th>
               <th>Added Date</th>
-              <th className="text-center">Options</th>
-              {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
-            {data
-              .filter((data) => {
-                return search.toLowerCase === ''
-                  ? data
-                  : data.supply_name.toLowerCase().includes(search) ||
-                      data.description.toLowerCase().includes(search);
-              })
-              .map((data) => (
-                <tr>
-                  {/* <td className="capitalize font-bold">{data.par_id}</td> */}
-                  <td className="capitalize font-bold">{data.client_name}</td>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <div className="font-bold capitalize">
-                          {data.supply_name}
+            {
+              data.length > 0 ? (<>
+                {data
+                  .filter((data) => {
+                    return search.toLowerCase === ''
+                      ? data
+                      : data.supply_name.toLowerCase().includes(search) ||
+                          data.description.toLowerCase().includes(search);
+                  })
+                  .map((data) => (
+                    <tr>
+                      <td className="capitalize font-bold">{data.ris_number}</td>
+                      <td>
+                        <div className="flex items-center gap-3">
+                          <div>
+                            <div className="font-bold capitalize">
+                              {data.supply_name}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="capitalize">{data.description}</td>
-                  <td className="capitalize">{data.name}</td>
-                  <td className="capitalize">{data.unit}</td>
-                  <td className="capitalize">
-                    {data.status == 'issued' && (
-                      <Badge colorScheme="green">Issued</Badge>
-                    )}
-                    {data.status == 'return' && (
-                      <Badge colorScheme="gray">Return</Badge>
-                    )}
-                    {data.status == 'unserviceable' && (
-                      <Badge colorScheme="red">Unserviceable</Badge>
-                    )}
-                  </td>
-                  <td className="capitalize">{data.qnty}</td>
-                  <td className="capitalize">{formatDate(data.created_at)}</td>
-                  <th className="flex gap-1 items-center justify-center mt-2">
-                    <button className="btn btn-outline btn-sm btn-success text-white hover:bg-red-500" onClick={ev => handleStatusModal(data)}>
-                      <i class="fa-solid fa-pen-to-square"></i> Update
-                    </button>
-                  </th>
+                      </td>
+                      <td className="capitalize">{data.description}</td>
+                      <td className="capitalize">{data.name}</td>
+                      <td className="capitalize">{data.unit}</td>
+                      <td className="capitalize">{data.qnty}</td>
+                      <td className="capitalize">{formatToPeso(data.price)}</td>
+                      <td className="capitalize">
+                        {formatToPeso(data.issued_total_price)}
+                      </td>
+                      <td className="capitalize">{formatDate(data.created_at)}</td>
+                    </tr>
+                  ))}
+              </>) : (
+                <tr>
+                  <td className='text-center' colSpan={9}>No Record Found</td>
                 </tr>
-              ))}
+              )
+            }
           </tbody>
-          {/* foot */}
         </table>
       )}
     </div>
   );
 };
 
-export default ParSupplyTable;
+export default ReportSuppliesTable;

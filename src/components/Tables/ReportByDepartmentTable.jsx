@@ -6,20 +6,21 @@ import BrandFour from '../../images/brand/brand-04.svg';
 import BrandFive from '../../images/brand/brand-05.svg';
 import { useEffect, useState } from 'react';
 import AddApplicantModal from '../Modal/AddApplicantModal';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import axiosClient from '../../axiosClinet';
 import DeleteApplicantModal from '../Modal/DeleteApplicantModal';
 import { useStateContext } from '../../context/ContextProvider';
 import AddDepartmentModal from '../Modal/AddDepartmentModal';
 import EditDepartmentModal from '../Modal/EditDepartmentModal';
-import { Box, Image } from '@chakra-ui/react';
-import StoreSupplyModal from '../Modal/StoreSupplyModal';
-import StoreParSupplyModal from '../Modal/StoreParSupplyModal';
-import { Badge } from '@chakra-ui/react';
-import UpdateParStatusModal from '../Modal/UpdateParStatusModal';
+import { Button } from '@chakra-ui/react';
+import AddCategoryModal from '../Modal/AddCategoryModal';
+import EditCategoryModal from '../Modal/EditCategoryModal';
+import AddReceivingModal from '../Modal/AddReceivingModal';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
-const ParSupplyTable = () => {
+const ReportByDepartmentTable = () => {
   const [request, setRequest] = useState();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -27,23 +28,33 @@ const ParSupplyTable = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [links, setLinks] = useState([]);
-  const [item, setItem] = useState({});
   const [ids, setIds] = useState([]);
   const [deleteModal, setDeleteModal] = useState(false);
   const [departmentModal, setDepartmentModal] = useState(false);
   const [editDepartment, setEditDepartment] = useState(false);
-  const [updateStatusModal, setUpdateStatusModal] = useState(false);
   const [department, setDepartment] = useState([]);
   const [deleteModalOne, setdeleteModalOne] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [user_id, setUserId] = useState(false);
-  const { id } = useParams();
-  const {
-    notification_error,
-    setNotificationError,
-    setNotification,
-    setSupplies,
-  } = useStateContext();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const { notification_error, setNotificationError, setNotification } =
+    useStateContext();
+  const [months, setMonths] = useState([
+    { name: 'January', value: 1 },
+    { name: 'February', value: 2 },
+    { name: 'March', value: 3 },
+    { name: 'April', value: 4 },
+    { name: 'May', value: 5 },
+    { name: 'June', value: 6 },
+    { name: 'July', value: 7 },
+    { name: 'August', value: 8 },
+    { name: 'September', value: 9 },
+    { name: 'October', value: 10 },
+    { name: 'November', value: 11 },
+    { name: 'December', value: 12 },
+  ]);
+  const [filteredMonth, setFilteredMonth] = useState(null)
+  const [year, setYear] = useState(new Date().getFullYear());
 
   const openModal = (id) => {
     setRequest(id);
@@ -51,28 +62,36 @@ const ParSupplyTable = () => {
   };
 
   const fetchData = async () => {
-    // setLoading(true)
+    const current = filteredMonth || new Date().getMonth() + 1;
     try {
-      const { data } = await axiosClient.get(
-        `/par-supplies/${id}?page=${page}&limit=${limit}`,
+      const { data: responseData } = await axiosClient.get(
+        `/reports-supply?page=${page}&limit=${limit}&month=${current}&year=${year}`,
       );
-      setData(data.data);
-      setSupplies(data.supplies);
+
+      // Parse costs to numbers and sort in descending order
+      const sortedData = responseData.department_data.sort((a, b) => {
+        // Remove commas from costs and convert to numbers for sorting
+        const costA = parseFloat(a.costs.replace(/,/g, ''));
+        const costB = parseFloat(b.costs.replace(/,/g, ''));
+        return costB - costA; // Sort in descending order
+      });
+
+      setData(sortedData);
+      setLinks(responseData.departments.links);
+      console.log(responseData);
       setLoading(false);
     } catch (error) {
+      console.error(error);
       setLoading(false);
     }
   };
 
-  const handleStatusModal = (data) => {
-    setItem(data)
-    setUpdateStatusModal(true)
-  }
-
-  const handleCloseStatusModal = () => {
-    setItem({})
-    setUpdateStatusModal(false)
-  }
+  const handleYearChange = (date) => {
+    const newYear = date.getFullYear();
+    const updatedDate = new Date(selectedDate.setFullYear(newYear));
+    setSelectedDate(updatedDate); // Update the entire date, not just the year
+    setYear(newYear)
+  };
 
   const incrementPage = () => {
     setLoading(true);
@@ -88,7 +107,7 @@ const ParSupplyTable = () => {
 
   useEffect(() => {
     fetchData();
-  }, [loading, page, limit]);
+  }, [loading, page, limit, filteredMonth, year]);
 
   useEffect(() => {
     const checkedInputValue = data
@@ -192,15 +211,8 @@ const ParSupplyTable = () => {
     return formatter.format(date);
   }
 
-  function formatToPeso(amount) {
-    return new Intl.NumberFormat('en-PH', {
-      style: 'currency',
-      currency: 'PHP',
-    }).format(amount);
-  }
-
   return (
-    <div className="overflow-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
+    <div className="overflow-x-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="flex items-center justify-between mt-2 mb-2">
         <div className="flex items-center gap-2">
           <label className="input input-bordered flex items-center gap-2">
@@ -208,7 +220,7 @@ const ParSupplyTable = () => {
               type="text"
               className="grow input-xs"
               onChange={(ev) => setSearch(ev.target.value)}
-              placeholder="Search Supply | Description"
+              placeholder="Search Receiving ID | supplier"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -235,20 +247,34 @@ const ParSupplyTable = () => {
             <option value="30">30</option>
             <option value="10000">All</option>
           </select>
+          <select
+            className="select select-bordered w-full max-w-xs"
+            onChange={(ev) => setFilteredMonth(ev.target.value)}
+          >
+            <option disabled selected>
+              Filter Month
+            </option>
+            {
+              months.map((m) => (
+                <option value={m.value}>{m.name}</option>
+              ))
+            }
+          </select>
           {/* <button className="btn btn-outline" onClick={openDeleteModal}>
             <i class="fa-solid fa-trash-can"></i> Mass Delete
           </button> */}
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={(ev) => setDepartmentModal(true)}
-            className="btn btn-primary"
-            to={'/supply/add'}
-          >
-            <i className="fa-solid fa-circle-plus"></i>
-            Assign Supply
-          </button>
+        <label className="input input-bordered flex items-center gap-2">
+          <DatePicker
+            selected={selectedDate}
+            showYearPicker
+            onChange={handleYearChange}
+            calendarClassName="bg-white border border-gray-300 shadow-lg rounded-lg p-2"
+            dateFormat="yyyy"
+          />
+          </label>
         </div>
       </div>
 
@@ -267,111 +293,103 @@ const ParSupplyTable = () => {
         handleModal={openDeleteModalOne}
         loading={btnLoading}
       />
-      <StoreParSupplyModal
+      <AddReceivingModal
         handlePageLoading={handlePageLoading}
         open={departmentModal}
         handleModal={handleDepartmentModal}
         loading={btnLoading}
         handleBntLoading={handleBtnLoading}
       />
-      <UpdateParStatusModal
-        handlePageLoading={handlePageLoading}
-        open={updateStatusModal}
-        handleModal={handleCloseStatusModal}
-        loading={btnLoading}
-        handleBntLoading={handleBtnLoading}
-        data={item}
-      />
-      <EditDepartmentModal
+      <EditCategoryModal
         handlePageLoading={handlePageLoading}
         open={editDepartment}
         handleModal={hideEditModal}
         loading={btnLoading}
-        department={department}
+        category={department}
         handleBntLoading={handleBtnLoading}
       />
 
       {loading ? (
         <Loader />
       ) : (
-        <table className="table table-zebra fade-in overflow-auto mb-3">
+        <table className="table table-zebra fade-in">
           {/* head */}
           <thead>
             <tr>
-              {/* <th>
-                <label>
-                  <input
-                    type="checkbox"
-                    name="allselect"
-                    checked={!data.some((user) => user?.isChecked !== true)}
-                    onChange={handleChange}
-                    className="checkbox"
-                  />
-                </label>
-              </th> */}
-              {/* <th>Receiving ID</th> */}
-              <th>Client Name</th>
-              <th>Supply Name</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Unit</th>
-              <th>Status</th>
-              <th>Quantity</th>
-              <th>Added Date</th>
-              <th className="text-center">Options</th>
+              <th>Department / Office Name</th>
+              <th>Total Number Supplies</th>
+              <th>Total Costs</th>
+              <th className="text-center">Option</th>
               {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
-            {data
-              .filter((data) => {
-                return search.toLowerCase === ''
-                  ? data
-                  : data.supply_name.toLowerCase().includes(search) ||
-                      data.description.toLowerCase().includes(search);
-              })
-              .map((data) => (
-                <tr>
-                  {/* <td className="capitalize font-bold">{data.par_id}</td> */}
-                  <td className="capitalize font-bold">{data.client_name}</td>
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <div className="font-bold capitalize">
-                          {data.supply_name}
+            {data.length == 0 ? (
+              <tr>
+                <td className="text-center" colSpan={5}>
+                  No Data
+                </td>
+              </tr>
+            ) : (
+              <>
+                {data
+                  .filter((data) => {
+                    return search.toLowerCase === ''
+                      ? data
+                      : data.department_name.toLowerCase().includes(search);
+                  })
+                  .map((data) => (
+                    <tr>
+                      <td>
+                        <div className="flex items-center gap-3">
+                          <div>
+                            <div className="font-bold capitalize">
+                              {data.department_name}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="capitalize">{data.description}</td>
-                  <td className="capitalize">{data.name}</td>
-                  <td className="capitalize">{data.unit}</td>
-                  <td className="capitalize">
-                    {data.status == 'issued' && (
-                      <Badge colorScheme="green">Issued</Badge>
-                    )}
-                    {data.status == 'return' && (
-                      <Badge colorScheme="gray">Return</Badge>
-                    )}
-                    {data.status == 'unserviceable' && (
-                      <Badge colorScheme="red">Unserviceable</Badge>
-                    )}
-                  </td>
-                  <td className="capitalize">{data.qnty}</td>
-                  <td className="capitalize">{formatDate(data.created_at)}</td>
-                  <th className="flex gap-1 items-center justify-center mt-2">
-                    <button className="btn btn-outline btn-sm btn-success text-white hover:bg-red-500" onClick={ev => handleStatusModal(data)}>
-                      <i class="fa-solid fa-pen-to-square"></i> Update
-                    </button>
-                  </th>
-                </tr>
-              ))}
+                      </td>
+                      <td className="capitalize">{data.total}</td>
+                      <td className="capitalize">
+                        <i class="fa-solid fa-peso-sign"></i> {data.costs}
+                      </td>
+                      <th className="flex gap-1 items-center justify-center mt-2">
+                        <Link
+                          className="btn btn-outline btn-sm btn-primary text-white hover:bg-red-500"
+                          to={`/issued/transactions/view/${data.department_id}?month=${filteredMonth || new Date().getMonth() + 1}&year=${year}`}
+                        >
+                          View Data
+                        </Link>
+                      </th>
+                    </tr>
+                  ))}
+              </>
+            )}
           </tbody>
-          {/* foot */}
         </table>
       )}
+      <div className="flex items-center justify-between mt-2 mb-2">
+        <div></div>
+        <div className="join">
+          <button
+            className="join-item btn"
+            onClick={(ev) => minusPage()}
+            disabled={page == 1 ? true : false}
+          >
+            «
+          </button>
+          <button className="join-item btn">Page {page}</button>
+          <button
+            className="join-item btn"
+            onClick={(ev) => incrementPage()}
+            disabled={loading || links.length == 3 ? true : false}
+          >
+            »
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default ParSupplyTable;
+export default ReportByDepartmentTable;
