@@ -53,7 +53,7 @@ const ReportByDepartmentTable = () => {
     { name: 'November', value: 11 },
     { name: 'December', value: 12 },
   ]);
-  const [filteredMonth, setFilteredMonth] = useState(null)
+  const [filteredMonth, setFilteredMonth] = useState(null);
   const [year, setYear] = useState(new Date().getFullYear());
 
   const openModal = (id) => {
@@ -86,11 +86,39 @@ const ReportByDepartmentTable = () => {
     }
   };
 
+  const exportData = async () => {
+    try {
+      const current = filteredMonth || new Date().getMonth() + 1;
+      const response = await axiosClient.get(
+        `/reports-supply/export?month=${current}&year=${year}`,
+        {
+          params: {
+            month: current,
+            year: year,
+          },
+          responseType: 'blob',
+        },
+      );
+
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      });
+      const link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.setAttribute('download', `${months[current - 1].name}, ${year}-report.xlsx`); // Set the file name
+      document.body.appendChild(link);
+      link.click(); // Trigger the download
+      document.body.removeChild(link);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleYearChange = (date) => {
     const newYear = date.getFullYear();
     const updatedDate = new Date(selectedDate.setFullYear(newYear));
     setSelectedDate(updatedDate); // Update the entire date, not just the year
-    setYear(newYear)
+    setYear(newYear);
   };
 
   const incrementPage = () => {
@@ -254,11 +282,9 @@ const ReportByDepartmentTable = () => {
             <option disabled selected>
               Filter Month
             </option>
-            {
-              months.map((m) => (
-                <option value={m.value}>{m.name}</option>
-              ))
-            }
+            {months.map((m) => (
+              <option value={m.value}>{m.name}</option>
+            ))}
           </select>
           {/* <button className="btn btn-outline" onClick={openDeleteModal}>
             <i class="fa-solid fa-trash-can"></i> Mass Delete
@@ -266,14 +292,17 @@ const ReportByDepartmentTable = () => {
         </div>
 
         <div className="flex items-center gap-2">
-        <label className="input input-bordered flex items-center gap-2">
-          <DatePicker
-            selected={selectedDate}
-            showYearPicker
-            onChange={handleYearChange}
-            calendarClassName="bg-white border border-gray-300 shadow-lg rounded-lg p-2"
-            dateFormat="yyyy"
-          />
+          <button className="btn btn-primary" onClick={exportData}>
+            <i class="fa-solid fa-file-export"></i>Export
+          </button>
+          <label className="input input-bordered flex items-center gap-2">
+            <DatePicker
+              selected={selectedDate}
+              showYearPicker
+              onChange={handleYearChange}
+              calendarClassName="bg-white border border-gray-300 shadow-lg rounded-lg p-2"
+              dateFormat="yyyy"
+            />
           </label>
         </div>
       </div>
@@ -356,7 +385,11 @@ const ReportByDepartmentTable = () => {
                       <th className="flex gap-1 items-center justify-center mt-2">
                         <Link
                           className="btn btn-outline btn-sm btn-primary text-white hover:bg-red-500"
-                          to={`/issued/transactions/view/${data.department_id}?month=${filteredMonth || new Date().getMonth() + 1}&year=${year}`}
+                          to={`/issued/transactions/view/${
+                            data.department_id
+                          }?month=${
+                            filteredMonth || new Date().getMonth() + 1
+                          }&year=${year}`}
                         >
                           View Data
                         </Link>

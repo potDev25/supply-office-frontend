@@ -16,7 +16,12 @@ import EditDepartmentModal from '../Modal/EditDepartmentModal';
 import { Box, Image } from '@chakra-ui/react';
 import StoreSupplyModal from '../Modal/StoreSupplyModal';
 
-const ReportSuppliesTable = ({setDepartmentName, setCosts, setCountSupplies, setStocksData}) => {
+const ReportSuppliesTable = ({
+  setDepartmentName,
+  setCosts,
+  setCountSupplies,
+  setStocksData,
+}) => {
   const [request, setRequest] = useState();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -59,10 +64,10 @@ const ReportSuppliesTable = ({setDepartmentName, setCosts, setCountSupplies, set
         `/stocks/report/${id}?page=${page}&limit=${limit}&month=${month}&year=${year}`,
       );
       setData(data.data);
-      setDepartmentName(data.department)
-      setCosts(data.costs)
-      setCountSupplies(data.count_supplies)
-      setStocksData(data.stocks_data)
+      setDepartmentName(data.department);
+      setCosts(data.costs);
+      setCountSupplies(data.count_supplies);
+      setStocksData(data.stocks_data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -297,8 +302,8 @@ const ReportSuppliesTable = ({setDepartmentName, setCosts, setCountSupplies, set
             </tr>
           </thead>
           <tbody>
-            {
-              data.length > 0 ? (<>
+            {data.length > 0 ? (
+              <>
                 {data
                   .filter((data) => {
                     return search.toLowerCase === ''
@@ -308,7 +313,9 @@ const ReportSuppliesTable = ({setDepartmentName, setCosts, setCountSupplies, set
                   })
                   .map((data) => (
                     <tr>
-                      <td className="capitalize font-bold">{data.ris_number}</td>
+                      <td className="capitalize font-bold">
+                        {data.ris_number}
+                      </td>
                       <td>
                         <div className="flex items-center gap-3">
                           <div>
@@ -326,15 +333,19 @@ const ReportSuppliesTable = ({setDepartmentName, setCosts, setCountSupplies, set
                       <td className="capitalize">
                         {formatToPeso(data.issued_total_price)}
                       </td>
-                      <td className="capitalize">{formatDate(data.created_at)}</td>
+                      <td className="capitalize">
+                        {formatDate(data.created_at)}
+                      </td>
                     </tr>
                   ))}
-              </>) : (
-                <tr>
-                  <td className='text-center' colSpan={9}>No Record Found</td>
-                </tr>
-              )
-            }
+              </>
+            ) : (
+              <tr>
+                <td className="text-center" colSpan={9}>
+                  No Record Found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       )}
