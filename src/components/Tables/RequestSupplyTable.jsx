@@ -20,7 +20,7 @@ import AddReceivingModal from '../Modal/AddReceivingModal';
 import AddRisModal from '../Modal/AddRisModal';
 import { Badge } from '@chakra-ui/react';
 
-const RequestSupplyTable = () => {
+const RequestSupplyTable = ({ department_id = null, setDepartmentProp }) => {
   const [request, setRequest] = useState();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -48,10 +48,11 @@ const RequestSupplyTable = () => {
     // setLoading(true)
     try {
       const { data } = await axiosClient.get(
-        `/ris?page=${page}&limit=${limit}`,
+        `/ris?page=${page}&limit=${limit}&department_id=${department_id ?? ''}`,
       );
-      setData(data.data);
-      setLinks(data.links);
+      setData(data.data.data);
+      setLinks(data.data.links);
+      setDepartmentProp(data.department);
       console.log(response);
       setLoading(false);
     } catch (error) {
@@ -179,11 +180,11 @@ const RequestSupplyTable = () => {
 
   return (
     <div className="overflow-x-auto rounded-sm border border-stroke bg-white pt-2 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
-      {
-        user.role === 'general admin' ? (<>
-          <h2 className='text-lg font-semibold'>Request Supplies</h2>
-        </>) : null
-      }
+      {user.role === 'general admin' ? (
+        <>
+          <h2 className="text-lg font-semibold">Request Supplies</h2>
+        </>
+      ) : null}
       <div className="flex items-center justify-between mt-2 mb-2">
         <div className="flex items-center gap-2">
           <label className="input input-bordered flex items-center gap-2">
@@ -224,8 +225,8 @@ const RequestSupplyTable = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          {
-            user.role == 'admin' ? <>
+          {user.role == 'admin' ? (
+            <>
               <Button
                 colorScheme="blue"
                 onClick={handleDepartmentModal}
@@ -233,8 +234,8 @@ const RequestSupplyTable = () => {
               >
                 ADD RIS
               </Button>
-            </> : null
-          }
+            </>
+          ) : null}
         </div>
       </div>
 
@@ -314,20 +315,51 @@ const RequestSupplyTable = () => {
                         {data.lastname} {data.firstname}
                       </td>
                       <td className="capitalize">
-                        <Badge variant="solid" colorScheme={data.status == 'pending' ? 'gray' : 'green'}>
-                        {data.status}
+                        <Badge
+                          variant="solid"
+                          colorScheme={
+                            data.status == 'pending' ? 'gray' : 'green'
+                          }
+                        >
+                          {data.status}
                         </Badge>
                       </td>
                       <td className="capitalize">
                         {formatDate(data.created_at)}
                       </td>
                       <th className="flex gap-1 items-center justify-center mt-2">
-                        <Link
-                          className="btn btn-outline btn-sm btn-primary text-white hover:bg-red-500"
-                          to={`/request/store/${data.id}`}
-                        >
-                          Manage
-                        </Link>
+                        {user.role === 'general admin' ? (
+                          <>
+                            {data.status == 'pending' ? (
+                              <>
+                                <Link
+                                  className="btn btn-outline btn-sm btn-primary text-white hover:bg-red-500"
+                                  to={`/request/store/${data.id}`}
+                                >
+                                  Manage
+                                </Link>
+                              </>
+                            ) : (
+                              <>
+                                <Link
+                                  className="btn btn-outline btn-sm btn-primary text-white hover:bg-red-500"
+                                  to={`/form/${data.id}`}
+                                >
+                                  View RIS
+                                </Link>
+                              </>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            <Link
+                              className="btn btn-outline btn-sm btn-primary text-white hover:bg-red-500"
+                              to={`/request/store/${data.id}`}
+                            >
+                              Manage
+                            </Link>
+                          </>
+                        )}
                       </th>
                     </tr>
                   ))}

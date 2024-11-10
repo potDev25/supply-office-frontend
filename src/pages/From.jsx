@@ -1,19 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import logo from '../images/bipsu_new.png';
 import axiosClient from '../axiosClinet';
 import { useParams } from 'react-router-dom';
 import { useStateContext } from '../context/ContextProvider';
+import ReactToPrint from "react-to-print";
 
-export default function From() {
+const pageStyle = `
+  @page {
+    size: A4; /* Set page size to A4 and landscape orientation */
+    margin: 20mm; /* Set margins to 20mm */
+  }
+
+  @media print {
+    body {
+      -webkit-print-color-adjust: exact; /* Ensures background colors are printed */
+      print-color-adjust: exact;
+      zoom: 75%; /* Optional: Adjust zoom for printing */
+    }
+  }
+`;
+
+export default function From({ ref }) {
   const [data, setData] = useState([]);
   const [ris, setRis] = useState([]);
   const [total_price, setTotal] = useState(0);
   const [approve, setApprove] = useState([]);
+  const [signature, setsignature] = useState({});
+  const [requistorSignature, setrequistorSignature] = useState({});
   const [loading, setLoading] = useState(true);
   const [btnLoading, setBtnLoading] = useState(false);
   const { setNotification, setNotificationError } = useStateContext();
   const { user } = useStateContext();
   const { id } = useParams();
+  const componentRef = useRef();
 
   const fetchData = async () => {
     // setLoading(true);
@@ -23,8 +42,11 @@ export default function From() {
       );
       setData(data.data);
       setRis(data.ris);
-      setApprove(data.approve)
-      setTotal(data.total_price)
+      setApprove(data.approve);
+      setTotal(data.total_price);
+      setTotal(data.total_price);
+      setsignature(data.signature);
+      setrequistorSignature(data.requistor);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -91,11 +113,26 @@ export default function From() {
 
   return (
     <>
+      <div className='flex items-center justify-center'>
+
+        <ReactToPrint
+          trigger={() => (
+            <button
+              className="btn btn-primary uppercase"
+            >
+              <i className="fa-solid fa-print"></i> Print
+            </button>
+          )}
+          content={() => componentRef.current}
+          pageStyle={pageStyle}
+        />
+      </div>
       <div
-        className="flex items-center justify-center"
+        className="flex items-center justify-center p-10"
         style={{ fontFamily: "'Times New Roman', Times, serif" }}
+        ref={componentRef}
       >
-        <div className="w-full m-auto border border-black">
+        <div className="w-full m-auto border border-black" >
           <div className="flex border-b border-black">
             <div className="flex px-15 w-[70%]">
               <div className="">
@@ -299,7 +336,9 @@ export default function From() {
             </div>
             <div className="text-center w-[10%]"></div>
             <div className="text-center w-[45%]"></div>
-            <div className="text-center w-[45%]">{formatToPeso(total_price)}</div>
+            <div className="text-center w-[45%]">
+              {formatToPeso(total_price)}
+            </div>
           </div>
 
           <div className="font-bold mt-4 text-sm flex">
@@ -332,16 +371,74 @@ export default function From() {
                     Signature :
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal px-2">
-                    <span className="text-white">/</span>
+                    <div className="flex items-center justify-center">
+                      {requistorSignature ? (
+                        <>
+                          <img
+                            style={{ height: '70px' }}
+                            src={`${
+                              import.meta.env.VITE_API_BASE_URL
+                            }/storage/${requistorSignature.image}`}
+                            alt=""
+                          />
+                        </>
+                      ) : (
+                        <span className="text-white">/</span>
+                      )}
+                    </div>
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal px-2">
-                    <span className="text-white">/</span>
+                    <div className="flex items-center justify-center">
+                      {ris.approved_by ? (
+                        <>
+                          <img
+                            style={{ height: '70px' }}
+                            src={`${
+                              import.meta.env.VITE_API_BASE_URL
+                            }/storage/${signature.image}`}
+                            alt=""
+                          />
+                        </>
+                      ) : (
+                        <span className="text-white">/</span>
+                      )}
+                    </div>
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal px-2">
-                    <span className="text-white">/</span>
+                    <span className="text-white">
+                      <div className="flex items-center justify-center">
+                        {ris.approved_by ? (
+                          <>
+                            <img
+                              style={{ height: '70px' }}
+                              src={`${
+                                import.meta.env.VITE_API_BASE_URL
+                              }/storage/${signature.image}`}
+                              alt=""
+                            />
+                          </>
+                        ) : (
+                          <span className="text-white">/</span>
+                        )}
+                      </div>
+                    </span>
                   </td>
                   <td className="border border-black border-t-0 border-l-0 border-r-0 font-normal">
-                    <span className="text-white">/</span>
+                    <span className="text-white">
+                      <div className="flex items-center justify-center">
+                        {ris.status == 'pending' ? (
+                          <></>
+                        ) : (
+                          <img
+                            style={{ height: '70px' }}
+                            src={`${
+                              import.meta.env.VITE_API_BASE_URL
+                            }/storage/${requistorSignature.image}`}
+                            alt=""
+                          />
+                        )}
+                      </div>
+                    </span>
                   </td>
                 </tr>
                 <tr>
@@ -352,10 +449,14 @@ export default function From() {
                     {ris.lastname} {ris.firstname}
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-bold uppercase px-2 text-center">
-                    {ris.approved_by ? approve.lastname + ' ' + approve.firstname : ''}
+                    {ris.approved_by
+                      ? approve.lastname + ' ' + approve.firstname
+                      : ''}
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-bold uppercase px-2 text-center">
-                    {ris.approved_by ? approve.lastname + ' ' + approve.firstname : ''}
+                    {ris.approved_by
+                      ? approve.lastname + ' ' + approve.firstname
+                      : ''}
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-bold uppercase px-2 text-center">
                     {ris.status == 'pending' ? (
@@ -375,10 +476,10 @@ export default function From() {
                     <span className="">{ris.position}</span>
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal text-center capitalize px-2">
-                  {ris.approved_by ? approve.position: ''}
+                    {ris.approved_by ? approve.position : ''}
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal text-center capitalize px-2">
-                  {ris.approved_by ? approve.position: ''}
+                    {ris.approved_by ? approve.position : ''}
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal text-center capitalize px-2">
                     {ris.status == 'pending' ? (
@@ -407,10 +508,14 @@ export default function From() {
                     )}
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal px-2 text-center">
-                    <span className="">{ris.approved_by ? formatDate(ris.updated_at) : ''}</span>
+                    <span className="">
+                      {ris.approved_by ? formatDate(ris.updated_at) : ''}
+                    </span>
                   </td>
                   <td className="border border-black border-t-0 border-l-0 font-normal px-2 text-center">
-                    <span className="">{ris.approved_by ? formatDate(ris.updated_at) : ''}</span>
+                    <span className="">
+                      {ris.approved_by ? formatDate(ris.updated_at) : ''}
+                    </span>
                   </td>
                 </tr>
               </tbody>
@@ -449,35 +554,34 @@ export default function From() {
             </button>
           </div>
           <div>
-            {ris.submit == 0 ? (
+            {ris.status === 'pending' && user.role === 'general admin' ? (
+              <button
+                onClick={approveForm}
+                className="btn btn-primary"
+                to="/supply/add"
+              >
+                {btnLoading ? 'Loading...' : 'Issue RIS'}
+              </button>
+            ) : (
               <>
-                {' '}
-                <button
-                  onClick={(ev) => submitForm()}
-                  className="btn btn-primary"
-                  to={'/supply/add'}
-                >
-                  {btnLoading ? 'Loading...' : 'Submit'}
-                </button>
+                {user.role !== 'general admin' ? (
+                  <>
+                    {ris.submit == 0 ? (
+                      <>
+                        {' '}
+                        <button
+                          onClick={(ev) => submitForm()}
+                          className="btn btn-primary"
+                          to={'/supply/add'}
+                        >
+                          {btnLoading ? 'Loading...' : 'Submit'}
+                        </button>
+                      </>
+                    ) : null}
+                  </>
+                ) : null}
               </>
-            ) : null}
-
-            {
-              ris.status == 'pending' ? <>
-                {
-                  user.role === 'general admin' ? <>
-                    <button
-                      onClick={(ev) => approveForm()}
-                      className="btn btn-primary"
-                      to={'/supply/add'}
-                    >
-                      {btnLoading ? 'Loading...' : 'Issue RIS'}
-                    </button>
-                  </> : null
-                }
-              </> : null
-            }
-
+            )}
           </div>
         </div>
       </div>

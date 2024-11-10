@@ -12,8 +12,17 @@ import axiosClient from '../../axiosClinet';
 import DeleteApplicantModal from '../Modal/DeleteApplicantModal';
 import { useStateContext } from '../../context/ContextProvider';
 import AddDepartmentModal from '../Modal/AddDepartmentModal';
+import EditDepartmentModal from '../Modal/EditDepartmentModal';
+import { Button } from '@chakra-ui/react';
+import AddCategoryModal from '../Modal/AddCategoryModal';
+import EditCategoryModal from '../Modal/EditCategoryModal';
+import AddReceivingModal from '../Modal/AddReceivingModal';
+import AddRisModal from '../Modal/AddRisModal';
+import { Badge } from '@chakra-ui/react';
+import 'flatpickr/dist/flatpickr.min.css';
+import DatePicker from 'react-datepicker';
 
-const AnnouncementsTable = () => {
+const AuditTable = ({ department_id = null, setDepartmentProp, type = '' }) => {
   const [request, setRequest] = useState();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -24,11 +33,20 @@ const AnnouncementsTable = () => {
   const [ids, setIds] = useState([]);
   const [deleteModal, setDeleteModal] = useState(false);
   const [departmentModal, setDepartmentModal] = useState(false);
+  const [editDepartment, setEditDepartment] = useState(false);
+  const [department, setDepartment] = useState([]);
   const [deleteModalOne, setdeleteModalOne] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
   const [user_id, setUserId] = useState(false);
-  const { notification_error, setNotificationError, setNotification } =
+  const { notification_error, setNotificationError, setNotification, user } =
     useStateContext();
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const _setStartDate = (date) => {
+    setStartDate(date);
+    setEndDate(date);
+  };
 
   const openModal = (id) => {
     setRequest(id);
@@ -36,23 +54,39 @@ const AnnouncementsTable = () => {
   };
 
   const fetchData = async () => {
-    // setLoading(true)
     try {
-      const response = await axiosClient.get(
-        `/departments?page=${page}&limit=${limit}`,
-      );
-      console.log(response);
-      let sortedData = response.data.archive;
+      const today = new Date().toISOString().split('T')[0]; // Format the current date as YYYY-MM-DD
+      const start = startDate ? formatFilterDate(startDate) : today;
+      const end = endDate ? formatFilterDate(endDate) : today;
 
-      // Sort by file count in descending order
-      sortedData = sortedData.sort((a, b) => b.files - a.files);
-      setData(sortedData);
-      setLinks(response.data.departments.links);
-      console.log(response);
+      const { data } = await axiosClient.get(
+        `/audit?page=${page}&limit=${limit}&type=${type}&start_date=${start}&end_date=${end}`,
+      );
+
+      setData(data.data);
+      setLinks(data.links);
+      setDepartmentProp(data.department);
+      console.log(data);
       setLoading(false);
     } catch (error) {
       setLoading(false);
     }
+  };
+
+  function formatFilterDate(inputDate) {
+    const date = new Date(inputDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  const filterDate = () => {
+    console.log('start date: ' + formatFilterDate(startDate));
+    console.log('end date: ' + formatFilterDate(endDate));
+
+    fetchData();
   };
 
   const incrementPage = () => {
@@ -143,6 +177,16 @@ const AnnouncementsTable = () => {
     setdeleteModalOne(!deleteModalOne);
   };
 
+  const openEditModal = (data) => {
+    setDepartment(data);
+    setEditDepartment(!editDepartment);
+  };
+
+  const hideEditModal = () => {
+    setDepartment([]);
+    setEditDepartment(false);
+  };
+
   const handleBtnLoading = (btn) => {
     setBtnLoading(btn);
   };
@@ -172,7 +216,7 @@ const AnnouncementsTable = () => {
               type="text"
               className="grow input-xs"
               onChange={(ev) => setSearch(ev.target.value)}
-              placeholder="Search Departments"
+              placeholder="Search Receiving ID | supplier"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -199,15 +243,57 @@ const AnnouncementsTable = () => {
             <option value="30">30</option>
             <option value="10000">All</option>
           </select>
-          {/* <button className="btn btn-outline" onClick={openDeleteModal}><i class="fa-solid fa-trash-can"></i> Mass Delete</button> */}
+          {/* <button className="btn btn-outline" onClick={openDeleteModal}>
+            <i class="fa-solid fa-trash-can"></i> Mass Delete
+          </button> */}
         </div>
 
-        {/* <div className='flex items-center gap-2'>
-          <button className="btn btn-primary" onClick={handleDepartmentModal}>
-          <i className="fa-solid fa-circle-plus"></i>
-            Add Department
-          </button>
-        </div> */}
+        <div className="flex items-center gap-2">
+          {user.role == 'admin' ? (
+            <>
+              <Button
+                colorScheme="blue"
+                onClick={handleDepartmentModal}
+                className="uppercase"
+              >
+                ADD RIS
+              </Button>
+            </>
+          ) : null}
+
+          <div className="flex items-center gap-2 mb-2">
+            <button
+              onClick={filterDate}
+              className="btn btn-outline btn-default"
+            >
+              <i class="fa-solid fa-filter"></i>
+            </button>
+            <label className="input input-bordered flex items-center gap-2">
+              <i class="fa-solid fa-calendar-days"></i>
+              <DatePicker
+                closeOnScroll={true}
+                selected={startDate}
+                calendarClassName="bg-white border border-gray-300 shadow-lg rounded-lg p-2"
+                className=""
+                onChange={(date) => _setStartDate(date)}
+              />
+            </label>
+            <label htmlFor="" className="uppercase">
+              TO
+            </label>
+            <label className="input input-bordered flex items-center gap-2">
+              <i class="fa-solid fa-calendar-days"></i>
+              <DatePicker
+                closeOnScroll={true}
+                selected={endDate}
+                minDate={startDate}
+                calendarClassName="bg-white border border-gray-300 shadow-lg rounded-lg p-2"
+                className=""
+                onChange={(date) => setEndDate(date)}
+              />
+            </label>
+          </div>
+        </div>
       </div>
 
       <AddApplicantModal />
@@ -225,11 +311,19 @@ const AnnouncementsTable = () => {
         handleModal={openDeleteModalOne}
         loading={btnLoading}
       />
-      <AddDepartmentModal
+      <AddRisModal
         handlePageLoading={handlePageLoading}
         open={departmentModal}
         handleModal={handleDepartmentModal}
         loading={btnLoading}
+        handleBntLoading={handleBtnLoading}
+      />
+      <EditCategoryModal
+        handlePageLoading={handlePageLoading}
+        open={editDepartment}
+        handleModal={hideEditModal}
+        loading={btnLoading}
+        category={department}
         handleBntLoading={handleBtnLoading}
       />
 
@@ -240,81 +334,68 @@ const AnnouncementsTable = () => {
           {/* head */}
           <thead>
             <tr>
-              {/* <th>
-                <label>
-                  <input type="checkbox" name="allselect" checked= { !data.some( (user)=>user?.isChecked!==true)} onChange={ handleChange} className="checkbox" />
-                </label>
-              </th> */}
-              <th>Department Name</th>
-              <th>Department Type</th>
-              <th>File</th>
-              <th>Created At</th>
-              <th className="text-center">Action</th>
-              {/* <th></th> */}
+              <th>Date</th>
+              <th>User</th>
+              <th>Role</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-            {data
-              .filter((data) => {
-                return search.toLowerCase === ''
-                  ? data
-                  : data.department_name.toLowerCase().includes(search) ||
-                      data.department_type.toLowerCase().includes(search);
-              })
-              .map((data) => (
-                <tr>
-                  {/* <th>
-                    <label>
-                      <input type="checkbox" name={data.name} checked={data?.isChecked || false} onChange={ handleChange} className="checkbox" />
-                    </label>
-                  </th> */}
-                  <td>
-                    <div className="flex items-center gap-3">
-                      <div className="avatar">
-                        <div className="mask mask-squircle w-12 h-12">
-                          <img
-                            src={`${
-                              import.meta.env.VITE_API_BASE_URL
-                            }/storage/${data.logo}`}
-                            alt="Avatar Tailwind CSS Component"
-                          />
+            {data.length == 0 ? (
+              <tr>
+                <td className="text-center" colSpan={5}>
+                  No Data
+                </td>
+              </tr>
+            ) : (
+              <>
+                {data
+                  .filter((data) => {
+                    return search.toLowerCase === ''
+                      ? data
+                      : data.type.toLowerCase().includes(search) ||
+                          data.action.toLowerCase().includes(search) ||
+                          data.lastname.toLowerCase().includes(search) ||
+                          data.firstname.toLowerCase().includes(search) ||
+                          data.role.toLowerCase().includes(search);
+                  })
+                  .map((data) => (
+                    <tr>
+                      <td>
+                        <div className="flex items-center gap-3">
+                          <div>
+                            <div className="font-bold capitalize">
+                              {formatDate(data.created_at)}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                      <div>
-                        <div className="font-bold capitalize">
-                          {data.department_name}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="capitalize">{data.department_type}</td>
-                  <td className="capitalize">{data.files}</td>
-                  <td className="capitalize">{formatDate(data.created_at)}</td>
-                  <th className="flex gap-1 items-center justify-center mt-2">
-                    <Link
-                      to={`/archives/files/${data.id}`}
-                      className="btn btn-sm bg-green-600 text-white hover:text-black"
-                    >
-                      <i class="fa-solid fa-eye"></i>
-                    </Link>
-                    {/* <button className="btn btn-sm bg-red-800 text-white hover:bg-red-500" onClick={ev => openDeleteModalOne(data.id)}><i class="fa-solid fa-trash-can"></i></button> */}
-                  </th>
-                </tr>
-              ))}
+                      </td>
+                      <td className="capitalize">
+                        {data.lastname} {data.firstname}
+                      </td>
+                      <td className="capitalize">
+                        {data.role == 'supply office' && (
+                          <Badge variant="solid" colorScheme={'blue'}>
+                            {data.role}
+                          </Badge>
+                        )}
+                        {data.role == 'general admin' && (
+                          <Badge variant="solid" colorScheme={'green'}>
+                            {data.role}
+                          </Badge>
+                        )}
+                        {data.role == 'admin' && (
+                          <Badge variant="solid" colorScheme={'gray'}>
+                            {data.role}
+                          </Badge>
+                        )}
+                      </td>
+                      <td className="capitalize">{data.action}</td>
+                    </tr>
+                  ))}
+              </>
+            )}
           </tbody>
-          {/* foot */}
-          <tfoot>
-            <tr>
-              {/* <th></th> */}
-              <th>Department Name</th>
-              <th>Department Type</th>
-              <th>File</th>
-              <th>Created At</th>
-              <th className="text-center">Action</th>
-              {/* <th></th> */}
-            </tr>
-          </tfoot>
         </table>
       )}
       <div className="flex items-center justify-between mt-2 mb-2">
@@ -341,4 +422,4 @@ const AnnouncementsTable = () => {
   );
 };
 
-export default AnnouncementsTable;
+export default AuditTable;

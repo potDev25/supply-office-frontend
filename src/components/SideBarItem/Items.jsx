@@ -166,7 +166,7 @@ const sidebarItem = [
   //   dropdown: false,
   // },
   {
-    title: 'Archives',
+    title: 'Archives RIS',
     includes: 'archives',
     url: '/archives',
     dropdown: false,
@@ -188,8 +188,8 @@ const sidebarItem = [
   },
   {
     title: 'PAR',
-    includes: 'par',
-    url: '/par',
+    includes: 'par1',
+    url: '/par1',
     dropdown: false,
     icon: (
       <svg
@@ -247,31 +247,49 @@ const sidebarItem = [
     dropdown_item: [
       {
         title: 'PAR Reports',
-        includes: 'reports',
-        url: '/reports/transactions',
+        includes: 'parequest-reports',
+        url: '/parequest-reports/transactions',
       },
       {
         title: 'Supplies and Materials Issued',
         includes: 'issued',
         url: '/issued/transactions',
       },
-      // {
-      //   title: 'Stock-Out Report',
-      //   includes: 'reports',
-      //   url: '/reports/transactions',
-      // },
-      // {
-      //   title: 'Stock-In Report',
-      //   includes: 'reports',
-      //   url: '/reports/transactions',
-      // },
-      // {
-      //   title : 'Sales Report',
-      //   includes : 'reports',
-      //   url : '/reports/sales'
-      // },
+      {
+        title: 'Stock-in Reports',
+        includes: 'issued',
+        url: '/stocks/reporst',
+      },
     ],
   },
+
+  {
+    title: 'Audit Trails',
+    includes: 'audit',
+    url: '',
+    dropdown: true,
+    icon: (
+      <i class="fa-solid fa-chart-column"></i>
+    ),
+    dropdown_item: [
+      {
+        title: 'PAR Audit',
+        includes: 'par-audit',
+        url: '/par-audit',
+      },
+      {
+        title: 'Receiving Audit',
+        includes: 'receiving-audit',
+        url: '/receiving-audit',
+      },
+      {
+        title: 'RIS Audit',
+        includes: 'ris-audit',
+        url: '/ris-audit',
+      },
+    ],
+  },
+
   {
     title: 'Users',
     includes: 'users',

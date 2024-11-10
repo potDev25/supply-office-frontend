@@ -9,7 +9,6 @@ import Chart from './pages/Chart';
 import ECommerce from './pages/Dashboard/ECommerce';
 import FormElements from './pages/Form/FormElements';
 import FormLayout from './pages/Form/FormLayout';
-import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Tables from './pages/Tables';
 import Alerts from './pages/UiElements/Alerts';
@@ -56,6 +55,13 @@ import ParSupplies from './pages/Supplies/ParSupplies';
 import ParClient from './pages/Supplies/ParClient';
 import ReportByDepartment from './pages/Announcements/ReportByDepartment';
 import ReportSupplies from './pages/Supplies/ReportSupplies';
+import ParReport from './pages/Supplies/ParReport';
+import StockinReport from './pages/Supplies/StockinReport';
+import ParAudit from './pages/Announcements/ParAudit';
+import ReceivingAudit from './pages/Announcements/ReceivingAudit';
+import RisAudit from './pages/Announcements/RisAudit';
+import Profile from './pages/Users/Profile';
+import FormPage from './pages/FormPage';
 
 
 function App() {
@@ -196,6 +202,24 @@ function App() {
           }
         />
         <Route
+          path="/parequest-reports/transactions"
+          element={
+            <>
+              <PageTitle title="Receiving | University Supply Office OFFICE" />
+              <ParReport />
+            </>
+          }
+        />
+        <Route
+          path="/stocks/reporst"
+          element={
+            <>
+              <PageTitle title="University Supply Office OFFICE" />
+              <StockinReport />
+            </>
+          }
+        />
+        <Route
           path="/par/client/"
           element={
             <>
@@ -277,7 +301,7 @@ function App() {
           }
         />
         <Route
-          path="/par"
+          path="/par1"
           element={
             <>
               <PageTitle title="Archives | University Supply Office" />
@@ -327,6 +351,33 @@ function App() {
             <>
               <PageTitle title="Archives | University Supply Office" />
               <Files />
+            </>
+          }
+        />
+        <Route
+          path="/par-audit"
+          element={
+            <>
+              <PageTitle title="University Supply Office" />
+              <ParAudit />
+            </>
+          }
+        />
+        <Route
+          path="/ris-audit"
+          element={
+            <>
+              <PageTitle title="University Supply Office" />
+              <RisAudit />
+            </>
+          }
+        />
+        <Route
+          path="/receiving-audit"
+          element={
+            <>
+              <PageTitle title="University Supply Office" />
+              <ReceivingAudit />
             </>
           }
         />
@@ -398,7 +449,7 @@ function App() {
           element={
             <>
               <PageTitle title="System Users | University Supply Office" />
-              <From />
+              <FormPage />
             </>
           }
         />

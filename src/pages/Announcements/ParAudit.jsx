@@ -4,19 +4,15 @@ import ArchiveTable from '../../components/Tables/ArchiveTable'
 import RequestStoreSupplyTable from '../../components/Tables/RequestStoreSupplyTable'
 import { useParams } from 'react-router-dom'
 import RequestSupplyTable from '../../components/Tables/RequestSupplyTable'
+import AuditTable from '../../components/Tables/AuditTable'
 
-export default function Files() {
+export default function ParAudit() {
   const {id} = useParams();
   const [department, setDepartment] = useState({})
   return (
     <>
-      <Breadcrumb pageName="Archives | Requisition and Issue Slip" />
-
-      <div className='mb-2'>
-        <h1>{department ? department.department_name : ''}</h1>
-      </div>
-
-      <RequestSupplyTable department_id={id} setDepartmentProp={setDepartment}/>
+      <Breadcrumb pageName="PAR Audit" />
+      <AuditTable department_id={id} setDepartmentProp={setDepartment} type='PAR'/>
     </>
   )
 }

@@ -2,18 +2,21 @@ import { ApexOptions } from 'apexcharts';
 import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 
-const ChartTwo = ({ data = [], text = '' }) => {
+const StocksIssued = ({ data = [], text = '' }) => {
   const [state, setState] = useState({
-    series: [{ name: 'Total Cost', data: [] }],
+    series: [
+      { name: 'Total Cost', data: [] },
+      { name: 'Quantity', data: [] },
+    ],
   });
 
   const options = {
-    colors: ['#3C50E0', '#80CAEE'],
+    colors: ['#0c6476', '#bec7e7'],  // Total Cost and Quantity colors
     chart: {
       fontFamily: 'Satoshi, sans-serif',
       type: 'bar',
       height: 335,
-      stacked: true,
+      stacked: false,
       toolbar: {
         show: false,
       },
@@ -24,15 +27,21 @@ const ChartTwo = ({ data = [], text = '' }) => {
     plotOptions: {
       bar: {
         horizontal: false,
-        borderRadius: 0,
-        columnWidth: '25%',
-      },
+        dataLabels: {
+          position: 'top',
+        },
+      }
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
+      offsetX: -6,
+      style: {
+        fontSize: '12px',
+        colors: ['#000000']
+      }
     },
     xaxis: {
-      categories: data.map((item) => item.category_name),
+      categories: data.map((item) => item.supply_name),
     },
     legend: {
       position: 'top',
@@ -41,7 +50,7 @@ const ChartTwo = ({ data = [], text = '' }) => {
       fontWeight: 500,
       fontSize: '14px',
       markers: {
-        radius: 99,
+        radius: 100,
       },
     },
     fill: {
@@ -50,8 +59,14 @@ const ChartTwo = ({ data = [], text = '' }) => {
   };
 
   useEffect(() => {
-    const seriesData = data.map((item) => item.total_price);
-    setState({ series: [{ name: 'Total Cost', data: seriesData }] });
+    const priceData = data.map((item) => item.total_price);
+    const quantityData = data.map((item) => item.qnty);
+    setState({
+      series: [
+        { name: 'Total Cost', data: priceData },
+        { name: 'Quantity', data: quantityData },
+      ],
+    });
   }, [data]);
 
   return (
@@ -77,4 +92,4 @@ const ChartTwo = ({ data = [], text = '' }) => {
   );
 };
 
-export default ChartTwo;
+export default StocksIssued;

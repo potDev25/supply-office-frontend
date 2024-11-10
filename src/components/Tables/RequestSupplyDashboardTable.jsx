@@ -50,8 +50,8 @@ const RequestSupplyDashboardTable = () => {
       const { data } = await axiosClient.get(
         `/ris?page=${page}&limit=${limit}&status=pending`,
       );
-      setData(data.data);
-      setLinks(data.links);
+      setData(data.data.data);
+      setLinks(data.data.links);
       console.log(response);
       setLoading(false);
     } catch (error) {

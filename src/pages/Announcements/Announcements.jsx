@@ -5,7 +5,7 @@ import AnnoucementsTable from '../../components/Tables/AnnouncementsTable'
 export default function Announcements() {
   return (
     <>
-      <Breadcrumb pageName="Archives" />
+      <Breadcrumb pageName="Archives RIS" />
       <AnnoucementsTable/>
     </>
   )

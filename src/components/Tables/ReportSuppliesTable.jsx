@@ -16,7 +16,7 @@ import EditDepartmentModal from '../Modal/EditDepartmentModal';
 import { Box, Image } from '@chakra-ui/react';
 import StoreSupplyModal from '../Modal/StoreSupplyModal';
 
-const ReportSuppliesTable = ({setDepartmentName, setCosts, setCountSupplies}) => {
+const ReportSuppliesTable = ({setDepartmentName, setCosts, setCountSupplies, setStocksData}) => {
   const [request, setRequest] = useState();
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
@@ -62,6 +62,7 @@ const ReportSuppliesTable = ({setDepartmentName, setCosts, setCountSupplies}) =>
       setDepartmentName(data.department)
       setCosts(data.costs)
       setCountSupplies(data.count_supplies)
+      setStocksData(data.stocks_data)
       setLoading(false);
     } catch (error) {
       setLoading(false);
