@@ -11,7 +11,7 @@ export default function ReceivingAudit() {
   const [department, setDepartment] = useState({})
   return (
     <>
-      <Breadcrumb pageName="PAR Audit" />
+      <Breadcrumb pageName="Receiving Audit" />
       <AuditTable department_id={id} setDepartmentProp={setDepartment} type='RECEIVING'/>
     </>
   )

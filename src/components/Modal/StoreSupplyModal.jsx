@@ -252,6 +252,7 @@ export default function StoreSupplyModal({
               <input
                 type="number"
                 name="qnty"
+                min={0}
                 placeholder="Qnty"
                 value={payload.qnty}
                 onChange={onChange}

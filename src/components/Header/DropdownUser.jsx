@@ -7,17 +7,17 @@ import axiosClient from '../../axiosClinet';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const {setUserToken, setUser, user} = useStateContext()
-  
+  const { setUserToken, setUser, user } = useStateContext();
+
   const logout = async () => {
     try {
-      const {data} = await axiosClient.post('/user/logout')
-      setUser({})
-      setUserToken(null)
+      const { data } = await axiosClient.post('/user/logout');
+      setUser({});
+      setUserToken(null);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -30,11 +30,29 @@ const DropdownUser = () => {
           <span className="block text-sm font-medium text-black dark:text-white">
             {user.lastname} {user.firstname}
           </span>
-          <span className="block text-xs capitalize">{user.role}</span>
+          {user.role === 'general admin' ? (
+            <>
+              {' '}
+              <span className="block text-xs capitalize">{user.role}</span>
+            </>
+          ) : (
+            <>
+              <span className="block text-xs capitalize">
+                {user.department_name}
+              </span>
+            </>
+          )}
         </span>
 
         <span className="h-12 w-12 rounded-full">
-          <img  src={user.photo ? `${import.meta.env.VITE_API_BASE_URL}/storage/${user.photo}` : UserOne} alt="User" />
+          <img
+            src={
+              user.photo
+                ? `${import.meta.env.VITE_API_BASE_URL}/storage/${user.photo}`
+                : UserOne
+            }
+            alt="User"
+          />
         </span>
 
         <svg
@@ -59,7 +77,7 @@ const DropdownUser = () => {
         <div
           className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark`}
         >
-          <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark"> 
+          <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
             <li>
               <Link
                 to="/profile"
@@ -132,7 +150,11 @@ const DropdownUser = () => {
               </Link>
             </li> */}
           </ul>
-          <a href='#' onClick={ev => logout()} className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+          <a
+            href="#"
+            onClick={(ev) => logout()}
+            className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+          >
             <svg
               className="fill-current"
               width="22"

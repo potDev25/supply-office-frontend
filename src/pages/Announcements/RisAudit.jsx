@@ -11,7 +11,7 @@ export default function RisAudit() {
   const [department, setDepartment] = useState({})
   return (
     <>
-      <Breadcrumb pageName="PAR Audit" />
+      <Breadcrumb pageName="RIS Audit" />
       <AuditTable department_id={id} setDepartmentProp={setDepartment} type='RIS'/>
     </>
   )
