@@ -30,7 +30,7 @@ export default function DefaultLayout({children}) {
    toast.error(notification_error, {
       toastId: notification_error, 
       position: "top-center",
-      autoClose: 500,
+      autoClose: 1500,
       hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,

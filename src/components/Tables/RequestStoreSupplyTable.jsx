@@ -345,7 +345,7 @@ const RequestStoreSupplyTable = () => {
               <th>Quantity</th>
               <th>Price</th>
               <th>Total Price</th>
-              {user.role == 'general admin' ? (
+              {user.role != 'admin' ? (
                 <>
                   <th>Issue Item</th>
                 </>
@@ -387,7 +387,7 @@ const RequestStoreSupplyTable = () => {
                   <td className="capitalize">
                     {formatToPeso(data.total_price)}
                   </td>
-                  {user.role == 'general admin' ? (
+                  {user.role != 'admin' ? (
                     <>
                       <td>
                         {

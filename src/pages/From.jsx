@@ -102,8 +102,12 @@ export default function From({ ref }) {
       setBtnLoading(false);
       setLoading(true);
     } catch (error) {
-      setNotificationError('Fail to Submit Form');
       setBtnLoading(false);
+      if(error.response.status == 422){
+        setNotificationError(error.response.data.message_error);
+      }else{
+        setNotificationError('Fail to Submit Form');
+      }
     }
   };
 
@@ -554,7 +558,7 @@ export default function From({ ref }) {
             </button>
           </div>
           <div>
-            {ris.status === 'pending' && user.role === 'general admin' ? (
+            {ris.status === 'pending' && user.role !== 'admin' ? (
               <button
                 onClick={approveForm}
                 className="btn btn-primary"
@@ -564,7 +568,7 @@ export default function From({ ref }) {
               </button>
             ) : (
               <>
-                {user.role !== 'general admin' ? (
+                {user.role !== 'general admin' && user.role !== 'supply office' ? (
                   <>
                     {ris.submit == 0 ? (
                       <>
