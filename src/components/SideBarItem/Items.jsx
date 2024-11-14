@@ -260,6 +260,11 @@ const sidebarItem = [
         includes: 'issued',
         url: '/stocks/reporst',
       },
+      {
+        title: 'Reports Analysis',
+        includes: 'issued',
+        url: '/report-analysis',
+      },
     ],
   },
 

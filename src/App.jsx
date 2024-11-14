@@ -62,6 +62,7 @@ import ReceivingAudit from './pages/Announcements/ReceivingAudit';
 import RisAudit from './pages/Announcements/RisAudit';
 import Profile from './pages/Users/Profile';
 import FormPage from './pages/FormPage';
+import ReportAnalysis from './pages/Supplies/ReportAnalysis';
 
 
 function App() {
@@ -216,6 +217,15 @@ function App() {
             <>
               <PageTitle title="University Supply Office OFFICE" />
               <StockinReport />
+            </>
+          }
+        />
+        <Route
+          path="/report-analysis"
+          element={
+            <>
+              <PageTitle title="University Supply Office OFFICE" />
+              <ReportAnalysis />
             </>
           }
         />
