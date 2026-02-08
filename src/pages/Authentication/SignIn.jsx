@@ -140,7 +140,7 @@ const SignIn  = () => {
           </div>
 
           <div className="mb-5">
-            <button className="w-full cursor-pointer rounded-lg border border-primary bg-primary btn text-white transition hover:bg-blue-400">
+            <button className="w-full cursor-pointer rounded-lg border border-primary bg-primary btn text-white transition hover:bg-blue-500">
               {
                 loading ? <>
                   <Spinner
